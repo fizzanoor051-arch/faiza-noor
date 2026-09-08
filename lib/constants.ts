@@ -4,18 +4,18 @@ export const SITE_CONFIG = {
   title: "Full-Stack Web Engineer",
   description:
     "Faiza Noor is a Full-Stack Web Engineer building modern, responsive, and interactive web experiences.",
-  url: "https://fizzanoor.github.io",
+  url: "https://github.com/fizzanoor051-arch",
   location: "Pakistan",
   timezone: "Asia/Karachi",
 };
 
 export const SOCIAL_LINKS = {
-  github: "https://github.com/",
-  linkedin: "https://www.linkedin.com/",
+  github: "https://github.com/fizzanoor051-arch",
+  linkedin: "https://www.linkedin.com/in/faiza-noor-b2711b42b",
 };
 
 export const CONTACT_CONFIG = {
-  email: "",
+  email: "fizzanoor051@gmail.com",
   availability: "Available for selected projects",
   responseTime: "Usually within 24–48 hours",
 };

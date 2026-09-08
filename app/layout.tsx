@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   creator: "Faiza Noor",
 
   metadataBase: new URL(
-    "https://fizzanoor.github.io"
+    "https://github.com/fizzanoor051-arch"
   ),
 
   openGraph: {

@@ -76,7 +76,7 @@ export default function CommandCenter({
       icon: "git-branch",
       action: () => {
         window.open(
-          "https://github.com/",
+          "https://github.com/fizzanoor051-arch",
           "_blank",
           "noopener,noreferrer"
         );

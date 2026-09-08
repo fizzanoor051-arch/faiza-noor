@@ -5,18 +5,19 @@ const contactItems = [
     label: "EMAIL",
     value: "Let’s connect through the form",
     icon: "@",
+    
   },
   {
     label: "GITHUB",
     value: "github.com/fizzanoor",
     icon: "⌘",
-    href: "https://github.com/",
+    href: "https://github.com/fizzanoor051-arch",
   },
   {
     label: "LINKEDIN",
     value: "Professional network",
     icon: "in",
-    href: "https://www.linkedin.com/",
+    href: "https://www.linkedin.com/in/faiza-noor-b2711b42b",
   },
 ];
 

@@ -53,10 +53,10 @@ const experience = [
 
 const education = [
   {
-    year: "2024 — 2026",
+    year: "2024 — 2025",
     title: "F.Sc. Pre-Medical",
     institute: "BISE Gujranwala",
-    result: "Approx. 70%",
+    result: "Approx. 88%",
   },
   {
     year: "2023 — 2024",

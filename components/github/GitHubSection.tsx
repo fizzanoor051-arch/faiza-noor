@@ -35,7 +35,7 @@ export default function GitHubSection() {
           </div>
 
           <a
-            href="https://github.com/"
+            href="https://github.com/fizzanoor051-arch"
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex w-fit items-center gap-3 rounded-full border border-white/10 bg-white/[0.03] px-5 py-3 text-sm text-white/70 transition hover:border-cyan-300/30 hover:bg-cyan-400/5 hover:text-white"

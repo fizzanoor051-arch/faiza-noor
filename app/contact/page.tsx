@@ -36,8 +36,8 @@ const CONTACT = {
   // Pakistan WhatsApp number with country code.
   whatsappNumber: "+923019346310",
 
-  linkedin: "https://www.linkedin.com/in/your-profile",
-  github: "https://github.com/your-username",
+  linkedin: "www.linkedin.com/in/faiza-noor-b2711b42b",
+  github: "https://github.com/fizzanoor051-arch",
   indeed: "https://profile.indeed.com/",
 
   location: "Punjab, Pakistan",
@@ -930,7 +930,7 @@ export default function ContactPage() {
               <input
                 type="email"
                 name="email"
-                placeholder="john@example.com"
+                placeholder="fizza@example.com"
                 required
                 autoComplete="email"
               />

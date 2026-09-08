@@ -30,12 +30,12 @@ const services = [
 const socialLinks = [
   {
     label: "GitHub",
-    href: "https://github.com/",
+    href: "https://github.com/fizzanoor051-arch",
     icon: GitBranch,
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/",
+    href: "https://www.linkedin.com/in/faiza-noor-b2711b42b",
     icon: Code2,
   },
 ];
