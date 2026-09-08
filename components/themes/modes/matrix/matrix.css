@@ -1,0 +1,1164 @@
+/* =========================================================
+   MATRIX WORLD
+   FAIZA NOOR PORTFOLIO
+   DIGITAL REALITY / CYBER SYSTEM
+========================================================= */
+
+body.theme-matrix {
+  --matrix-black: #000503;
+  --matrix-deep: #00130a;
+
+  --matrix-green: #00ff66;
+  --matrix-green-bright: #7dffb2;
+  --matrix-green-dark: #00a844;
+
+  --matrix-text: #caffdf;
+  --matrix-muted: #3c8f60;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(0, 255, 102, 0.08),
+      transparent 38%
+    ),
+    #000503;
+
+  color:
+    var(--matrix-text);
+
+  font-family:
+    "JetBrains Mono",
+    "Fira Code",
+    Consolas,
+    monospace;
+
+  transition:
+    background 0.7s ease,
+    color 0.7s ease;
+}
+
+/* =========================================================
+   GLOBAL DIGITAL FIELD
+========================================================= */
+
+body.theme-matrix::before {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: 1;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 255, 102, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      rgba(0, 255, 102, 0.025) 1px,
+      transparent 1px
+    );
+
+  background-size:
+    64px 64px;
+
+  mask-image:
+    radial-gradient(
+      circle,
+      black,
+      transparent 80%
+    );
+}
+
+body.theme-matrix::after {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: 50;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 255, 102, 0.025) 0px,
+      rgba(0, 255, 102, 0.025) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+
+  opacity: 0.4;
+}
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+.matrix-world {
+  position: fixed;
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(0, 255, 102, 0.045),
+      transparent 62%
+    );
+}
+
+/* =========================================================
+   MATRIX RAIN
+========================================================= */
+
+.matrix-rain {
+  position: absolute;
+  inset: -20% 0;
+
+  display: flex;
+
+  justify-content:
+    space-around;
+
+  overflow: hidden;
+
+  opacity: 0.52;
+
+  filter:
+    drop-shadow(
+      0 0 6px
+      rgba(0, 255, 102, 0.22)
+    );
+}
+
+.matrix-column {
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  width: 18px;
+
+  color:
+    var(--matrix-green);
+
+  font-size:
+    clamp(9px, 1vw, 15px);
+
+  line-height:
+    1.35;
+
+  text-align: center;
+
+  opacity: 0.22;
+
+  animation:
+    matrixFall
+    var(--matrix-speed)
+    linear
+    infinite;
+
+  animation-delay:
+    var(--matrix-delay);
+}
+
+.matrix-column i {
+  display: block;
+
+  font-style: normal;
+
+  text-shadow:
+    0 0 8px
+    rgba(0, 255, 102, 0.65);
+
+  animation:
+    matrixFlicker
+    2.2s
+    ease-in-out
+    infinite;
+}
+
+.matrix-column i:first-child {
+  color:
+    var(--matrix-green-bright);
+
+  text-shadow:
+    0 0 16px
+    rgba(125, 255, 178, 0.95);
+}
+
+/* Individual rain timing */
+
+.matrix-column-0 {
+  --matrix-speed: 8s;
+  --matrix-delay: -2s;
+}
+
+.matrix-column-1 {
+  --matrix-speed: 11s;
+  --matrix-delay: -6s;
+}
+
+.matrix-column-2 {
+  --matrix-speed: 7s;
+  --matrix-delay: -3s;
+}
+
+.matrix-column-3 {
+  --matrix-speed: 13s;
+  --matrix-delay: -9s;
+}
+
+.matrix-column-4 {
+  --matrix-speed: 9s;
+  --matrix-delay: -4s;
+}
+
+.matrix-column-5 {
+  --matrix-speed: 15s;
+  --matrix-delay: -11s;
+}
+
+.matrix-column-6 {
+  --matrix-speed: 8s;
+  --matrix-delay: -1s;
+}
+
+.matrix-column-7 {
+  --matrix-speed: 12s;
+  --matrix-delay: -7s;
+}
+
+.matrix-column-8 {
+  --matrix-speed: 10s;
+  --matrix-delay: -5s;
+}
+
+.matrix-column-9 {
+  --matrix-speed: 14s;
+  --matrix-delay: -10s;
+}
+
+.matrix-column-10 {
+  --matrix-speed: 9s;
+  --matrix-delay: -2s;
+}
+
+.matrix-column-11 {
+  --matrix-speed: 16s;
+  --matrix-delay: -13s;
+}
+
+.matrix-column-12 {
+  --matrix-speed: 8s;
+  --matrix-delay: -6s;
+}
+
+.matrix-column-13 {
+  --matrix-speed: 11s;
+  --matrix-delay: -3s;
+}
+
+.matrix-column-14 {
+  --matrix-speed: 13s;
+  --matrix-delay: -8s;
+}
+
+.matrix-column-15 {
+  --matrix-speed: 7s;
+  --matrix-delay: -1s;
+}
+
+.matrix-column-16 {
+  --matrix-speed: 12s;
+  --matrix-delay: -9s;
+}
+
+.matrix-column-17 {
+  --matrix-speed: 10s;
+  --matrix-delay: -5s;
+}
+
+.matrix-column-18 {
+  --matrix-speed: 15s;
+  --matrix-delay: -12s;
+}
+
+.matrix-column-19 {
+  --matrix-speed: 8s;
+  --matrix-delay: -4s;
+}
+
+.matrix-column-20 {
+  --matrix-speed: 14s;
+  --matrix-delay: -7s;
+}
+
+.matrix-column-21 {
+  --matrix-speed: 9s;
+  --matrix-delay: -3s;
+}
+
+.matrix-column-22 {
+  --matrix-speed: 13s;
+  --matrix-delay: -10s;
+}
+
+.matrix-column-23 {
+  --matrix-speed: 11s;
+  --matrix-delay: -5s;
+}
+
+.matrix-column-24 {
+  --matrix-speed: 7s;
+  --matrix-delay: -2s;
+}
+
+.matrix-column-25 {
+  --matrix-speed: 16s;
+  --matrix-delay: -14s;
+}
+
+.matrix-column-26 {
+  --matrix-speed: 10s;
+  --matrix-delay: -6s;
+}
+
+.matrix-column-27 {
+  --matrix-speed: 12s;
+  --matrix-delay: -8s;
+}
+
+.matrix-column-28 {
+  --matrix-speed: 9s;
+  --matrix-delay: -3s;
+}
+
+.matrix-column-29 {
+  --matrix-speed: 14s;
+  --matrix-delay: -11s;
+}
+
+.matrix-column-30 {
+  --matrix-speed: 8s;
+  --matrix-delay: -4s;
+}
+
+.matrix-column-31 {
+  --matrix-speed: 13s;
+  --matrix-delay: -9s;
+}
+
+.matrix-column-32 {
+  --matrix-speed: 10s;
+  --matrix-delay: -5s;
+}
+
+.matrix-column-33 {
+  --matrix-speed: 15s;
+  --matrix-delay: -12s;
+}
+
+@keyframes matrixFall {
+  from {
+    transform:
+      translateY(-25%);
+  }
+
+  to {
+    transform:
+      translateY(125%);
+  }
+}
+
+@keyframes matrixFlicker {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* =========================================================
+   GLOW
+========================================================= */
+
+.matrix-glow {
+  position: absolute;
+
+  width: 75vw;
+  height: 75vw;
+
+  max-width: 950px;
+  max-height: 950px;
+
+  left: 50%;
+  top: 48%;
+
+  transform:
+    translate(-50%, -50%);
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0, 255, 102, 0.08),
+      transparent 65%
+    );
+
+  filter:
+    blur(25px);
+
+  animation:
+    matrixGlow 6s ease-in-out infinite;
+}
+
+@keyframes matrixGlow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform:
+      translate(-50%, -50%)
+      scale(0.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform:
+      translate(-50%, -50%)
+      scale(1.12);
+  }
+}
+
+/* =========================================================
+   CENTER CORE
+========================================================= */
+
+.matrix-center-core {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 180px;
+  height: 180px;
+
+  transform:
+    translate(-50%, -50%);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  opacity: 0.22;
+}
+
+.matrix-core-ring {
+  position: absolute;
+
+  border:
+    1px solid
+    rgba(0, 255, 102, 0.45);
+
+  border-radius: 50%;
+
+  animation:
+    matrixRing 8s linear infinite;
+}
+
+.matrix-core-ring-1 {
+  inset: 0;
+
+  border-style: dashed;
+}
+
+.matrix-core-ring-2 {
+  inset: 22px;
+
+  animation-duration: 5s;
+
+  animation-direction: reverse;
+}
+
+.matrix-core-ring-3 {
+  inset: 48px;
+
+  border-color:
+    rgba(125, 255, 178, 0.8);
+
+  animation-duration: 3s;
+}
+
+@keyframes matrixRing {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+.matrix-core-label {
+  position: relative;
+
+  color:
+    var(--matrix-green);
+
+  font-size: 9px;
+
+  letter-spacing:
+    0.35em;
+
+  text-transform:
+    uppercase;
+}
+
+.matrix-core-status {
+  position: relative;
+
+  margin-top: 8px;
+
+  color:
+    rgba(202, 255, 223, 0.7);
+
+  font-size: 7px;
+
+  letter-spacing:
+    0.25em;
+}
+
+/* =========================================================
+   SCANLINES
+========================================================= */
+
+.matrix-scanlines {
+  position: absolute;
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 5px,
+      rgba(0, 255, 102, 0.025) 6px
+    );
+
+  animation:
+    matrixScan 10s linear infinite;
+}
+
+@keyframes matrixScan {
+  from {
+    background-position:
+      0 0;
+  }
+
+  to {
+    background-position:
+      0 100px;
+  }
+}
+
+/* =========================================================
+   VIGNETTE
+========================================================= */
+
+.matrix-vignette {
+  position: absolute;
+  inset: 0;
+
+  z-index: 10;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 38%,
+      rgba(0, 0, 0, 0.78) 100%
+    );
+}
+
+/* =========================================================
+   HUD
+========================================================= */
+
+.matrix-hud {
+  position: absolute;
+
+  top: 100px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  padding:
+    9px 12px;
+
+  border-left:
+    1px solid
+    rgba(0, 255, 102, 0.35);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 255, 102, 0.06),
+      transparent
+    );
+
+  color:
+    rgba(0, 255, 102, 0.5);
+
+  font-size: 7px;
+
+  letter-spacing:
+    0.18em;
+
+  text-transform:
+    uppercase;
+}
+
+.matrix-hud strong {
+  color:
+    var(--matrix-green);
+
+  font-size: 8px;
+}
+
+.matrix-hud-left {
+  left: 24px;
+}
+
+.matrix-hud-right {
+  right: 24px;
+
+  text-align: right;
+
+  border-left: none;
+
+  border-right:
+    1px solid
+    rgba(0, 255, 102, 0.35);
+
+  background:
+    linear-gradient(
+      -90deg,
+      rgba(0, 255, 102, 0.06),
+      transparent
+    );
+}
+
+/* =========================================================
+   TERMINAL
+========================================================= */
+
+.matrix-terminal {
+  position: absolute;
+
+  left: 28px;
+  bottom: 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding:
+    8px 12px;
+
+  border:
+    1px solid
+    rgba(0, 255, 102, 0.14);
+
+  background:
+    rgba(0, 8, 4, 0.58);
+
+  color:
+    rgba(0, 255, 102, 0.4);
+
+  font-size: 8px;
+
+  letter-spacing:
+    0.08em;
+
+  box-shadow:
+    0 0 20px
+    rgba(0, 255, 102, 0.04);
+}
+
+.matrix-terminal strong {
+  color:
+    rgba(202, 255, 223, 0.62);
+
+  font-weight: 400;
+}
+
+.matrix-terminal b {
+  color:
+    var(--matrix-green);
+
+  animation:
+    matrixCursor 0.9s steps(2) infinite;
+}
+
+@keyframes matrixCursor {
+  0%,
+  45% {
+    opacity: 1;
+  }
+
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   CORNERS
+========================================================= */
+
+.matrix-corners span {
+  position: absolute;
+
+  width: 34px;
+  height: 34px;
+
+  opacity: 0.45;
+}
+
+.matrix-corners span::before,
+.matrix-corners span::after {
+  content: "";
+
+  position: absolute;
+
+  background:
+    var(--matrix-green);
+}
+
+.matrix-corners span::before {
+  width: 100%;
+  height: 1px;
+}
+
+.matrix-corners span::after {
+  width: 1px;
+  height: 100%;
+}
+
+.matrix-corners span:nth-child(1) {
+  left: 18px;
+  top: 18px;
+}
+
+.matrix-corners span:nth-child(2) {
+  right: 18px;
+  top: 18px;
+
+  transform:
+    rotate(90deg);
+}
+
+.matrix-corners span:nth-child(3) {
+  left: 18px;
+  bottom: 18px;
+
+  transform:
+    rotate(-90deg);
+}
+
+.matrix-corners span:nth-child(4) {
+  right: 18px;
+  bottom: 18px;
+
+  transform:
+    rotate(180deg);
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+body.theme-matrix .premium-topbar {
+  background:
+    rgba(0, 5, 3, 0.88);
+
+  border-bottom:
+    1px solid
+    rgba(0, 255, 102, 0.18);
+
+  box-shadow:
+    0 15px 50px
+    rgba(0, 0, 0, 0.6);
+
+  backdrop-filter:
+    blur(20px);
+}
+
+body.theme-matrix .premium-brand-name {
+  color:
+    var(--matrix-green);
+
+  text-shadow:
+    0 0 18px
+    rgba(0, 255, 102, 0.45);
+}
+
+body.theme-matrix .premium-brand-role {
+  color:
+    var(--matrix-muted);
+}
+
+body.theme-matrix .premium-brand-mark {
+  border-color:
+    rgba(0, 255, 102, 0.35);
+
+  background:
+    rgba(0, 255, 102, 0.04);
+
+  color:
+    var(--matrix-green);
+
+  box-shadow:
+    inset 0 0 18px
+    rgba(0, 255, 102, 0.08),
+    0 0 20px
+    rgba(0, 255, 102, 0.06);
+}
+
+body.theme-matrix nav a {
+  color:
+    rgba(202, 255, 223, 0.62);
+
+  font-family:
+    "JetBrains Mono",
+    monospace;
+}
+
+body.theme-matrix nav a:hover {
+  color:
+    var(--matrix-green);
+
+  text-shadow:
+    0 0 12px
+    rgba(0, 255, 102, 0.5);
+}
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+body.theme-matrix main {
+  position: relative;
+
+  z-index: 5;
+}
+
+body.theme-matrix h1,
+body.theme-matrix h2,
+body.theme-matrix h3,
+body.theme-matrix h4 {
+  font-family:
+    "JetBrains Mono",
+    "Fira Code",
+    Consolas,
+    monospace;
+}
+
+body.theme-matrix h1 {
+  text-shadow:
+    0 0 30px
+    rgba(0, 255, 102, 0.18);
+}
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+body.theme-matrix article,
+body.theme-matrix .card,
+body.theme-matrix [class*="card"],
+body.theme-matrix [class*="panel"] {
+  background:
+    linear-gradient(
+      145deg,
+      rgba(0, 20, 10, 0.88),
+      rgba(0, 6, 4, 0.9)
+    );
+
+  border-color:
+    rgba(0, 255, 102, 0.12);
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.5);
+}
+
+body.theme-matrix article:hover,
+body.theme-matrix .card:hover,
+body.theme-matrix [class*="card"]:hover {
+  border-color:
+    rgba(0, 255, 102, 0.38);
+
+  box-shadow:
+    0 20px 70px
+    rgba(0, 0, 0, 0.55),
+    0 0 35px
+    rgba(0, 255, 102, 0.08);
+
+  transform:
+    translateY(-4px);
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+body.theme-matrix button,
+body.theme-matrix [role="button"] {
+  font-family:
+    "JetBrains Mono",
+    monospace;
+
+  border-color:
+    rgba(0, 255, 102, 0.25);
+
+  background:
+    rgba(0, 255, 102, 0.035);
+
+  color:
+    var(--matrix-green);
+}
+
+body.theme-matrix button:hover,
+body.theme-matrix [role="button"]:hover {
+  border-color:
+    var(--matrix-green);
+
+  background:
+    rgba(0, 255, 102, 0.09);
+
+  box-shadow:
+    0 0 25px
+    rgba(0, 255, 102, 0.12);
+}
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+body.theme-matrix input,
+body.theme-matrix textarea,
+body.theme-matrix select {
+  background:
+    rgba(0, 5, 3, 0.9);
+
+  border-color:
+    rgba(0, 255, 102, 0.15);
+
+  color:
+    var(--matrix-text);
+
+  font-family:
+    "JetBrains Mono",
+    monospace;
+}
+
+body.theme-matrix input:focus,
+body.theme-matrix textarea:focus,
+body.theme-matrix select:focus {
+  border-color:
+    rgba(0, 255, 102, 0.55);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(0, 255, 102, 0.05),
+    0 0 25px
+    rgba(0, 255, 102, 0.08);
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+body.theme-matrix .premium-search-bar {
+  background:
+    rgba(0, 7, 4, 0.92);
+
+  border-color:
+    rgba(0, 255, 102, 0.22);
+
+  box-shadow:
+    0 20px 70px
+    rgba(0, 0, 0, 0.6),
+    0 0 30px
+    rgba(0, 255, 102, 0.07);
+}
+
+body.theme-matrix .premium-search-bar input {
+  color:
+    var(--matrix-green);
+}
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+body.theme-matrix a:hover {
+  color:
+    var(--matrix-green);
+
+  text-shadow:
+    0 0 10px
+    rgba(0, 255, 102, 0.35);
+}
+
+/* =========================================================
+   IMAGES
+========================================================= */
+
+body.theme-matrix img {
+  filter:
+    grayscale(0.7)
+    sepia(1)
+    hue-rotate(75deg)
+    saturate(1.5)
+    contrast(1.08);
+}
+
+body.theme-matrix img:hover {
+  filter:
+    grayscale(0.15)
+    sepia(0.65)
+    hue-rotate(70deg)
+    saturate(1.45)
+    contrast(1.08);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+body.theme-matrix footer {
+  background:
+    rgba(0, 4, 2, 0.9);
+
+  border-top:
+    1px solid
+    rgba(0, 255, 102, 0.14);
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+body.theme-matrix::-webkit-scrollbar {
+  width: 8px;
+}
+
+body.theme-matrix::-webkit-scrollbar-track {
+  background:
+    #000302;
+}
+
+body.theme-matrix::-webkit-scrollbar-thumb {
+  background:
+    rgba(0, 255, 102, 0.22);
+
+  border:
+    2px solid
+    #000302;
+}
+
+body.theme-matrix::-webkit-scrollbar-thumb:hover {
+  background:
+    rgba(0, 255, 102, 0.55);
+}
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+body.theme-matrix ::selection {
+  background:
+    rgba(0, 255, 102, 0.3);
+
+  color:
+    #ffffff;
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  body.theme-matrix *,
+  body.theme-matrix *::before,
+  body.theme-matrix *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .matrix-rain {
+    display: none;
+  }
+
+  .matrix-scanlines {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+  .matrix-hud {
+    top: 88px;
+
+    font-size: 6px;
+
+    padding:
+      7px 9px;
+  }
+
+  .matrix-hud-left {
+    left: 10px;
+  }
+
+  .matrix-hud-right {
+    right: 10px;
+  }
+
+  .matrix-terminal {
+    left: 12px;
+    bottom: 15px;
+
+    font-size: 6px;
+  }
+
+  .matrix-center-core {
+    transform:
+      translate(-50%, -50%)
+      scale(0.7);
+  }
+
+  .matrix-rain {
+    opacity: 0.32;
+  }
+}

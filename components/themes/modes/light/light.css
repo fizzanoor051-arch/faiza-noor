@@ -1,0 +1,342 @@
+/* =========================================================
+   FAIZA NOOR PORTFOLIO
+   LIGHT VISUAL WORLD
+========================================================= */
+
+body[data-theme="light"] {
+  --theme-name: "light";
+
+  --theme-background: #f5f5f8;
+  --theme-foreground: #111116;
+
+  --theme-surface:
+    rgba(255, 255, 255, 0.78);
+
+  --theme-surface-strong:
+    rgba(255, 255, 255, 0.94);
+
+  --theme-border:
+    rgba(17, 17, 22, 0.09);
+
+  --theme-border-strong:
+    rgba(17, 17, 22, 0.16);
+
+  --theme-muted:
+    rgba(17, 17, 22, 0.55);
+
+  --theme-subtle:
+    rgba(17, 17, 22, 0.32);
+
+  --theme-accent:
+    #6d28d9;
+
+  --theme-accent-soft:
+    rgba(109, 40, 217, 0.1);
+
+  --theme-glow:
+    rgba(109, 40, 217, 0.16);
+
+  --theme-shadow:
+    rgba(30, 25, 45, 0.14);
+
+  --theme-radius-sm: 8px;
+  --theme-radius-md: 14px;
+  --theme-radius-lg: 20px;
+  --theme-radius-xl: 28px;
+
+  --theme-ease:
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+
+  --theme-duration: 700ms;
+
+  background:
+    var(--theme-background);
+
+  color:
+    var(--theme-foreground);
+
+  transition:
+    background-color
+      var(--theme-duration)
+      var(--theme-ease),
+    color
+      var(--theme-duration)
+      var(--theme-ease);
+}
+
+/* =========================================================
+   LIGHT ATMOSPHERE
+========================================================= */
+
+.light-theme-atmosphere {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -1;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  opacity: 1;
+}
+
+/* =========================================================
+   SOFT LIGHT GLOWS
+========================================================= */
+
+.light-theme-glow {
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  filter: blur(90px);
+
+  opacity: 0.28;
+
+  animation:
+    light-theme-float
+    12s
+    ease-in-out
+    infinite;
+}
+
+.light-theme-glow--one {
+  top: -180px;
+  left: 8%;
+
+  background:
+    rgba(
+      167,
+      139,
+      250,
+      0.38
+    );
+}
+
+.light-theme-glow--two {
+  right: 5%;
+  bottom: -180px;
+
+  background:
+    rgba(
+      96,
+      165,
+      250,
+      0.28
+    );
+
+  animation-delay: -5s;
+}
+
+@keyframes light-theme-float {
+  0%,
+  100% {
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      )
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        30px,
+        -25px,
+        0
+      )
+      scale(1.08);
+  }
+}
+
+/* =========================================================
+   SUBTLE GRID
+========================================================= */
+
+.light-theme-grid {
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(
+        17,
+        17,
+        22,
+        0.025
+      )
+      1px,
+      transparent
+      1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(
+        17,
+        17,
+        22,
+        0.025
+      )
+      1px,
+      transparent
+      1px
+    );
+
+  background-size:
+    55px 55px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black,
+      transparent
+    );
+
+  -webkit-mask-image:
+    linear-gradient(
+      to bottom,
+      black,
+      transparent
+    );
+
+  opacity: 0.7;
+}
+
+/* =========================================================
+   LIGHT NOISE
+========================================================= */
+
+.light-theme-noise {
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0.025;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+
+  mix-blend-mode: multiply;
+}
+
+/* =========================================================
+   GLOBAL LIGHT SURFACES
+========================================================= */
+
+body[data-theme="light"]
+.theme-surface {
+  background:
+    var(--theme-surface);
+
+  border:
+    1px solid
+    var(--theme-border);
+
+  box-shadow:
+    0 20px 60px
+    var(--theme-shadow);
+
+  backdrop-filter:
+    blur(24px)
+    saturate(130%);
+
+  -webkit-backdrop-filter:
+    blur(24px)
+    saturate(130%);
+}
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+body[data-theme="light"]
+.theme-accent {
+  color:
+    var(--theme-accent);
+}
+
+body[data-theme="light"]
+.theme-accent-bg {
+  background:
+    var(--theme-accent-soft);
+}
+
+body[data-theme="light"]
+.theme-glow {
+  box-shadow:
+    0 0 35px
+    var(--theme-glow);
+}
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+body[data-theme="light"] ::selection {
+  background:
+    rgba(
+      109,
+      40,
+      217,
+      0.18
+    );
+
+  color:
+    #111116;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+body[data-theme="light"] {
+  scrollbar-color:
+    rgba(109, 40, 217, 0.35)
+    rgba(17, 17, 22, 0.04);
+}
+
+body[data-theme="light"]::-webkit-scrollbar {
+  width: 8px;
+}
+
+body[data-theme="light"]::-webkit-scrollbar-track {
+  background:
+    rgba(17, 17, 22, 0.035);
+}
+
+body[data-theme="light"]::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+
+  background:
+    rgba(
+      109,
+      40,
+      217,
+      0.28
+    );
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .light-theme-glow {
+    animation: none;
+  }
+}

@@ -1,0 +1,1316 @@
+/* =========================================================
+   3D WORLD
+   Continuous cinematic motion
+   No hover required
+   Everything moves automatically
+========================================================= */
+
+body.theme-3d {
+  --theme-background: #03030a;
+  --theme-foreground: #ffffff;
+
+  --theme-surface:
+    rgba(10, 10, 25, 0.58);
+
+  --theme-surface-strong:
+    rgba(5, 5, 15, 0.88);
+
+  --theme-border:
+    rgba(140, 130, 255, 0.14);
+
+  --theme-border-strong:
+    rgba(160, 150, 255, 0.26);
+
+  --theme-muted:
+    rgba(255, 255, 255, 0.55);
+
+  --theme-subtle:
+    rgba(255, 255, 255, 0.3);
+
+  --theme-accent:
+    #a78bfa;
+
+  --theme-accent-soft:
+    rgba(139, 92, 246, 0.14);
+
+  --theme-glow:
+    rgba(139, 92, 246, 0.32);
+}
+
+/* =========================================================
+   WORLD
+========================================================= */
+
+body.theme-3d {
+  background:
+    #020208;
+
+  color:
+    white;
+
+  overflow-x: hidden;
+
+  perspective:
+    1400px;
+}
+
+.three-d-world {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -4;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  perspective:
+    1400px;
+
+  transform-style:
+    preserve-3d;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(102, 83, 255, 0.12),
+      transparent 32%
+    );
+}
+
+/* =========================================================
+   ENVIRONMENT
+========================================================= */
+
+.three-d-world__environment {
+  position: absolute;
+
+  inset: -20%;
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(126, 92, 255, 0.14),
+      transparent 22%
+    ),
+    radial-gradient(
+      circle at 20% 30%,
+      rgba(52, 110, 255, 0.1),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 80% 65%,
+      rgba(195, 72, 255, 0.08),
+      transparent 26%
+    ),
+    linear-gradient(
+      180deg,
+      #050512,
+      #020208
+    );
+
+  animation:
+    environment-drift
+    18s
+    ease-in-out
+    infinite;
+}
+
+@keyframes environment-drift {
+  0%,
+  100% {
+    transform:
+      scale(1)
+      translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform:
+      scale(1.08)
+      translate3d(
+        -1%,
+        1%,
+        0
+      );
+  }
+}
+
+/* =========================================================
+   LIGHT SOURCES
+========================================================= */
+
+.three-d-world__light {
+  position: absolute;
+
+  width: 500px;
+  height: 500px;
+
+  border-radius: 50%;
+
+  filter:
+    blur(80px);
+
+  opacity: 0.32;
+
+  animation:
+    light-orbit
+    14s
+    ease-in-out
+    infinite;
+}
+
+.three-d-world__light--one {
+  left: -10%;
+  top: 12%;
+
+  background:
+    rgba(77, 92, 255, 0.35);
+}
+
+.three-d-world__light--two {
+  right: -12%;
+  bottom: 8%;
+
+  background:
+    rgba(204, 82, 255, 0.26);
+
+  animation-delay:
+    -7s;
+}
+
+@keyframes light-orbit {
+  0%,
+  100% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(0.9);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        80px,
+        -50px,
+        0
+      )
+      scale(1.15);
+  }
+}
+
+/* =========================================================
+   PERSPECTIVE FLOOR
+========================================================= */
+
+.three-d-world__floor {
+  position: absolute;
+
+  left: -30%;
+  right: -30%;
+
+  bottom: -42%;
+
+  height: 80%;
+
+  transform:
+    perspective(800px)
+    rotateX(67deg)
+    translateZ(-120px);
+
+  transform-style:
+    preserve-3d;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 49.5%,
+      rgba(157, 139, 255, 0.16) 50%,
+      transparent 50.5%
+    );
+
+  opacity: 0.48;
+}
+
+.three-d-world__floor::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 79px,
+      rgba(144, 132, 255, 0.1) 80px,
+      transparent 81px
+    );
+}
+
+.three-d-world__floor::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 59px,
+      rgba(144, 132, 255, 0.12) 60px,
+      transparent 61px
+    );
+
+  animation:
+    floor-scroll
+    5s
+    linear
+    infinite;
+}
+
+@keyframes floor-scroll {
+  from {
+    transform:
+      translateY(0);
+  }
+
+  to {
+    transform:
+      translateY(60px);
+  }
+}
+
+/* =========================================================
+   SCENE
+========================================================= */
+
+.three-d-world__scene {
+  position: absolute;
+
+  inset: 0;
+
+  display: grid;
+
+  place-items: center;
+
+  perspective:
+    1200px;
+
+  transform-style:
+    preserve-3d;
+
+  animation:
+    scene-camera
+    14s
+    ease-in-out
+    infinite;
+}
+
+@keyframes scene-camera {
+  0%,
+  100% {
+    transform:
+      translate3d(0, 0, 0)
+      rotateX(0deg)
+      rotateY(0deg);
+  }
+
+  50% {
+    transform:
+      translate3d(0, -18px, 40px)
+      rotateX(2deg)
+      rotateY(-4deg);
+  }
+}
+
+/* =========================================================
+   3D CUBE
+========================================================= */
+
+.three-d-object--cube {
+  position: absolute;
+
+  width: 170px;
+  height: 170px;
+
+  transform-style:
+    preserve-3d;
+
+  animation:
+    cube-spin
+    13s
+    linear
+    infinite;
+}
+
+.three-d-object--cube .face {
+  position: absolute;
+
+  width: 170px;
+  height: 170px;
+
+  display: grid;
+
+  place-items: center;
+
+  font-family:
+    monospace;
+
+  font-size: 32px;
+
+  letter-spacing: 0.2em;
+
+  color:
+    rgba(255, 255, 255, 0.85);
+
+  border:
+    1px solid
+    rgba(176, 157, 255, 0.35);
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(123, 93, 255, 0.16),
+      rgba(255, 255, 255, 0.02)
+    );
+
+  box-shadow:
+    inset 0 0 35px
+    rgba(148, 111, 255, 0.1),
+
+    0 0 35px
+    rgba(118, 91, 255, 0.08);
+
+  backdrop-filter:
+    blur(5px);
+}
+
+.face--front {
+  transform:
+    translateZ(85px);
+}
+
+.face--back {
+  transform:
+    rotateY(180deg)
+    translateZ(85px);
+}
+
+.face--right {
+  transform:
+    rotateY(90deg)
+    translateZ(85px);
+}
+
+.face--left {
+  transform:
+    rotateY(-90deg)
+    translateZ(85px);
+}
+
+.face--top {
+  transform:
+    rotateX(90deg)
+    translateZ(85px);
+}
+
+.face--bottom {
+  transform:
+    rotateX(-90deg)
+    translateZ(85px);
+}
+
+@keyframes cube-spin {
+  from {
+    transform:
+      rotateX(0deg)
+      rotateY(0deg)
+      rotateZ(0deg);
+  }
+
+  to {
+    transform:
+      rotateX(360deg)
+      rotateY(360deg)
+      rotateZ(180deg);
+  }
+}
+
+/* =========================================================
+   ORBITING RING
+========================================================= */
+
+.three-d-object--ring {
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  border:
+    1px solid
+    rgba(157, 137, 255, 0.22);
+
+  border-radius: 50%;
+
+  transform-style:
+    preserve-3d;
+
+  animation:
+    ring-spin
+    11s
+    linear
+    infinite;
+}
+
+.three-d-object--ring::before,
+.three-d-object--ring::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 28px;
+
+  border:
+    1px solid
+    rgba(129, 115, 255, 0.15);
+
+  border-radius: 50%;
+}
+
+.three-d-object--ring::after {
+  inset: 70px;
+
+  border-color:
+    rgba(199, 126, 255, 0.12);
+}
+
+.three-d-object--ring span {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 12px;
+  height: 12px;
+
+  margin:
+    -6px;
+
+  border-radius: 50%;
+
+  background:
+    #c7b9ff;
+
+  box-shadow:
+    0 0 20px
+    rgba(173, 145, 255, 0.9);
+}
+
+.three-d-object--ring span:nth-child(1) {
+  transform:
+    translateX(210px);
+}
+
+.three-d-object--ring span:nth-child(2) {
+  transform:
+    rotate(120deg)
+    translateX(210px);
+}
+
+.three-d-object--ring span:nth-child(3) {
+  transform:
+    rotate(240deg)
+    translateX(210px);
+}
+
+@keyframes ring-spin {
+  from {
+    transform:
+      rotateX(68deg)
+      rotateY(0deg)
+      rotateZ(0deg);
+  }
+
+  to {
+    transform:
+      rotateX(68deg)
+      rotateY(360deg)
+      rotateZ(360deg);
+  }
+}
+
+/* =========================================================
+   DIAMOND
+========================================================= */
+
+.three-d-object--diamond {
+  position: absolute;
+
+  width: 110px;
+  height: 110px;
+
+  right: 20%;
+
+  top: 26%;
+
+  transform-style:
+    preserve-3d;
+
+  animation:
+    diamond-float
+    8s
+    ease-in-out
+    infinite;
+}
+
+.three-d-object--diamond span {
+  position: absolute;
+
+  width: 100px;
+  height: 100px;
+
+  border:
+    1px solid
+    rgba(198, 170, 255, 0.3);
+
+  background:
+    rgba(145, 106, 255, 0.04);
+
+  transform:
+    rotate(45deg)
+    skew(8deg, 8deg);
+}
+
+.three-d-object--diamond span:nth-child(1) {
+  transform:
+    rotateY(0deg)
+    rotate(45deg);
+}
+
+.three-d-object--diamond span:nth-child(2) {
+  transform:
+    rotateY(90deg)
+    rotate(45deg);
+}
+
+.three-d-object--diamond span:nth-child(3) {
+  transform:
+    rotateX(90deg)
+    rotate(45deg);
+}
+
+@keyframes diamond-float {
+  0%,
+  100% {
+    transform:
+      translate3d(0, 0, 0)
+      rotateX(0deg)
+      rotateY(0deg);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        0,
+        -55px,
+        40px
+      )
+      rotateX(180deg)
+      rotateY(180deg);
+  }
+}
+
+/* =========================================================
+   ORB
+========================================================= */
+
+.three-d-object--orb {
+  position: absolute;
+
+  left: 18%;
+
+  top: 28%;
+
+  width: 90px;
+  height: 90px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      rgba(255, 255, 255, 0.9),
+      rgba(148, 117, 255, 0.7) 24%,
+      rgba(60, 38, 130, 0.85) 58%,
+      rgba(11, 7, 28, 0.9)
+    );
+
+  box-shadow:
+    0 0 35px
+    rgba(137, 103, 255, 0.55),
+
+    0 0 90px
+    rgba(106, 73, 255, 0.2);
+
+  animation:
+    orb-float
+    6s
+    ease-in-out
+    infinite;
+}
+
+.three-d-object--orb span {
+  position: absolute;
+
+  inset: -25px;
+
+  border:
+    1px solid
+    rgba(193, 171, 255, 0.24);
+
+  border-radius: 50%;
+
+  transform:
+    rotateX(65deg);
+
+  animation:
+    orb-ring
+    5s
+    linear
+    infinite;
+}
+
+@keyframes orb-float {
+  0%,
+  100% {
+    transform:
+      translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        20px,
+        -45px,
+        70px
+      );
+  }
+}
+
+@keyframes orb-ring {
+  to {
+    transform:
+      rotateX(65deg)
+      rotateZ(360deg);
+  }
+}
+
+/* =========================================================
+   SMALL CUBE
+========================================================= */
+
+.three-d-object--small-cube {
+  position: absolute;
+
+  right: 15%;
+  bottom: 25%;
+
+  width: 65px;
+  height: 65px;
+
+  border:
+    1px solid
+    rgba(160, 143, 255, 0.28);
+
+  background:
+    rgba(120, 93, 255, 0.08);
+
+  box-shadow:
+    0 0 30px
+    rgba(119, 88, 255, 0.15);
+
+  animation:
+    small-cube
+    7s
+    linear
+    infinite;
+}
+
+@keyframes small-cube {
+  0%,
+  100% {
+    transform:
+      translate3d(0, 0, 0)
+      rotateX(0)
+      rotateY(0);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        -70px,
+        -50px,
+        100px
+      )
+      rotateX(180deg)
+      rotateY(360deg);
+  }
+}
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+.three-d-world__particles {
+  position: absolute;
+
+  inset: 0;
+
+  transform-style:
+    preserve-3d;
+}
+
+.three-d-world__particles span {
+  position: absolute;
+
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(204, 193, 255, 0.9);
+
+  box-shadow:
+    0 0 10px
+    rgba(168, 145, 255, 0.7);
+
+  animation:
+    particle-float
+    9s
+    ease-in-out
+    infinite;
+}
+
+.three-d-world__particles span:nth-child(1) {
+  left: 5%;
+  top: 20%;
+}
+
+.three-d-world__particles span:nth-child(2) {
+  left: 12%;
+  top: 45%;
+  animation-delay: -2s;
+}
+
+.three-d-world__particles span:nth-child(3) {
+  left: 19%;
+  top: 72%;
+  animation-delay: -4s;
+}
+
+.three-d-world__particles span:nth-child(4) {
+  left: 27%;
+  top: 14%;
+  animation-delay: -1s;
+}
+
+.three-d-world__particles span:nth-child(5) {
+  left: 34%;
+  top: 62%;
+  animation-delay: -5s;
+}
+
+.three-d-world__particles span:nth-child(6) {
+  left: 41%;
+  top: 32%;
+  animation-delay: -3s;
+}
+
+.three-d-world__particles span:nth-child(7) {
+  left: 49%;
+  top: 78%;
+  animation-delay: -7s;
+}
+
+.three-d-world__particles span:nth-child(8) {
+  left: 57%;
+  top: 17%;
+  animation-delay: -4s;
+}
+
+.three-d-world__particles span:nth-child(9) {
+  left: 64%;
+  top: 51%;
+  animation-delay: -6s;
+}
+
+.three-d-world__particles span:nth-child(10) {
+  left: 71%;
+  top: 30%;
+  animation-delay: -2.5s;
+}
+
+.three-d-world__particles span:nth-child(11) {
+  left: 78%;
+  top: 68%;
+  animation-delay: -5.5s;
+}
+
+.three-d-world__particles span:nth-child(12) {
+  left: 86%;
+  top: 22%;
+  animation-delay: -8s;
+}
+
+.three-d-world__particles span:nth-child(13) {
+  left: 94%;
+  top: 48%;
+  animation-delay: -3.5s;
+}
+
+.three-d-world__particles span:nth-child(14) {
+  left: 7%;
+  top: 84%;
+  animation-delay: -6s;
+}
+
+.three-d-world__particles span:nth-child(15) {
+  left: 22%;
+  top: 35%;
+  animation-delay: -1.5s;
+}
+
+.three-d-world__particles span:nth-child(16) {
+  left: 37%;
+  top: 88%;
+  animation-delay: -7.5s;
+}
+
+.three-d-world__particles span:nth-child(17) {
+  left: 53%;
+  top: 43%;
+  animation-delay: -4.5s;
+}
+
+.three-d-world__particles span:nth-child(18) {
+  left: 69%;
+  top: 82%;
+  animation-delay: -2.8s;
+}
+
+.three-d-world__particles span:nth-child(19) {
+  left: 83%;
+  top: 37%;
+  animation-delay: -5.8s;
+}
+
+.three-d-world__particles span:nth-child(20) {
+  left: 91%;
+  top: 76%;
+  animation-delay: -7s;
+}
+
+.three-d-world__particles span:nth-child(21) {
+  left: 15%;
+  top: 12%;
+  animation-delay: -4s;
+}
+
+.three-d-world__particles span:nth-child(22) {
+  left: 45%;
+  top: 12%;
+  animation-delay: -2s;
+}
+
+.three-d-world__particles span:nth-child(23) {
+  left: 73%;
+  top: 12%;
+  animation-delay: -6s;
+}
+
+.three-d-world__particles span:nth-child(24) {
+  left: 97%;
+  top: 17%;
+  animation-delay: -3s;
+}
+
+.three-d-world__particles span:nth-child(25) {
+  left: 30%;
+  top: 46%;
+  animation-delay: -5s;
+}
+
+.three-d-world__particles span:nth-child(26) {
+  left: 58%;
+  top: 63%;
+  animation-delay: -1s;
+}
+
+.three-d-world__particles span:nth-child(27) {
+  left: 88%;
+  top: 60%;
+  animation-delay: -4s;
+}
+
+.three-d-world__particles span:nth-child(28) {
+  left: 3%;
+  top: 60%;
+  animation-delay: -8s;
+}
+
+.three-d-world__particles span:nth-child(29) {
+  left: 17%;
+  top: 91%;
+  animation-delay: -2s;
+}
+
+.three-d-world__particles span:nth-child(30) {
+  left: 66%;
+  top: 91%;
+  animation-delay: -6s;
+}
+
+.three-d-world__particles span:nth-child(31) {
+  left: 80%;
+  top: 8%;
+  animation-delay: -3s;
+}
+
+.three-d-world__particles span:nth-child(32) {
+  left: 39%;
+  top: 8%;
+  animation-delay: -7s;
+}
+
+.three-d-world__particles span:nth-child(33) {
+  left: 61%;
+  top: 38%;
+  animation-delay: -5s;
+}
+
+.three-d-world__particles span:nth-child(34) {
+  left: 99%;
+  top: 90%;
+  animation-delay: -1s;
+}
+
+@keyframes particle-float {
+  0%,
+  100% {
+    opacity: 0.15;
+
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      )
+      scale(0.7);
+  }
+
+  50% {
+    opacity: 0.9;
+
+    transform:
+      translate3d(
+        35px,
+        -45px,
+        90px
+      )
+      scale(1.4);
+  }
+}
+
+/* =========================================================
+   ORBIT SYSTEM
+========================================================= */
+
+.three-d-world__orbit {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 720px;
+  height: 720px;
+
+  margin-left: -360px;
+  margin-top: -360px;
+
+  border:
+    1px solid
+    rgba(173, 150, 255, 0.12);
+
+  border-radius: 50%;
+
+  transform-style:
+    preserve-3d;
+
+  transform:
+    rotateX(72deg);
+
+  animation:
+    master-orbit
+    24s
+    linear
+    infinite;
+}
+
+.three-d-world__orbit span {
+  position: absolute;
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background:
+    #b9a9ff;
+
+  box-shadow:
+    0 0 18px
+    rgba(169, 145, 255, 0.9);
+}
+
+.three-d-world__orbit span:nth-child(1) {
+  top: -4px;
+  left: 50%;
+}
+
+.three-d-world__orbit span:nth-child(2) {
+  bottom: 12%;
+  left: 10%;
+}
+
+.three-d-world__orbit span:nth-child(3) {
+  right: 10%;
+  bottom: 12%;
+}
+
+@keyframes master-orbit {
+  to {
+    transform:
+      rotateX(72deg)
+      rotateZ(360deg);
+  }
+}
+
+/* =========================================================
+   FOG
+========================================================= */
+
+.three-d-world__fog {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 25%,
+      rgba(2, 2, 8, 0.42) 100%
+    );
+
+  backdrop-filter:
+    blur(0.2px);
+}
+
+/* =========================================================
+   VIGNETTE
+========================================================= */
+
+.three-d-world__vignette {
+  position: absolute;
+
+  inset: 0;
+
+  box-shadow:
+    inset 0 0 180px
+    rgba(0, 0, 0, 0.65);
+}
+
+/* =========================================================
+   FULL WEBSITE 3D TRANSFORMATION
+========================================================= */
+
+body.theme-3d .premium-topbar {
+  background:
+    rgba(4, 4, 14, 0.52);
+
+  border-color:
+    rgba(174, 156, 255, 0.15);
+
+  backdrop-filter:
+    blur(24px);
+
+  transform-style:
+    preserve-3d;
+}
+
+body.theme-3d .premium-search-wrapper {
+  transform-style:
+    preserve-3d;
+
+  perspective:
+    1000px;
+}
+
+body.theme-3d .premium-search-bar {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(20, 17, 45, 0.72),
+      rgba(7, 7, 19, 0.65)
+    );
+
+  border-color:
+    rgba(178, 159, 255, 0.2);
+
+  box-shadow:
+    0 25px 80px
+    rgba(0, 0, 0, 0.45),
+
+    inset 0 0 35px
+    rgba(141, 112, 255, 0.06);
+
+  transform:
+    translateZ(25px);
+
+  animation:
+    search-depth
+    7s
+    ease-in-out
+    infinite;
+}
+
+@keyframes search-depth {
+  0%,
+  100% {
+    transform:
+      translateZ(15px)
+      rotateX(0deg);
+  }
+
+  50% {
+    transform:
+      translateZ(35px)
+      rotateX(1deg);
+  }
+}
+
+body.theme-3d .theme-switcher__option {
+  transform-style:
+    preserve-3d;
+
+  transition:
+    transform 500ms ease,
+    border-color 500ms ease,
+    background 500ms ease;
+}
+
+body.theme-3d .theme-switcher__option:hover {
+  transform:
+    perspective(700px)
+    translateZ(18px)
+    rotateX(2deg)
+    rotateY(-2deg);
+}
+
+body.theme-3d .premium-nav-link:hover {
+  text-shadow:
+    0 0 20px
+    rgba(178, 155, 255, 0.7);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767px) {
+  .three-d-object--cube {
+    width: 105px;
+    height: 105px;
+  }
+
+  .three-d-object--cube .face {
+    width: 105px;
+    height: 105px;
+
+    font-size: 20px;
+  }
+
+  .face--front {
+    transform:
+      translateZ(52px);
+  }
+
+  .face--back {
+    transform:
+      rotateY(180deg)
+      translateZ(52px);
+  }
+
+  .face--right {
+    transform:
+      rotateY(90deg)
+      translateZ(52px);
+  }
+
+  .face--left {
+    transform:
+      rotateY(-90deg)
+      translateZ(52px);
+  }
+
+  .face--top {
+    transform:
+      rotateX(90deg)
+      translateZ(52px);
+  }
+
+  .face--bottom {
+    transform:
+      rotateX(-90deg)
+      translateZ(52px);
+  }
+
+  .three-d-object--ring {
+    width: 270px;
+    height: 270px;
+  }
+
+  .three-d-world__orbit {
+    width: 430px;
+    height: 430px;
+
+    margin-left: -215px;
+    margin-top: -215px;
+  }
+
+  .three-d-object--diamond {
+    right: 8%;
+  }
+
+  .three-d-object--orb {
+    left: 8%;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .three-d-world *,
+  .three-d-world *::before,
+  .three-d-world *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

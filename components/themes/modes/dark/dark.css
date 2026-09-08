@@ -1,0 +1,399 @@
+/* =========================================================
+   FAIZA NOOR PORTFOLIO
+   DARK VISUAL WORLD
+========================================================= */
+
+body[data-theme="dark"] {
+  --theme-name: "dark";
+
+  --theme-background: #010106;
+  --theme-foreground: #f7f5ff;
+
+  --theme-surface:
+    rgba(8, 7, 16, 0.84);
+
+  --theme-surface-strong:
+    rgba(5, 5, 12, 0.95);
+
+  --theme-border:
+    rgba(255, 255, 255, 0.055);
+
+  --theme-border-strong:
+    rgba(255, 255, 255, 0.11);
+
+  --theme-muted:
+    rgba(255, 255, 255, 0.43);
+
+  --theme-subtle:
+    rgba(255, 255, 255, 0.24);
+
+  --theme-accent:
+    #8b5cf6;
+
+  --theme-accent-soft:
+    rgba(124, 58, 237, 0.15);
+
+  --theme-glow:
+    rgba(109, 40, 217, 0.22);
+
+  --theme-shadow:
+    rgba(0, 0, 0, 0.62);
+
+  --theme-radius-sm: 8px;
+  --theme-radius-md: 14px;
+  --theme-radius-lg: 20px;
+  --theme-radius-xl: 28px;
+
+  --theme-ease:
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+
+  --theme-duration: 700ms;
+
+  background:
+    var(--theme-background);
+
+  color:
+    var(--theme-foreground);
+
+  transition:
+    background-color
+      var(--theme-duration)
+      var(--theme-ease),
+    color
+      var(--theme-duration)
+      var(--theme-ease);
+}
+
+/* =========================================================
+   DARK ATMOSPHERE
+========================================================= */
+
+.dark-theme-atmosphere {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -1;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 20% 15%,
+      rgba(
+        109,
+        40,
+        217,
+        0.08
+      ),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 82% 80%,
+      rgba(
+        59,
+        130,
+        246,
+        0.045
+      ),
+      transparent 30%
+    );
+
+  opacity: 1;
+}
+
+/* =========================================================
+   AMBIENT ORBS
+========================================================= */
+
+.dark-theme-orb {
+  position: absolute;
+
+  width: 480px;
+  height: 480px;
+
+  border-radius: 50%;
+
+  filter: blur(110px);
+
+  opacity: 0.22;
+
+  animation:
+    dark-theme-drift
+    16s
+    ease-in-out
+    infinite;
+}
+
+.dark-theme-orb--one {
+  top: -250px;
+  left: -100px;
+
+  background:
+    rgba(
+      124,
+      58,
+      237,
+      0.35
+    );
+}
+
+.dark-theme-orb--two {
+  right: -200px;
+  bottom: -250px;
+
+  background:
+    rgba(
+      79,
+      70,
+      229,
+      0.3
+    );
+
+  animation-delay: -7s;
+}
+
+@keyframes dark-theme-drift {
+  0%,
+  100% {
+    transform:
+      translate3d(
+        0,
+        0,
+        0
+      )
+      scale(1);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        -35px,
+        25px,
+        0
+      )
+      scale(1.1);
+  }
+}
+
+/* =========================================================
+   DARK GRID
+========================================================= */
+
+.dark-theme-grid {
+  position: absolute;
+
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(
+        255,
+        255,
+        255,
+        0.018
+      )
+      1px,
+      transparent
+      1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(
+        255,
+        255,
+        255,
+        0.018
+      )
+      1px,
+      transparent
+      1px
+    );
+
+  background-size:
+    65px 65px;
+
+  mask-image:
+    radial-gradient(
+      ellipse at center,
+      black 0%,
+      transparent 72%
+    );
+
+  -webkit-mask-image:
+    radial-gradient(
+      ellipse at center,
+      black 0%,
+      transparent 72%
+    );
+}
+
+/* =========================================================
+   VIGNETTE
+========================================================= */
+
+.dark-theme-vignette {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      rgba(
+        0,
+        0,
+        0,
+        0.5
+      )
+      100%
+    );
+}
+
+/* =========================================================
+   DARK NOISE
+========================================================= */
+
+.dark-theme-noise {
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0.035;
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+
+  mix-blend-mode: screen;
+}
+
+/* =========================================================
+   GLOBAL DARK SURFACES
+========================================================= */
+
+body[data-theme="dark"]
+.theme-surface {
+  background:
+    var(--theme-surface);
+
+  border:
+    1px solid
+    var(--theme-border);
+
+  box-shadow:
+    0 25px 75px
+    var(--theme-shadow);
+
+  backdrop-filter:
+    blur(28px)
+    saturate(135%);
+
+  -webkit-backdrop-filter:
+    blur(28px)
+    saturate(135%);
+}
+
+/* =========================================================
+   DARK ACCENTS
+========================================================= */
+
+body[data-theme="dark"]
+.theme-accent {
+  color:
+    var(--theme-accent);
+
+  text-shadow:
+    0 0 20px
+    rgba(
+      139,
+      92,
+      246,
+      0.22
+    );
+}
+
+body[data-theme="dark"]
+.theme-accent-bg {
+  background:
+    var(--theme-accent-soft);
+}
+
+body[data-theme="dark"]
+.theme-glow {
+  box-shadow:
+    0 0 45px
+    var(--theme-glow);
+}
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+body[data-theme="dark"] ::selection {
+  background:
+    rgba(
+      139,
+      92,
+      246,
+      0.28
+    );
+
+  color:
+    #ffffff;
+}
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+body[data-theme="dark"] {
+  scrollbar-color:
+    rgba(139, 92, 246, 0.32)
+    rgba(255, 255, 255, 0.025);
+}
+
+body[data-theme="dark"]::-webkit-scrollbar {
+  width: 8px;
+}
+
+body[data-theme="dark"]::-webkit-scrollbar-track {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.02
+    );
+}
+
+body[data-theme="dark"]::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+
+  background:
+    rgba(
+      139,
+      92,
+      246,
+      0.28
+    );
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .dark-theme-orb {
+    animation: none;
+  }
+}

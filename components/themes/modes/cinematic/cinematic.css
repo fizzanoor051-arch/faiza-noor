@@ -1,0 +1,1316 @@
+/* =========================================================
+   CINEMATIC HORROR WORLD
+   Original horror-movie atmosphere
+   No gore — psychological / supernatural / cinematic
+========================================================= */
+
+body.theme-cinematic {
+  --theme-background: #030204;
+  --theme-foreground: #f4f0f2;
+
+  --theme-surface:
+    rgba(12, 8, 13, 0.72);
+
+  --theme-surface-strong:
+    rgba(5, 3, 7, 0.94);
+
+  --theme-border:
+    rgba(255, 255, 255, 0.1);
+
+  --theme-border-strong:
+    rgba(255, 255, 255, 0.2);
+
+  --theme-muted:
+    rgba(245, 238, 243, 0.55);
+
+  --theme-subtle:
+    rgba(245, 238, 243, 0.3);
+
+  --theme-accent:
+    #d7a9b8;
+
+  --theme-accent-soft:
+    rgba(215, 169, 184, 0.1);
+
+  --theme-glow:
+    rgba(215, 169, 184, 0.2);
+}
+
+/* =========================================================
+   BASE
+========================================================= */
+
+body.theme-cinematic {
+  background:
+    #020103;
+
+  color:
+    var(--theme-foreground);
+
+  overflow-x: hidden;
+
+  transition:
+    background 1s ease,
+    color 1s ease;
+}
+
+/* =========================================================
+   HORROR WORLD
+========================================================= */
+
+.cinematic-world {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -4;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 28%,
+      rgba(84, 68, 88, 0.16),
+      transparent 36%
+    ),
+    linear-gradient(
+      180deg,
+      #08060b 0%,
+      #030205 55%,
+      #010101 100%
+    );
+}
+
+/* =========================================================
+   MOVING VOID
+========================================================= */
+
+.cinematic-world__void {
+  position: absolute;
+
+  inset: -15%;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(125, 93, 115, 0.1),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 15% 25%,
+      rgba(95, 73, 110, 0.08),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 85% 70%,
+      rgba(110, 60, 82, 0.07),
+      transparent 28%
+    );
+
+  animation:
+    horror-breath
+    12s
+    ease-in-out
+    infinite;
+}
+
+@keyframes horror-breath {
+  0%,
+  100% {
+    transform:
+      scale(1)
+      translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform:
+      scale(1.08)
+      translate3d(
+        -1%,
+        1%,
+        0
+      );
+  }
+}
+
+/* =========================================================
+   MOON
+========================================================= */
+
+.cinematic-world__moon {
+  position: absolute;
+
+  width: 260px;
+  height: 260px;
+
+  top: 9%;
+  right: 13%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #eee9df,
+      #b7b1aa 58%,
+      #68636a 100%
+    );
+
+  box-shadow:
+    0 0 45px
+    rgba(228, 220, 225, 0.15),
+
+    0 0 120px
+    rgba(209, 193, 207, 0.08);
+
+  opacity: 0.48;
+
+  animation:
+    moon-drift
+    18s
+    ease-in-out
+    infinite;
+}
+
+.cinematic-world__moon::before,
+.cinematic-world__moon::after {
+  content: "";
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background:
+    rgba(70, 66, 72, 0.2);
+}
+
+.cinematic-world__moon::before {
+  width: 32px;
+  height: 32px;
+
+  left: 42px;
+  top: 64px;
+}
+
+.cinematic-world__moon::after {
+  width: 48px;
+  height: 48px;
+
+  right: 45px;
+  bottom: 54px;
+}
+
+.cinematic-world__moon span {
+  position: absolute;
+
+  width: 24px;
+  height: 24px;
+
+  left: 90px;
+  top: 42px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(60, 57, 64, 0.18);
+}
+
+@keyframes moon-drift {
+  0%,
+  100% {
+    transform:
+      translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform:
+      translate3d(
+        -35px,
+        15px,
+        0
+      );
+  }
+}
+
+/* =========================================================
+   CLOUDS
+========================================================= */
+
+.cinematic-world__clouds {
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  opacity: 0.5;
+}
+
+.cinematic-world__clouds span {
+  position: absolute;
+
+  width: 70vw;
+  height: 130px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(11, 9, 14, 0.85);
+
+  filter:
+    blur(28px);
+
+  animation:
+    cloud-drift
+    28s
+    linear
+    infinite;
+}
+
+.cinematic-world__clouds span:nth-child(1) {
+  top: 15%;
+  left: -50%;
+}
+
+.cinematic-world__clouds span:nth-child(2) {
+  top: 30%;
+  left: -70%;
+
+  opacity: 0.55;
+
+  animation-duration: 36s;
+  animation-delay: -11s;
+}
+
+.cinematic-world__clouds span:nth-child(3) {
+  top: 43%;
+  left: -40%;
+
+  opacity: 0.35;
+
+  animation-duration: 44s;
+  animation-delay: -22s;
+}
+
+.cinematic-world__clouds span:nth-child(4) {
+  top: 7%;
+  left: -80%;
+
+  opacity: 0.28;
+
+  animation-duration: 50s;
+  animation-delay: -31s;
+}
+
+@keyframes cloud-drift {
+  from {
+    transform:
+      translateX(0);
+  }
+
+  to {
+    transform:
+      translateX(190vw);
+  }
+}
+
+/* =========================================================
+   HAUNTED FOG
+========================================================= */
+
+.cinematic-world__fog {
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+}
+
+.cinematic-world__fog span {
+  position: absolute;
+
+  left: -20%;
+
+  width: 140%;
+
+  height: 180px;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(195, 185, 194, 0.11),
+      transparent 70%
+    );
+
+  filter:
+    blur(25px);
+
+  animation:
+    fog-flow
+    20s
+    ease-in-out
+    infinite;
+}
+
+.cinematic-world__fog span:nth-child(1) {
+  bottom: 28%;
+}
+
+.cinematic-world__fog span:nth-child(2) {
+  bottom: 42%;
+
+  opacity: 0.5;
+
+  animation-delay: -7s;
+}
+
+.cinematic-world__fog span:nth-child(3) {
+  bottom: 12%;
+
+  opacity: 0.4;
+
+  animation-delay: -13s;
+}
+
+@keyframes fog-flow {
+  0%,
+  100% {
+    transform:
+      translateX(-5%);
+  }
+
+  50% {
+    transform:
+      translateX(5%);
+  }
+}
+
+/* =========================================================
+   HAUNTED FOREST
+========================================================= */
+
+.cinematic-world__forest {
+  position: absolute;
+
+  left: -5%;
+  right: -5%;
+
+  bottom: 0;
+
+  height: 42%;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content:
+    space-around;
+
+  opacity: 0.82;
+}
+
+.cinematic-world__forest span {
+  position: relative;
+
+  width: 4%;
+  min-width: 34px;
+
+  height:
+    calc(
+      130px +
+      (var(--tree-height, 1) * 20px)
+    );
+
+  background:
+    linear-gradient(
+      90deg,
+      #010101,
+      #09070a,
+      #010101
+    );
+
+  clip-path:
+    polygon(
+      45% 0,
+      60% 14%,
+      54% 27%,
+      72% 40%,
+      59% 42%,
+      82% 61%,
+      62% 59%,
+      80% 80%,
+      56% 75%,
+      68% 100%,
+      35% 100%,
+      45% 76%,
+      20% 82%,
+      36% 61%,
+      15% 63%,
+      39% 41%,
+      25% 43%,
+      43% 26%,
+      35% 17%
+    );
+
+  transform-origin:
+    bottom center;
+
+  animation:
+    forest-breath
+    7s
+    ease-in-out
+    infinite alternate;
+}
+
+.cinematic-world__forest span:nth-child(2n) {
+  height: 260px;
+  animation-delay: -2s;
+}
+
+.cinematic-world__forest span:nth-child(3n) {
+  height: 340px;
+  animation-delay: -4s;
+}
+
+.cinematic-world__forest span:nth-child(5n) {
+  height: 210px;
+  animation-delay: -5s;
+}
+
+@keyframes forest-breath {
+  from {
+    transform:
+      scaleX(0.96)
+      skewX(-1deg);
+  }
+
+  to {
+    transform:
+      scaleX(1.03)
+      skewX(1deg);
+  }
+}
+
+/* =========================================================
+   GIANT SHADOW
+========================================================= */
+
+.cinematic-world__shadow {
+  position: absolute;
+
+  left: 50%;
+  top: 34%;
+
+  width: 170px;
+  height: 390px;
+
+  transform:
+    translateX(-50%)
+    scale(0.8);
+
+  opacity: 0;
+
+  filter:
+    blur(7px);
+
+  animation:
+    shadow-appear
+    14s
+    ease-in-out
+    infinite;
+}
+
+.shadow-head {
+  position: absolute;
+
+  width: 100px;
+  height: 120px;
+
+  left: 35px;
+  top: 0;
+
+  border-radius:
+    48% 48% 44% 44%;
+
+  background:
+    #010101;
+}
+
+.shadow-body {
+  position: absolute;
+
+  width: 145px;
+  height: 250px;
+
+  left: 13px;
+  top: 90px;
+
+  border-radius:
+    48% 48% 15% 15%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #010101,
+      rgba(0, 0, 0, 0.65)
+    );
+}
+
+.shadow-arm {
+  position: absolute;
+
+  width: 32px;
+  height: 230px;
+
+  top: 110px;
+
+  border-radius: 50%;
+
+  background:
+    #010101;
+}
+
+.shadow-arm--left {
+  left: 0;
+
+  transform:
+    rotate(10deg);
+}
+
+.shadow-arm--right {
+  right: 0;
+
+  transform:
+    rotate(-10deg);
+}
+
+@keyframes shadow-appear {
+  0%,
+  45%,
+  100% {
+    opacity: 0;
+
+    transform:
+      translateX(-50%)
+      scale(0.72);
+  }
+
+  52%,
+  66% {
+    opacity: 0.36;
+
+    transform:
+      translateX(-50%)
+      scale(0.9);
+  }
+
+  70% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   FLOATING EYES
+========================================================= */
+
+.cinematic-world__eyes {
+  position: absolute;
+
+  inset: 0;
+}
+
+.cinematic-world__eyes span {
+  position: absolute;
+
+  width: 8px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(226, 195, 205, 0.65);
+
+  box-shadow:
+    0 0 12px
+    rgba(226, 195, 205, 0.4);
+
+  opacity: 0;
+
+  animation:
+    eye-blink
+    8s
+    ease-in-out
+    infinite;
+}
+
+.cinematic-world__eyes span:nth-child(1) {
+  left: 18%;
+  top: 42%;
+}
+
+.cinematic-world__eyes span:nth-child(2) {
+  left: 24%;
+  top: 55%;
+
+  animation-delay: -2s;
+}
+
+.cinematic-world__eyes span:nth-child(3) {
+  right: 17%;
+  top: 38%;
+
+  animation-delay: -4s;
+}
+
+.cinematic-world__eyes span:nth-child(4) {
+  right: 27%;
+  top: 59%;
+
+  animation-delay: -6s;
+}
+
+.cinematic-world__eyes span:nth-child(5) {
+  left: 45%;
+  top: 24%;
+
+  animation-delay: -1s;
+}
+
+.cinematic-world__eyes span:nth-child(6) {
+  right: 42%;
+  top: 48%;
+
+  animation-delay: -5s;
+}
+
+@keyframes eye-blink {
+  0%,
+  60%,
+  100% {
+    opacity: 0;
+  }
+
+  64%,
+  68% {
+    opacity: 0.8;
+  }
+
+  72% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   BATS
+========================================================= */
+
+.cinematic-world__bats {
+  position: absolute;
+
+  inset: 0;
+}
+
+.cinematic-world__bats span {
+  position: absolute;
+
+  font-size: 20px;
+
+  color:
+    rgba(0, 0, 0, 0.85);
+
+  filter:
+    drop-shadow(
+      0 0 6px
+      rgba(0, 0, 0, 0.9)
+    );
+
+  animation:
+    bat-flight
+    15s
+    linear
+    infinite;
+}
+
+.cinematic-world__bats span:nth-child(1) {
+  top: 20%;
+  left: -10%;
+}
+
+.cinematic-world__bats span:nth-child(2) {
+  top: 35%;
+  left: -15%;
+
+  animation-delay: -5s;
+}
+
+.cinematic-world__bats span:nth-child(3) {
+  top: 15%;
+  left: -20%;
+
+  animation-delay: -9s;
+}
+
+.cinematic-world__bats span:nth-child(4) {
+  top: 48%;
+  left: -12%;
+
+  animation-delay: -12s;
+}
+
+@keyframes bat-flight {
+  0% {
+    transform:
+      translateX(0)
+      translateY(0)
+      scale(0.7);
+  }
+
+  50% {
+    transform:
+      translateX(60vw)
+      translateY(-80px)
+      scale(1);
+  }
+
+  100% {
+    transform:
+      translateX(125vw)
+      translateY(30px)
+      scale(0.65);
+  }
+}
+
+/* =========================================================
+   ASH
+========================================================= */
+
+.cinematic-world__ash {
+  position: absolute;
+
+  inset: 0;
+}
+
+.cinematic-world__ash span {
+  position: absolute;
+
+  width: 2px;
+  height: 2px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(220, 215, 220, 0.45);
+
+  animation:
+    ash-fall
+    12s
+    linear
+    infinite;
+}
+
+.cinematic-world__ash span:nth-child(1) { left: 5%; animation-delay: -2s; }
+.cinematic-world__ash span:nth-child(2) { left: 9%; animation-delay: -7s; }
+.cinematic-world__ash span:nth-child(3) { left: 14%; animation-delay: -4s; }
+.cinematic-world__ash span:nth-child(4) { left: 19%; animation-delay: -9s; }
+.cinematic-world__ash span:nth-child(5) { left: 24%; animation-delay: -1s; }
+.cinematic-world__ash span:nth-child(6) { left: 29%; animation-delay: -6s; }
+.cinematic-world__ash span:nth-child(7) { left: 34%; animation-delay: -3s; }
+.cinematic-world__ash span:nth-child(8) { left: 39%; animation-delay: -8s; }
+.cinematic-world__ash span:nth-child(9) { left: 44%; animation-delay: -5s; }
+.cinematic-world__ash span:nth-child(10) { left: 49%; animation-delay: -10s; }
+.cinematic-world__ash span:nth-child(11) { left: 54%; animation-delay: -2s; }
+.cinematic-world__ash span:nth-child(12) { left: 59%; animation-delay: -7s; }
+.cinematic-world__ash span:nth-child(13) { left: 64%; animation-delay: -4s; }
+.cinematic-world__ash span:nth-child(14) { left: 69%; animation-delay: -9s; }
+.cinematic-world__ash span:nth-child(15) { left: 74%; animation-delay: -1s; }
+.cinematic-world__ash span:nth-child(16) { left: 79%; animation-delay: -6s; }
+.cinematic-world__ash span:nth-child(17) { left: 84%; animation-delay: -3s; }
+.cinematic-world__ash span:nth-child(18) { left: 89%; animation-delay: -8s; }
+.cinematic-world__ash span:nth-child(19) { left: 94%; animation-delay: -5s; }
+.cinematic-world__ash span:nth-child(20) { left: 98%; animation-delay: -11s; }
+.cinematic-world__ash span:nth-child(21) { left: 12%; animation-delay: -10s; }
+.cinematic-world__ash span:nth-child(22) { left: 33%; animation-delay: -12s; }
+.cinematic-world__ash span:nth-child(23) { left: 57%; animation-delay: -11s; }
+.cinematic-world__ash span:nth-child(24) { left: 88%; animation-delay: -13s; }
+.cinematic-world__ash span:nth-child(25) { left: 72%; animation-delay: -14s; }
+.cinematic-world__ash span:nth-child(26) { left: 41%; animation-delay: -15s; }
+.cinematic-world__ash span:nth-child(27) { left: 26%; animation-delay: -16s; }
+.cinematic-world__ash span:nth-child(28) { left: 63%; animation-delay: -17s; }
+.cinematic-world__ash span:nth-child(29) { left: 3%; animation-delay: -18s; }
+.cinematic-world__ash span:nth-child(30) { left: 81%; animation-delay: -19s; }
+
+@keyframes ash-fall {
+  0% {
+    top: -5%;
+    opacity: 0;
+    transform:
+      translateX(0);
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  100% {
+    top: 110%;
+    opacity: 0;
+    transform:
+      translateX(60px);
+  }
+}
+
+/* =========================================================
+   PARTICLES
+========================================================= */
+
+.cinematic-world__particles {
+  position: absolute;
+
+  inset: 0;
+}
+
+.cinematic-world__particles span {
+  position: absolute;
+
+  width: 3px;
+  height: 3px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(218, 193, 204, 0.4);
+
+  box-shadow:
+    0 0 10px
+    rgba(218, 193, 204, 0.25);
+
+  animation:
+    horror-particle
+    9s
+    ease-in-out
+    infinite;
+}
+
+.cinematic-world__particles span:nth-child(1) { left: 5%; top: 25%; }
+.cinematic-world__particles span:nth-child(2) { left: 12%; top: 67%; animation-delay: -2s; }
+.cinematic-world__particles span:nth-child(3) { left: 18%; top: 38%; animation-delay: -4s; }
+.cinematic-world__particles span:nth-child(4) { left: 26%; top: 72%; animation-delay: -1s; }
+.cinematic-world__particles span:nth-child(5) { left: 33%; top: 20%; animation-delay: -6s; }
+.cinematic-world__particles span:nth-child(6) { left: 41%; top: 55%; animation-delay: -3s; }
+.cinematic-world__particles span:nth-child(7) { left: 48%; top: 31%; animation-delay: -5s; }
+.cinematic-world__particles span:nth-child(8) { left: 56%; top: 74%; animation-delay: -7s; }
+.cinematic-world__particles span:nth-child(9) { left: 64%; top: 44%; animation-delay: -2s; }
+.cinematic-world__particles span:nth-child(10) { left: 72%; top: 25%; animation-delay: -4s; }
+.cinematic-world__particles span:nth-child(11) { left: 80%; top: 68%; animation-delay: -8s; }
+.cinematic-world__particles span:nth-child(12) { left: 88%; top: 36%; animation-delay: -1s; }
+.cinematic-world__particles span:nth-child(13) { left: 94%; top: 61%; animation-delay: -5s; }
+.cinematic-world__particles span:nth-child(14) { left: 8%; top: 82%; animation-delay: -3s; }
+.cinematic-world__particles span:nth-child(15) { left: 22%; top: 12%; animation-delay: -6s; }
+.cinematic-world__particles span:nth-child(16) { left: 37%; top: 88%; animation-delay: -4s; }
+.cinematic-world__particles span:nth-child(17) { left: 53%; top: 15%; animation-delay: -7s; }
+.cinematic-world__particles span:nth-child(18) { left: 67%; top: 83%; animation-delay: -2s; }
+.cinematic-world__particles span:nth-child(19) { left: 78%; top: 13%; animation-delay: -5s; }
+.cinematic-world__particles span:nth-child(20) { left: 91%; top: 77%; animation-delay: -8s; }
+.cinematic-world__particles span:nth-child(21) { left: 47%; top: 92%; animation-delay: -9s; }
+.cinematic-world__particles span:nth-child(22) { left: 15%; top: 49%; animation-delay: -10s; }
+.cinematic-world__particles span:nth-child(23) { left: 84%; top: 50%; animation-delay: -11s; }
+.cinematic-world__particles span:nth-child(24) { left: 59%; top: 62%; animation-delay: -12s; }
+
+@keyframes horror-particle {
+  0%,
+  100% {
+    opacity: 0.1;
+
+    transform:
+      translate3d(0, 0, 0)
+      scale(0.7);
+  }
+
+  50% {
+    opacity: 0.8;
+
+    transform:
+      translate3d(
+        20px,
+        -35px,
+        30px
+      )
+      scale(1.4);
+  }
+}
+
+/* =========================================================
+   LIGHTNING
+========================================================= */
+
+.cinematic-world__lightning {
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0;
+
+  animation:
+    lightning-flash
+    13s
+    linear
+    infinite;
+}
+
+.cinematic-world__lightning span {
+  position: absolute;
+
+  top: 0;
+
+  width: 2px;
+
+  height: 75%;
+
+  background:
+    rgba(220, 214, 226, 0.75);
+
+  filter:
+    blur(0.5px);
+
+  clip-path:
+    polygon(
+      46% 0,
+      58% 0,
+      53% 22%,
+      70% 22%,
+      45% 52%,
+      54% 52%,
+      30% 100%,
+      40% 58%,
+      28% 58%,
+      47% 27%
+    );
+}
+
+.cinematic-world__lightning span:nth-child(1) {
+  left: 28%;
+}
+
+.cinematic-world__lightning span:nth-child(2) {
+  right: 24%;
+
+  transform:
+    scale(0.7);
+}
+
+@keyframes lightning-flash {
+  0%,
+  72%,
+  74%,
+  100% {
+    opacity: 0;
+  }
+
+  72.5% {
+    opacity: 0.85;
+  }
+
+  73% {
+    opacity: 0;
+  }
+
+  73.4% {
+    opacity: 0.55;
+  }
+
+  73.8% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   FILM SCRATCHES
+========================================================= */
+
+.cinematic-world__film {
+  position: absolute;
+
+  inset: 0;
+
+  opacity: 0.08;
+
+  mix-blend-mode:
+    screen;
+}
+
+.cinematic-world__film span {
+  position: absolute;
+
+  top: 0;
+
+  width: 1px;
+  height: 100%;
+
+  background:
+    rgba(255, 255, 255, 0.7);
+
+  animation:
+    scratch
+    4s
+    linear
+    infinite;
+}
+
+.cinematic-world__film span:nth-child(1) {
+  left: 23%;
+}
+
+.cinematic-world__film span:nth-child(2) {
+  left: 68%;
+
+  animation-delay: -2s;
+}
+
+.cinematic-world__film span:nth-child(3) {
+  left: 91%;
+
+  animation-delay: -3s;
+}
+
+@keyframes scratch {
+  from {
+    transform:
+      translateY(-100%);
+  }
+
+  to {
+    transform:
+      translateY(100%);
+  }
+}
+
+/* =========================================================
+   SCANLINE
+========================================================= */
+
+.cinematic-world__scanline {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+
+  height: 1px;
+
+  top: -5%;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  box-shadow:
+    0 0 18px
+    rgba(255, 255, 255, 0.08);
+
+  animation:
+    scan
+    8s
+    linear
+    infinite;
+}
+
+@keyframes scan {
+  from {
+    top: -5%;
+  }
+
+  to {
+    top: 105%;
+  }
+}
+
+/* =========================================================
+   WHISPER
+========================================================= */
+
+.cinematic-world__whisper {
+  position: absolute;
+
+  left: 50%;
+  top: 52%;
+
+  transform:
+    translate(-50%, -50%);
+
+  opacity: 0;
+
+  letter-spacing:
+    0.55em;
+
+  font-size: 10px;
+
+  color:
+    rgba(237, 219, 227, 0.7);
+
+  white-space: nowrap;
+
+  text-shadow:
+    0 0 20px
+    rgba(215, 169, 184, 0.3);
+
+  animation:
+    whisper
+    17s
+    ease-in-out
+    infinite;
+}
+
+@keyframes whisper {
+  0%,
+  46%,
+  100% {
+    opacity: 0;
+
+    filter:
+      blur(8px);
+  }
+
+  51%,
+  57% {
+    opacity: 0.5;
+
+    filter:
+      blur(0);
+  }
+
+  62% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   VIGNETTE
+========================================================= */
+
+.cinematic-world__vignette {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 32%,
+      rgba(0, 0, 0, 0.5) 72%,
+      rgba(0, 0, 0, 0.9) 100%
+    );
+}
+
+/* =========================================================
+   FULL WEBSITE CINEMATIC TRANSFORMATION
+========================================================= */
+
+body.theme-cinematic .premium-topbar {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 3, 7, 0.82),
+      rgba(5, 3, 7, 0.42)
+    );
+
+  border-color:
+    rgba(229, 209, 220, 0.12);
+
+  backdrop-filter:
+    blur(24px);
+
+  box-shadow:
+    0 15px 60px
+    rgba(0, 0, 0, 0.55);
+}
+
+body.theme-cinematic .premium-nav-link:hover {
+  color:
+    #e4c1cc;
+
+  text-shadow:
+    0 0 20px
+    rgba(215, 169, 184, 0.6);
+}
+
+body.theme-cinematic .premium-search-bar {
+  background:
+    rgba(8, 5, 10, 0.82);
+
+  border-color:
+    rgba(228, 205, 217, 0.16);
+
+  box-shadow:
+    0 25px 90px
+    rgba(0, 0, 0, 0.65),
+
+    inset 0 0 30px
+    rgba(215, 169, 184, 0.04);
+}
+
+body.theme-cinematic .theme-switcher__option {
+  background:
+    rgba(12, 8, 14, 0.78);
+
+  border-color:
+    rgba(235, 215, 224, 0.1);
+}
+
+body.theme-cinematic .theme-switcher__option:hover,
+body.theme-cinematic .theme-switcher__option.is-selected {
+  background:
+    rgba(86, 54, 69, 0.25);
+
+  border-color:
+    rgba(215, 169, 184, 0.38);
+
+  box-shadow:
+    0 0 35px
+    rgba(215, 169, 184, 0.08);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767px) {
+  .cinematic-world__moon {
+    width: 150px;
+    height: 150px;
+
+    right: 8%;
+  }
+
+  .cinematic-world__shadow {
+    transform:
+      translateX(-50%)
+      scale(0.55);
+  }
+
+  .cinematic-world__whisper {
+    font-size: 7px;
+
+    letter-spacing:
+      0.3em;
+  }
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .cinematic-world *,
+  .cinematic-world *::before,
+  .cinematic-world *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+  }
+}

@@ -1,0 +1,191 @@
+/* =========================================================
+   FAIZA NOOR PORTFOLIO
+   NORMAL VISUAL WORLD
+========================================================= */
+
+:root {
+  --theme-name: "normal";
+
+  --theme-background: #05050b;
+  --theme-foreground: #ffffff;
+
+  --theme-surface:
+    rgba(12, 10, 22, 0.82);
+
+  --theme-surface-strong:
+    rgba(10, 8, 18, 0.94);
+
+  --theme-border:
+    rgba(255, 255, 255, 0.08);
+
+  --theme-border-strong:
+    rgba(255, 255, 255, 0.14);
+
+  --theme-muted:
+    rgba(255, 255, 255, 0.48);
+
+  --theme-subtle:
+    rgba(255, 255, 255, 0.28);
+
+  --theme-accent:
+    #a78bfa;
+
+  --theme-accent-soft:
+    rgba(139, 92, 246, 0.12);
+
+  --theme-glow:
+    rgba(139, 92, 246, 0.18);
+
+  --theme-shadow:
+    rgba(0, 0, 0, 0.45);
+
+  --theme-radius-sm: 8px;
+  --theme-radius-md: 14px;
+  --theme-radius-lg: 20px;
+  --theme-radius-xl: 28px;
+
+  --theme-ease:
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
+
+  --theme-duration:
+    700ms;
+}
+
+/* =========================================================
+   NORMAL BODY
+========================================================= */
+
+body.theme-normal {
+  background-color:
+    var(--theme-background);
+
+  color:
+    var(--theme-foreground);
+
+  transition:
+    background-color
+      var(--theme-duration)
+      var(--theme-ease),
+    color
+      var(--theme-duration)
+      var(--theme-ease);
+}
+
+/* =========================================================
+   THEME TRANSITION
+========================================================= */
+
+body.theme-transitioning {
+  pointer-events: none;
+}
+
+body.theme-transitioning::after {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 99999;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(
+        167,
+        139,
+        250,
+        0.08
+      ),
+      transparent 55%
+    );
+
+  opacity: 0;
+
+  animation:
+    theme-transition-flash
+    700ms
+    ease;
+}
+
+@keyframes theme-transition-flash {
+  0% {
+    opacity: 0;
+  }
+
+  35% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   GLOBAL THEME SURFACES
+========================================================= */
+
+.theme-normal .theme-surface {
+  background:
+    var(--theme-surface);
+
+  border:
+    1px solid
+    var(--theme-border);
+
+  box-shadow:
+    0 20px 60px
+    var(--theme-shadow);
+
+  backdrop-filter:
+    blur(24px);
+
+  -webkit-backdrop-filter:
+    blur(24px);
+}
+
+/* =========================================================
+   GLOBAL THEME ACCENT
+========================================================= */
+
+.theme-normal .theme-accent {
+  color:
+    var(--theme-accent);
+}
+
+.theme-normal .theme-accent-bg {
+  background:
+    var(--theme-accent-soft);
+}
+
+.theme-normal .theme-glow {
+  box-shadow:
+    0 0 35px
+    var(--theme-glow);
+}
+
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  body.theme-normal,
+  body.theme-transitioning {
+    transition: none;
+  }
+
+  body.theme-transitioning::after {
+    animation: none;
+    opacity: 0;
+  }
+}
