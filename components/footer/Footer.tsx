@@ -172,16 +172,18 @@ export default function Footer() {
             </div>
 
             {/* CTA Button */}
-            <a
-              href="#contact"
-              className="group relative inline-flex min-h-[56px] w-full items-center justify-center overflow-hidden rounded-full border border-white/[0.12] bg-white px-7 text-[10px] font-semibold uppercase tracking-[0.2em] text-black transition-all duration-500 hover:scale-[1.025] hover:border-violet-200 hover:bg-violet-100 focus:outline-none focus:ring-2 focus:ring-violet-300/40 sm:w-fit sm:min-w-[200px]"
-            >
-              <span className="relative z-10">Start a project</span>
+             <a
+  href="/contact"
+  className="group relative inline-flex min-h-[56px] w-full items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-7 text-[14px] font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.025] hover:border-pink-300/70 hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40 sm:w-fit sm:min-w-[200px]"
+>
+  <span className="relative z-10"><strong>Start a project</strong></span>
 
-              <ArrowUpRight className="relative z-10 ml-3 h-4 w-4 transition-transform duration-500 group-hover:-translate-y-1 group-hover:translate-x-1" />
+  <ArrowUpRight
+    className="relative z-10 ml-3 h-4 w-4 text-white transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.95)]"
+  />
 
-              <span className="absolute inset-0 translate-y-full bg-violet-300 transition-transform duration-500 group-hover:translate-y-0" />
-            </a>
+  <span className="absolute inset-0 translate-y-full bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-700 ease-out group-hover:translate-y-0" />
+</a>
           </div>
         </section>
 

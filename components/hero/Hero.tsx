@@ -36,20 +36,42 @@ export function Hero() {
             Crafting scalable web applications, sleek UI/UX interfaces, and performant back-end systems.
           </p>
 
-          <div className="flex flex-wrap gap-4 pt-2">
-            <a
-              href="#projects"
-              className="px-6 py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium text-sm transition-all shadow-[0_0_20px_rgba(147,51,234,0.4)]"
-            >
-              View My Work
-            </a>
-            <a
-              href="#contact"
-              className="px-6 py-3 rounded-lg border border-purple-500/30 hover:bg-purple-950/40 text-purple-200 font-medium text-sm transition-all"
-            >
-              Contact Me
-            </a>
-          </div>
+        
+<div className="flex flex-wrap gap-4 pt-2">
+<a
+  href="/projects"
+  className="group relative inline-flex min-h-[46px] items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.02] hover:border-pink-300/70 hover:shadow-[0_0_32px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40"
+>
+  {/* Liquid pink fill */}
+  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+
+  {/* Liquid glow */}
+  <span className="absolute -bottom-8 left-1/2 h-16 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-lg opacity-0 transition-all duration-700 group-hover:bottom-[-4px] group-hover:opacity-100" />
+
+  {/* Content */}
+  <span className="relative z-10 font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
+    View My Work
+  </span>
+</a>
+
+<a
+  href="/contact"
+  className="group relative inline-flex min-h-[46px] items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.02] hover:border-pink-300/70 hover:shadow-[0_0_32px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40"
+>
+  {/* Liquid pink fill */}
+  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+
+  {/* Liquid glow */}
+  <span className="absolute -bottom-8 left-1/2 h-16 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-lg opacity-0 transition-all duration-700 group-hover:bottom-[-4px] group-hover:opacity-100" />
+
+  {/* Content */}
+  <span className="relative z-10 font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
+    Contact Me
+  </span>
+</a>
+</div>
+
+
         </motion.div>
 
         {/* Right Column — Code Terminal & Skill Badges */}

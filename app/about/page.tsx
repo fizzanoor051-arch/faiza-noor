@@ -414,16 +414,27 @@ export default function AboutPage() {
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href="/projects"
-              className="group inline-flex items-center gap-4 rounded-full border border-white/15 bg-white px-7 py-4 text-xs font-medium uppercase tracking-[0.2em] text-black transition-all duration-300 hover:bg-white/90"
-            >
-              Explore Projects
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                ↗
-              </span>
-            </Link>
+           <Link
+  href="/projects"
+  className="group relative inline-flex min-h-[56px] w-full items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-7 text-[14px] font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.025] hover:border-pink-300/70 hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40 sm:w-fit sm:min-w-[200px]"
+>
+  <span className="absolute inset-x-0 bottom-0 h-full translate-y-full bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-700 ease-out group-hover:translate-y-0" />
 
+  <span className="absolute -bottom-8 left-1/2 h-20 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/60 blur-xl opacity-0 transition-all duration-700 group-hover:bottom-[-2px] group-hover:opacity-100" />
+
+  <span className="relative z-10 flex items-center">
+    <span className="font-semibold text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
+      Explore Projects
+    </span>
+
+    <span className="ml-3 text-white transition-all duration-500 group-hover:translate-x-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.95)]">
+      ↗
+    </span>
+  </span>
+</Link>
+   
+
+         
             <Link
               href="/contact"
               className="group inline-flex items-center gap-4 rounded-full border border-white/10 px-7 py-4 text-xs font-medium uppercase tracking-[0.2em] text-white/65 transition-all duration-300 hover:border-purple-300/30 hover:text-white"

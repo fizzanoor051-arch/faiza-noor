@@ -995,9 +995,143 @@
     box-shadow 0.3s ease;
 }
 
+.contact-submit-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  min-height: 46px;
+  padding: 10px 20px;
+
+  overflow: hidden;
+  isolation: isolate;
+
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  border-radius: 999px;
+
+  background: #6d28d9;
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.35);
+
+  transition:
+    transform 0.5s ease,
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+
+/* Pink liquid */
+.contact-submit-button::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: -2;
+
+  background: linear-gradient(
+    to top,
+    #db2777 0%,
+    #d946ef 48%,
+    #f9a8d4 100%
+  );
+
+  transform: translateY(105%);
+
+  transition:
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* Liquid glow */
+.contact-submit-button::after {
+  content: "";
+
+  position: absolute;
+  left: 50%;
+  bottom: -32px;
+
+  width: 130%;
+  height: 64px;
+
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+
+  background: rgba(249, 168, 212, 0.7);
+
+  filter: blur(16px);
+
+  opacity: 0;
+
+  z-index: -1;
+
+  transition:
+    bottom 0.7s ease,
+    opacity 0.7s ease;
+}
+
+
+/* Hover */
 .contact-submit-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 18px 50px rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px) scale(1.02);
+
+  border-color: rgba(249, 168, 212, 0.7);
+
+  box-shadow:
+    0 18px 50px rgba(255, 255, 255, 0.1),
+    0 0 32px rgba(236, 72, 153, 0.55);
+}
+
+
+/* Liquid rises from bottom */
+.contact-submit-button:hover::before {
+  transform: translateY(0);
+}
+
+
+/* Glow appears */
+.contact-submit-button:hover::after {
+  bottom: -4px;
+  opacity: 1;
+}
+
+
+/* Keep text and icons visible */
+.contact-submit-button > * {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+
+
+/* Icon glow */
+.contact-submit-button svg {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+
+  transition:
+    transform 0.5s ease,
+    color 0.5s ease,
+    filter 0.5s ease;
+}
+
+.contact-submit-button:hover svg {
+  color: #fce7f3;
+
+  filter:
+    drop-shadow(0 0 7px rgba(251, 113, 133, 0.95));
 }
 
 /* =========================================================

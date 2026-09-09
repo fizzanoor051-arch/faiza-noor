@@ -3,27 +3,36 @@
 import { useState } from "react";
 import ProjectPreview from "./ProjectPreview";
 import ProjectCaseStudy from "./ProjectCaseStudy";
-
 export type Project = {
-  id: string;
-  slug: string;
-  number: string;
-  title: string;
-  shortTitle: string;
-  category: string;
-  year: string;
-  status: string;
-  description: string;
-  problem: string;
-  solution: string;
-  role: string;
-  stack: string[];
-  features: string[];
-  metrics: {
-    label: string;
-    value: string;
-  }[];
-  color: "purple" | "cyan" | "blue";
+id: string;
+slug: string;
+number: string;
+title: string;
+shortTitle: string;
+category: string;
+year: string;
+status: string;
+
+description: string;
+problem: string;
+solution: string;
+role: string;
+
+stack: string[];
+features: string[];
+
+metrics: {
+label: string;
+value: string;
+}[];
+
+color: "purple" | "cyan" | "blue";
+
+// Optional project preview data
+tagline?: string;
+featured?: boolean;
+screenshots?: string[];
+video?: string;
 };
 
 export const projects: Project[] = [

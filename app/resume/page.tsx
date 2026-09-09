@@ -737,13 +737,33 @@ export default function ResumePage() {
             </p>
 
             <div className="resume-contact-actions">
-              <Link
-                href="/contact"
-                className="resume-primary-button"
-              >
-                <Mail size={17} />
-                START A PROJECT
-              </Link>
+         
+  <Link
+    href="/contact"
+    className="group relative inline-flex min-h-[56px] w-full items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-7 py-4 text-[14px] font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.025] hover:border-pink-300/70 hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40 sm:w-fit sm:min-w-[200px]"
+  >
+    {/* Liquid pink fill */}
+    <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+
+    {/* Liquid glow */}
+    <span className="absolute -bottom-10 left-1/2 h-24 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-xl opacity-0 transition-all duration-700 group-hover:bottom-[-5px] group-hover:opacity-100" />
+
+    {/* Floating liquid bubble */}
+    <span className="absolute bottom-[-20px] left-[15%] h-16 w-16 rounded-full bg-pink-300/70 blur-md opacity-0 transition-all duration-700 group-hover:bottom-[8px] group-hover:opacity-100" />
+
+    {/* Content */}
+    <span className="relative z-10 flex items-center">
+      <Mail
+        size={17}
+        className="text-white transition-all duration-500 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.95)]"
+      />
+
+      <span className="ml-3 font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
+        START A PROJECT
+      </span>
+    </span>
+  </Link>
+
 
               <Link
                 href="/services"
