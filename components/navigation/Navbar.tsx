@@ -889,7 +889,7 @@ export default function Navbar() {
           {/* CV */}
 
           <a
-            href="/Faiza-Noor-CV.pdf"
+            href="/files/Faiza-Noor-CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="nav-cv-button"
@@ -1336,7 +1336,7 @@ export default function Navbar() {
         <div className="sidebar-actions">
 
           <a
-            href="/Faiza-Noor-CV.pdf"
+            href="/files/Faiza-Noor-CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="sidebar-cv-button"
@@ -1655,7 +1655,7 @@ export default function Navbar() {
         <div className="mobile-panel-actions">
 
           <a
-            href="/Faiza-Noor-CV.pdf"
+           href="/files/Faiza-Noor-CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="mobile-cv-button"

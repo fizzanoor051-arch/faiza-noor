@@ -1,3 +1,4 @@
+
 /* =========================================================
    RESUME PAGE
    FAIZA NOOR — CINEMATIC PROFESSIONAL SYSTEM
@@ -45,6 +46,10 @@
 .resume-page button,
 .resume-page a {
   -webkit-tap-highlight-color: transparent;
+}
+
+.resume-page button {
+  font-family: inherit;
 }
 
 .resume-page a {
@@ -282,6 +287,7 @@
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.18em;
+  cursor: pointer;
   transition:
     transform 250ms ease,
     border-color 250ms ease,
@@ -1071,6 +1077,398 @@
 }
 
 /* =========================================================
+   CV MODAL
+   IMPORTANT FIX
+   ========================================================= */
+
+.cv-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(2, 2, 5, 0.82);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  animation: cvOverlayIn 220ms ease both;
+}
+
+.cv-preview-modal {
+  position: relative;
+
+  width: min(1050px, 100%);
+  height: min(92vh, 900px);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.13);
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(25, 22, 38, 0.98),
+      rgba(7, 7, 11, 0.99)
+    );
+
+  box-shadow:
+    0 40px 120px rgba(0, 0, 0, 0.65),
+    0 0 80px rgba(124, 58, 237, 0.12);
+
+  animation: cvModalIn 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.cv-preview-header {
+  flex: 0 0 auto;
+
+  min-height: 78px;
+
+  padding: 18px 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.cv-preview-label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--resume-purple-light);
+
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.cv-preview-header h2 {
+  margin: 0;
+
+  color: var(--resume-text);
+
+  font-size: 17px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+
+.cv-preview-close {
+  width: 42px;
+  height: 42px;
+
+  flex: 0 0 auto;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: var(--resume-muted);
+
+  cursor: pointer;
+
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.cv-preview-close:hover {
+  color: #fff;
+
+  border-color: rgba(196, 181, 253, 0.4);
+
+  background: rgba(167, 139, 250, 0.12);
+
+  transform: rotate(4deg);
+}
+
+/* =========================================================
+   CV BODY
+   ========================================================= */
+
+.cv-preview-body {
+  position: relative;
+
+  flex: 1 1 auto;
+
+  min-height: 0;
+
+  padding: 22px;
+
+  overflow: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(167, 139, 250, 0.07),
+      transparent 45%
+    ),
+    #09090e;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167, 139, 250, 0.35) transparent;
+}
+
+.cv-preview-body::-webkit-scrollbar {
+  width: 7px;
+}
+
+.cv-preview-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cv-preview-body::-webkit-scrollbar-thumb {
+  border-radius: 20px;
+  background: rgba(167, 139, 250, 0.3);
+}
+
+.cv-preview-image-wrap {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+
+  padding: 5px 0 20px;
+}
+
+.cv-preview-image {
+  display: block;
+
+  width: auto;
+  max-width: 100%;
+  height: auto;
+
+  object-fit: contain;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.5);
+
+  background: #fff;
+}
+
+/* =========================================================
+   CV ERROR
+   ========================================================= */
+
+.cv-preview-error {
+  width: min(600px, 100%);
+
+  min-height: 320px;
+
+  margin: auto;
+
+  padding: 50px 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cv-preview-error-icon {
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 22px;
+
+  border: 1px solid rgba(248, 113, 113, 0.25);
+
+  color: #fca5a5;
+
+  background: rgba(248, 113, 113, 0.06);
+}
+
+.cv-preview-error h3 {
+  margin: 0 0 12px;
+
+  color: var(--resume-text);
+
+  font-size: 16px;
+  letter-spacing: 0.12em;
+}
+
+.cv-preview-error p {
+  margin: 0 0 14px;
+
+  color: var(--resume-muted);
+
+  font-size: 12px;
+}
+
+.cv-preview-error code {
+  padding: 10px 13px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: var(--resume-purple-light);
+
+  background: rgba(255, 255, 255, 0.035);
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   CV FOOTER
+   ========================================================= */
+
+.cv-preview-footer {
+  flex: 0 0 auto;
+
+  min-height: 76px;
+
+  padding: 14px 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(8, 8, 13, 0.98);
+}
+
+.cv-preview-footer > span {
+  color: var(--resume-dim);
+
+  font-size: 8px;
+
+  letter-spacing: 0.17em;
+}
+
+.cv-preview-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cv-preview-secondary,
+.cv-preview-print,
+.cv-preview-download {
+  min-height: 42px;
+
+  padding: 0 15px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: 1px solid rgba(255, 255, 255, 0.09);
+
+  font-family: inherit;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.15em;
+
+  cursor: pointer;
+
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.cv-preview-secondary {
+  background: transparent;
+  color: var(--resume-muted);
+}
+
+.cv-preview-secondary:hover {
+  color: var(--resume-text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.cv-preview-print {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--resume-text);
+}
+
+.cv-preview-print:hover {
+  transform: translateY(-2px);
+  border-color: rgba(196, 181, 253, 0.3);
+  background: rgba(167, 139, 250, 0.09);
+}
+
+.cv-preview-download {
+  border-color: rgba(196, 181, 253, 0.22);
+
+  background: var(--resume-text);
+
+  color: #08070b;
+}
+
+.cv-preview-download:hover {
+  transform: translateY(-2px);
+
+  border-color: var(--resume-text);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   MODAL ANIMATIONS
+   ========================================================= */
+
+@keyframes cvOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cvModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================================
    RESPONSIVE
    ========================================================= */
 
@@ -1251,6 +1649,61 @@
     gap: 8px;
     text-align: center;
   }
+
+  /* CV MODAL */
+
+  .cv-preview-overlay {
+    padding: 10px;
+    align-items: center;
+  }
+
+  .cv-preview-modal {
+    width: 100%;
+    height: min(94vh, 900px);
+  }
+
+  .cv-preview-header {
+    min-height: 68px;
+    padding: 14px 15px;
+  }
+
+  .cv-preview-header h2 {
+    font-size: 13px;
+  }
+
+  .cv-preview-close {
+    width: 38px;
+    height: 38px;
+  }
+
+  .cv-preview-body {
+    padding: 12px;
+  }
+
+  .cv-preview-footer {
+    padding: 10px 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .cv-preview-footer > span {
+    display: none;
+  }
+
+  .cv-preview-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.5fr;
+  }
+
+  .cv-preview-secondary,
+  .cv-preview-print,
+  .cv-preview-download {
+    width: 100%;
+    padding: 0 8px;
+    font-size: 7px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1359,10 +1812,50 @@
   .resume-cert-card h3 {
     margin-top: 45px;
   }
+
+  /* CV MODAL */
+
+  .cv-preview-overlay {
+    padding: 6px;
+  }
+
+  .cv-preview-modal {
+    height: calc(100vh - 12px);
+  }
+
+  .cv-preview-header {
+    padding: 12px;
+  }
+
+  .cv-preview-body {
+    padding: 8px;
+  }
+
+  .cv-preview-actions {
+    grid-template-columns: 1fr 1fr 1.35fr;
+    gap: 5px;
+  }
+
+  .cv-preview-secondary,
+  .cv-preview-print,
+  .cv-preview-download {
+    min-height: 40px;
+    gap: 5px;
+    letter-spacing: 0.08em;
+  }
+
+  .cv-preview-error {
+    padding: 30px 15px;
+  }
+
+  .cv-preview-error code {
+    max-width: 100%;
+    overflow-x: auto;
+  }
 }
 
 /* =========================================================
-   PRINT / CV MODE
+   PRINT
    ========================================================= */
 
 @media print {
@@ -1377,7 +1870,8 @@
   .resume-topbar,
   .resume-contact,
   .resume-footer,
-  .resume-hero-actions {
+  .resume-hero-actions,
+  .cv-preview-overlay {
     display: none !important;
   }
 
@@ -1413,7 +1907,6 @@
     -webkit-text-stroke: 0 !important;
   }
 
-  .resume-muted,
   .resume-hero-description,
   .resume-about-content p,
   .resume-experience-description,
@@ -1445,5 +1938,384 @@
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+/* =========================================================
+   PDF CV PREVIEW
+   ========================================================= */
+
+.cv-preview-pdf-wrap {
+  width: 100%;
+  height: min(78vh, 900px);
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: #15151b;
+  box-shadow:
+    0 20px 70px rgba(0, 0, 0, 0.35),
+    0 0 50px rgba(124, 58, 237, 0.08);
+}
+
+.cv-preview-pdf {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+@media (max-width: 760px) {
+  .cv-preview-pdf-wrap {
+    height: 72vh;
+    min-height: 420px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cv-preview-pdf-wrap {
+    height: 68vh;
+    min-height: 360px;
+  }
+}
+/* =========================================================
+   PDF CV PREVIEW
+   ========================================================= */
+
+.cv-preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(2, 2, 5, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  overflow-y: auto;
+  animation: cvOverlayIn 0.25s ease both;
+}
+
+.cv-preview-modal {
+  width: min(1120px, 100%);
+  max-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #0a0a10;
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.65),
+    0 0 80px rgba(124, 58, 237, 0.12);
+  animation: cvModalIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.cv-preview-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.cv-preview-label {
+  display: block;
+  margin-bottom: 6px;
+  color: rgba(196, 181, 253, 0.65);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.cv-preview-header h2 {
+  margin: 0;
+  color: #f6f3ff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.cv-preview-close {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  transition:
+    color 200ms ease,
+    border-color 200ms ease,
+    background 200ms ease,
+    transform 200ms ease;
+}
+
+.cv-preview-close:hover {
+  color: #ffffff;
+  border-color: rgba(167, 139, 250, 0.5);
+  background: rgba(124, 58, 237, 0.15);
+  transform: rotate(90deg);
+}
+
+.cv-preview-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 22px;
+  background: rgba(255, 255, 255, 0.012);
+}
+
+.cv-preview-pdf-wrap {
+  width: 100%;
+  height: min(78vh, 900px);
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: #ffffff;
+  box-shadow:
+    0 20px 70px rgba(0, 0, 0, 0.35),
+    0 0 50px rgba(124, 58, 237, 0.08);
+}
+
+.cv-preview-pdf {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #ffffff;
+}
+
+.cv-preview-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.cv-preview-footer > span {
+  color: rgba(235, 230, 255, 0.38);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.cv-preview-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cv-preview-secondary,
+.cv-preview-print,
+.cv-preview-download {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 200ms ease,
+    border-color 200ms ease,
+    background 200ms ease,
+    transform 200ms ease;
+}
+
+.cv-preview-secondary {
+  background: transparent;
+  color: rgba(235, 230, 255, 0.55);
+}
+
+.cv-preview-secondary:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cv-preview-print {
+  background: rgba(255, 255, 255, 0.035);
+  color: #f6f3ff;
+}
+
+.cv-preview-print:hover {
+  border-color: rgba(167, 139, 250, 0.45);
+  background: rgba(124, 58, 237, 0.14);
+  transform: translateY(-1px);
+}
+
+.cv-preview-download {
+  border-color: rgba(167, 139, 250, 0.35);
+  background: rgba(124, 58, 237, 0.16);
+  color: #ddd6fe;
+}
+
+.cv-preview-download:hover {
+  border-color: rgba(196, 181, 253, 0.7);
+  background: rgba(124, 58, 237, 0.28);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+@keyframes cvOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cvModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================================
+   PDF MODAL — TABLET
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .cv-preview-overlay {
+    padding: 12px;
+    align-items: center;
+  }
+
+  .cv-preview-modal {
+    max-height: calc(100vh - 24px);
+  }
+
+  .cv-preview-header {
+    padding: 16px;
+  }
+
+  .cv-preview-body {
+    padding: 12px;
+  }
+
+  .cv-preview-pdf-wrap {
+    height: 72vh;
+    min-height: 420px;
+  }
+
+  .cv-preview-footer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 16px;
+  }
+
+  .cv-preview-footer > span {
+    display: none;
+  }
+
+  .cv-preview-actions {
+    width: 100%;
+  }
+
+  .cv-preview-secondary,
+  .cv-preview-print,
+  .cv-preview-download {
+    flex: 1;
+  }
+}
+
+/* =========================================================
+   PDF MODAL — MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .cv-preview-overlay {
+    padding: 7px;
+  }
+
+  .cv-preview-modal {
+    max-height: calc(100vh - 14px);
+  }
+
+  .cv-preview-header {
+    padding: 13px 14px;
+  }
+
+  .cv-preview-header h2 {
+    font-size: 15px;
+  }
+
+  .cv-preview-close {
+    width: 36px;
+    height: 36px;
+  }
+
+  .cv-preview-body {
+    padding: 8px;
+  }
+
+  .cv-preview-pdf-wrap {
+    height: 68vh;
+    min-height: 360px;
+  }
+
+  .cv-preview-actions {
+    gap: 6px;
+  }
+
+  .cv-preview-secondary,
+  .cv-preview-print,
+  .cv-preview-download {
+    min-height: 38px;
+    padding: 0 8px;
+    font-size: 8px;
+  }
+}
+
+/* =========================================================
+   PRINT
+   ========================================================= */
+
+@media print {
+  .cv-preview-overlay {
+    display: none !important;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-preview-overlay,
+  .cv-preview-modal {
+    animation: none;
+  }
+
+  .cv-preview-close,
+  .cv-preview-secondary,
+  .cv-preview-print,
+  .cv-preview-download {
+    transition: none;
   }
 }

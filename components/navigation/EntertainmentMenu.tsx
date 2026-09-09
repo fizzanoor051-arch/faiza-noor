@@ -1,3 +1,4 @@
+
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
@@ -27,51 +28,73 @@ const experiences = [
     icon: Gamepad2,
     title: "Explore",
     subtitle: "Interactive Experience",
-    description: "Explore my portfolio in a different way.",
+    description:
+      "Explore my portfolio in a different way.",
   },
+
   {
     id: "break",
     number: "02",
     icon: Zap,
     title: "Break It",
     subtitle: "Try To Break My Website",
-    description: "Think you can break it? Go ahead.",
+    description:
+      "Think you can break it? Go ahead.",
   },
+
   {
-    id: "playground",
-    number: "03",
-    icon: Brain,
-    title: "Playground",
-    subtitle: "Interactive Lab",
-    description: "Play with ideas, technology and experiments.",
-  },
-  {
-    id: "secret",
+    id: "tic-tac-toe",
     number: "04",
-    icon: Eye,
-    title: "Secret",
-    subtitle: "Easter Egg",
-    description: "There may be something hidden here.",
+    icon: Gamepad2,
+    title: "Tic-Tac-Toe",
+    subtitle: "AI Challenge",
+    description:
+      "Challenge the computer and try to get three in a row.",
   },
+
+  {
+    id: "snake-ladder",
+    number: "05",
+    icon: Gamepad2,
+    title: "Snake & Ladder",
+    subtitle: "Classic Board Game",
+    description:
+      "Roll the dice, climb ladders, avoid snakes and race to 100.",
+  },
+
+  {
+    id: "chess",
+    number: "06",
+    icon: Brain,
+    title: "AI Chess",
+    subtitle: "AI Chess",
+    description:
+      "Challenge the computer in a classic game of strategy.",
+  },
+
+  {
+    id: "puzzle",
+    number: "07",
+    icon: Brain,
+    title: "Puzzles",
+    subtitle: "Mind Challenge",
+    description:
+      "Solve difficult logic puzzles, spot hidden traps and challenge your thinking.",
+  },
+
   {
     id: "command",
-    number: "05",
+    number: "08",
     icon: Command,
     title: "Command",
     subtitle: "Command Center",
-    description: "Navigate my portfolio like a developer.",
+    description:
+      "Navigate my portfolio like a developer.",
   },
-  {
-    id: "hire",
-    number: "06",
-    icon: Heart,
-    title: "Why Hire Me?",
-    subtitle: "The Real Question",
-    description: "See what I can bring to your next project.",
-  },
+
   {
     id: "mind-lab",
-    number: "07",
+    number: "10",
     icon: Brain,
     title: "Mind Lab",
     subtitle: "Cognitive Challenge",
@@ -88,254 +111,267 @@ export default function EntertainmentMenu({
   return (
     <AnimatePresence>
       {open && (
-        <>
+        <motion.div
+          className="fixed inset-0 z-[1000] overflow-y-auto bg-[#050507] text-white"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 0.3,
+            ease: "easeOut",
+          }}
+        >
           {/* =====================================================
-              BACKDROP
+              BACKGROUND ATMOSPHERE
           ===================================================== */}
 
-          <motion.div
-            className="fixed inset-0 z-[998] bg-black/60 backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-          />
+          <div className="pointer-events-none fixed inset-0 overflow-hidden">
+            {/* Main purple glow */}
+            <div className="absolute left-1/2 top-[42%] h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-700/[0.10] blur-[170px]" />
+
+            {/* Pink glow */}
+            <div className="absolute -left-32 top-1/4 h-[400px] w-[400px] rounded-full bg-fuchsia-600/[0.06] blur-[150px]" />
+
+            {/* Blue glow */}
+            <div className="absolute -right-32 bottom-1/4 h-[450px] w-[450px] rounded-full bg-blue-600/[0.06] blur-[160px]" />
+
+            {/* Grid */}
+            <div
+              className="absolute inset-0 opacity-[0.035]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)",
+                backgroundSize: "60px 60px",
+              }}
+            />
+
+            {/* Vignette */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_25%,rgba(0,0,0,0.55)_100%)]" />
+          </div>
 
           {/* =====================================================
-              SCROLLABLE MENU WRAPPER
+              HEADER
           ===================================================== */}
 
-          <motion.div
-            className="fixed inset-0 z-[999] overflow-y-auto overflow-x-hidden overscroll-contain px-4 py-4 sm:px-6 lg:px-8"
-            initial={{ opacity: 0, y: -35 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -25 }}
-            transition={{
-              duration: 0.45,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            {/* =================================================
-                MENU CONTAINER
-            ================================================= */}
+          <div className="relative z-10 mx-auto w-full max-w-[1500px] px-5 pb-10 pt-7 sm:px-8 lg:px-10">
+            <div className="flex items-start justify-between gap-6">
+              {/* LEFT */}
 
-            <div className="relative mx-auto w-full max-w-[1500px] overflow-hidden rounded-[28px] border border-white/10 bg-[#09090f]/95 shadow-[0_30px_100px_rgba(0,0,0,0.65)] backdrop-blur-2xl">
-              {/* =================================================
-                  AMBIENT GLOW
-              ================================================= */}
-
-              <div className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-violet-600/15 blur-[100px]" />
-
-              <div className="pointer-events-none absolute -bottom-40 right-0 h-96 w-96 rounded-full bg-blue-600/10 blur-[120px]" />
-
-              <div className="pointer-events-none absolute bottom-0 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-fuchsia-600/[0.04] blur-[110px]" />
-
-              {/* =================================================
-                  HEADER
-              ================================================= */}
-
-              <div className="relative flex items-center justify-between border-b border-white/10 px-6 py-5 sm:px-8">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04]">
-                    <Sparkles className="h-5 w-5 text-violet-300" />
+              <div>
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 12,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    duration: 0.45,
+                  }}
+                  className="mb-4 flex items-center gap-3"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/[0.08]">
+                    <Sparkles className="h-3.5 w-3.5 text-violet-300" />
                   </div>
 
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-[11px] font-medium uppercase tracking-[0.28em] text-violet-300">
-                        Entertainment
-                      </p>
+                  <span className="text-[9px] font-medium uppercase tracking-[0.28em] text-white/35">
+                    Entertainment Hub
+                  </span>
+                </motion.div>
 
-                      <span className="h-1 w-1 rounded-full bg-white/30" />
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: 18,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  transition={{
+                    duration: 0.55,
+                    delay: 0.05,
+                  }}
+                >
+                  <h1 className="text-4xl font-semibold tracking-[-0.045em] text-white sm:text-5xl lg:text-6xl">
+                    Choose an{" "}
+                    <span className="bg-gradient-to-r from-violet-300 via-fuchsia-300 to-pink-300 bg-clip-text text-transparent">
+                      experience.
+                    </span>
+                  </h1>
 
-                      <span className="text-[10px] uppercase tracking-[0.2em] text-white/35">
-                        Experience Hub
+                  <p className="mt-4 max-w-xl text-sm leading-7 text-white/40 sm:text-[15px]">
+                    A collection of interactive experiments, games,
+                    challenges and hidden experiences built into my
+                    portfolio.
+                  </p>
+                </motion.div>
+              </div>
+
+              {/* CLOSE */}
+
+              <motion.button
+                type="button"
+                onClick={onClose}
+                initial={{
+                  opacity: 0,
+                  scale: 0.9,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  duration: 0.35,
+                  delay: 0.1,
+                }}
+                className="group flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-4 py-2.5 text-[10px] font-medium uppercase tracking-[0.18em] text-white/40 backdrop-blur-xl transition-all duration-300 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+              >
+                <span>Close</span>
+
+                <X className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-90" />
+              </motion.button>
+            </div>
+
+            {/* ===================================================
+                EXPERIENCE COUNT
+            =================================================== */}
+
+            <motion.div
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              transition={{
+                duration: 0.5,
+                delay: 0.2,
+              }}
+              className="mt-10 flex items-center gap-4"
+            >
+              <div className="h-px w-10 bg-white/10" />
+
+              <span className="text-[9px] font-medium uppercase tracking-[0.25em] text-white/25">
+                11 Experiences
+              </span>
+
+              <div className="h-px flex-1 bg-white/[0.06]" />
+            </motion.div>
+          </div>
+
+          {/* =====================================================
+              EXPERIENCE GRID
+          ===================================================== */}
+
+          <div className="relative z-10 mx-auto w-full max-w-[1500px] px-5 pb-20 sm:px-8 lg:px-10">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+              {experiences.map((experience, index) => {
+                const Icon = experience.icon;
+
+                return (
+                  <motion.button
+                    key={experience.id}
+                    type="button"
+                    onClick={() => onSelect(experience.id)}
+                    initial={{
+                      opacity: 0,
+                      y: 24,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    transition={{
+                      duration: 0.45,
+                      delay: 0.06 * index,
+                      ease: "easeOut",
+                    }}
+                    whileHover={{
+                      y: -5,
+                    }}
+                    whileTap={{
+                      scale: 0.985,
+                    }}
+                    className="group relative min-h-[230px] overflow-hidden rounded-[26px] border border-white/[0.08] bg-white/[0.025] p-6 text-left backdrop-blur-xl transition-all duration-500 hover:border-violet-300/[0.22] hover:bg-white/[0.045] sm:p-7"
+                  >
+                    {/* CARD GLOW */}
+
+                    <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-violet-500/[0.07] blur-3xl transition-all duration-500 group-hover:bg-fuchsia-500/[0.12]" />
+
+                    <div className="pointer-events-none absolute inset-0 rounded-[26px] bg-gradient-to-br from-white/[0.035] via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+                    {/* TOP ROW */}
+
+                    <div className="relative flex items-start justify-between">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/[0.08] bg-black/20 transition-all duration-500 group-hover:border-violet-300/20 group-hover:bg-violet-500/[0.08]">
+                        <Icon className="h-[18px] w-[18px] text-white/45 transition-all duration-500 group-hover:text-violet-200" />
+                      </div>
+
+                      <span className="font-mono text-[10px] tracking-[0.2em] text-white/20 transition-colors duration-300 group-hover:text-violet-200/45">
+                        {experience.number}
                       </span>
                     </div>
 
-                    <h2 className="mt-1 text-lg font-semibold tracking-tight text-white sm:text-xl">
-                      Don&apos;t just browse. Explore.
-                    </h2>
-                  </div>
-                </div>
+                    {/* CONTENT */}
 
-                <button
-                  type="button"
-                  onClick={onClose}
-                  aria-label="Close entertainment menu"
-                  className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] text-white/50 transition-all duration-300 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
-                >
-                  <X className="h-4 w-4 transition-transform duration-300 group-hover:rotate-90" />
-                </button>
-              </div>
-
-              {/* =================================================
-                  INTRO
-              ================================================= */}
-
-              <div className="relative px-6 pb-5 pt-6 sm:px-8">
-                <div className="flex items-end justify-between gap-6">
-                  <div>
-                    <p className="max-w-xl text-sm leading-6 text-white/45">
-                      A collection of interactive experiences built to show
-                      that a portfolio doesn&apos;t have to feel like a
-                      portfolio.
-                    </p>
-                  </div>
-
-                  <div className="hidden items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-white/25 sm:flex">
-                    <MousePointer2 className="h-3.5 w-3.5" />
-                    Choose your experience
-                  </div>
-                </div>
-              </div>
-
-              {/* =================================================
-                  EXPERIENCE GRID
-              ================================================= */}
-
-              <div className="relative grid grid-cols-1 gap-3 px-6 pb-6 sm:grid-cols-2 sm:px-8 lg:grid-cols-3">
-                {experiences.map((experience, index) => {
-                  const Icon = experience.icon;
-                  const isMindLab = experience.id === "mind-lab";
-
-                  return (
-                    <motion.button
-                      key={experience.id}
-                      type="button"
-                      onClick={() => onSelect(experience.id)}
-                      className={`group relative overflow-hidden rounded-2xl border p-5 text-left transition-all duration-300 hover:-translate-y-1 ${
-                        isMindLab
-                          ? "border-violet-400/20 bg-violet-500/[0.045] hover:border-violet-300/40 hover:bg-violet-500/[0.08]"
-                          : "border-white/[0.08] bg-white/[0.025] hover:border-white/[0.16] hover:bg-white/[0.055]"
-                      }`}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        delay: index * 0.055,
-                        duration: 0.35,
-                      }}
-                    >
-                      {/* Hover glow */}
-                      <div
-                        className={`pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full blur-3xl transition-all duration-500 ${
-                          isMindLab
-                            ? "bg-violet-500/10 group-hover:bg-violet-500/30"
-                            : "bg-violet-500/0 group-hover:bg-violet-500/20"
-                        }`}
-                      />
-
-                      {/* Mind Lab extra glow */}
-                      {isMindLab && (
-                        <>
-                          <div className="pointer-events-none absolute -bottom-16 -left-10 h-32 w-32 rounded-full bg-fuchsia-500/10 blur-3xl transition-all duration-500 group-hover:bg-fuchsia-500/20" />
-
-                          <div className="pointer-events-none absolute right-5 top-5 h-1.5 w-1.5 animate-pulse rounded-full bg-violet-300 shadow-[0_0_15px_rgba(167,139,250,0.9)]" />
-                        </>
-                      )}
-
-                      <div className="relative">
-                        {/* =================================================
-                            CARD TOP
-                        ================================================= */}
-
-                        <div className="flex items-start justify-between">
-                          <div
-                            className={`flex h-11 w-11 items-center justify-center rounded-xl border transition-all duration-300 ${
-                              isMindLab
-                                ? "border-violet-400/25 bg-violet-500/10 group-hover:border-violet-300/40 group-hover:bg-violet-500/15"
-                                : "border-white/10 bg-white/[0.045] group-hover:border-violet-400/30 group-hover:bg-violet-500/10"
-                            }`}
-                          >
-                            <Icon
-                              className={`h-[18px] w-[18px] transition-colors duration-300 ${
-                                isMindLab
-                                  ? "text-violet-300"
-                                  : "text-white/60 group-hover:text-violet-300"
-                              }`}
-                            />
-                          </div>
-
-                          <span className="font-mono text-[10px] tracking-widest text-white/20">
-                            {experience.number}
-                          </span>
-                        </div>
-
-                        {/* =================================================
-                            CARD CONTENT
-                        ================================================= */}
-
-                        <div className="mt-5">
-                          <div className="flex items-center gap-2">
-                            <p
-                              className={`text-[10px] font-medium uppercase tracking-[0.2em] ${
-                                isMindLab
-                                  ? "text-violet-300"
-                                  : "text-violet-300/70"
-                              }`}
-                            >
-                              {experience.subtitle}
-                            </p>
-
-                            {isMindLab && (
-                              <span className="rounded-full border border-violet-300/20 bg-violet-400/10 px-2 py-0.5 text-[8px] uppercase tracking-[0.15em] text-violet-200">
-                                New
-                              </span>
-                            )}
-                          </div>
-
-                          <h3 className="mt-1 text-base font-semibold text-white">
-                            {experience.title}
-                          </h3>
-
-                          <p className="mt-2 text-xs leading-5 text-white/35">
-                            {experience.description}
-                          </p>
-                        </div>
-
-                        {/* =================================================
-                            CARD FOOTER
-                        ================================================= */}
-
-                        <div className="mt-5 flex items-center justify-between">
-                          <span className="text-[10px] uppercase tracking-[0.18em] text-white/25 transition-colors duration-300 group-hover:text-white/50">
-                            {isMindLab ? "Enter the lab" : "Open experience"}
-                          </span>
-
-                          <ArrowUpRight
-                            className={`h-4 w-4 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
-                              isMindLab
-                                ? "text-violet-300/60 group-hover:text-violet-200"
-                                : "text-white/25 group-hover:text-violet-300"
-                            }`}
-                          />
-                        </div>
+                    <div className="relative mt-8">
+                      <div className="mb-2 flex items-center gap-2">
+                        <span className="text-[9px] font-medium uppercase tracking-[0.2em] text-violet-300/45 transition-colors duration-300 group-hover:text-violet-200/70">
+                          {experience.subtitle}
+                        </span>
                       </div>
-                    </motion.button>
-                  );
-                })}
-              </div>
 
-              {/* =================================================
-                  FOOTER
-              ================================================= */}
+                      <h2 className="text-xl font-medium tracking-[-0.025em] text-white/90 transition-colors duration-300 group-hover:text-white sm:text-[22px]">
+                        {experience.title}
+                      </h2>
 
-              <div className="relative flex flex-col gap-3 border-t border-white/[0.07] px-6 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-                <p className="text-[10px] uppercase tracking-[0.18em] text-white/20">
-                  Built with curiosity • Designed with intention
-                </p>
+                      <p className="mt-3 max-w-sm text-[12px] leading-6 text-white/35 transition-colors duration-300 group-hover:text-white/50">
+                        {experience.description}
+                      </p>
+                    </div>
 
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="text-left text-[10px] uppercase tracking-[0.18em] text-white/35 transition-colors hover:text-white/70 sm:text-right"
-                >
-                  Return to portfolio
-                </button>
-              </div>
+                    {/* ARROW */}
+
+                    <div className="absolute bottom-6 right-6 flex h-9 w-9 items-center justify-center rounded-full border border-white/[0.07] bg-black/20 text-white/25 transition-all duration-500 group-hover:border-violet-300/20 group-hover:bg-violet-500/[0.08] group-hover:text-violet-200">
+                      <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </div>
+
+                    {/* BOTTOM LINE */}
+
+                    <div className="absolute bottom-0 left-6 right-6 h-px origin-left scale-x-0 bg-gradient-to-r from-violet-400/60 via-fuchsia-400/40 to-transparent transition-transform duration-500 group-hover:scale-x-100" />
+                  </motion.button>
+                );
+              })}
             </div>
-          </motion.div>
-        </>
+
+            {/* ===================================================
+                FOOTER HINT
+            =================================================== */}
+
+            <motion.div
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              transition={{
+                duration: 0.6,
+                delay: 0.75,
+              }}
+              className="mt-10 flex items-center justify-center gap-2 text-center"
+            >
+              <MousePointer2 className="h-3 w-3 text-white/20" />
+
+              <span className="text-[9px] uppercase tracking-[0.2em] text-white/20">
+                Select an experience to enter
+              </span>
+            </motion.div>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );

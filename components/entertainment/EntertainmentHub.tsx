@@ -1,8 +1,9 @@
+
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import EntertainmentMenu from "../navigation/EntertainmentMenu";
 
@@ -19,6 +20,19 @@ import HireExperience from "./hire/HireExperience";
 
 import MindLab from "./mind-lab/MindLab";
 
+// =============================================================
+// GAMES
+// =============================================================
+
+import TicTacToe from "./games/TicTacToe";
+import SnakeLadder from "./games/SnakeLadder";
+import ChessAI from "./games/ChessAI";
+import Puzzle from "./games/Puzzle";
+
+// =============================================================
+// TYPES
+// =============================================================
+
 type EntertainmentHubProps = {
   open: boolean;
   onClose: () => void;
@@ -28,6 +42,10 @@ type ExperienceId =
   | "explore"
   | "break"
   | "playground"
+  | "tic-tac-toe"
+  | "snake-ladder"
+  | "chess"
+  | "puzzle"
   | "secret"
   | "command"
   | "hire"
@@ -45,19 +63,25 @@ export default function EntertainmentHub({
   ========================================================= */
 
   const handleSelect = (id: string) => {
-    if (
-      id !== "explore" &&
-      id !== "break" &&
-      id !== "playground" &&
-      id !== "secret" &&
-      id !== "command" &&
-      id !== "hire" &&
-      id !== "mind-lab"
-    ) {
+    const validExperiences: ExperienceId[] = [
+      "explore",
+      "break",
+      "playground",
+      "tic-tac-toe",
+      "snake-ladder",
+      "chess",
+      "puzzle",
+      "secret",
+      "command",
+      "hire",
+      "mind-lab",
+    ];
+
+    if (!validExperiences.includes(id as ExperienceId)) {
       return;
     }
 
-    setSelectedExperience(id);
+    setSelectedExperience(id as ExperienceId);
   };
 
   /* =========================================================
@@ -78,23 +102,86 @@ export default function EntertainmentHub({
   };
 
   /* =========================================================
+     ESCAPE KEY
+  ========================================================= */
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+
+      /*
+       * If an experience is open:
+       * return to the Entertainment Menu.
+       *
+       * If the Entertainment Menu is open:
+       * close Entertainment completely.
+       */
+
+      if (selectedExperience) {
+        setSelectedExperience(null);
+      } else {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [open, selectedExperience, onClose]);
+
+  /* =========================================================
      EXPERIENCE WRAPPER
+
+     Handles:
+     - Full-screen experience
+     - Vertical scrolling
+     - Background atmosphere
+     - Double-click outside content
   ========================================================= */
 
   const ExperienceShell = ({
     children,
+    experienceId,
   }: {
     children: React.ReactNode;
+    experienceId: ExperienceId;
   }) => {
+    const handleShellDoubleClick = (
+      event: React.MouseEvent<HTMLDivElement>
+    ) => {
+      /*
+       * Double-clicking the actual empty shell/background
+       * returns to the Entertainment Menu.
+       *
+       * Double-clicking inside the experience does nothing.
+       */
+
+      if (event.target === event.currentTarget) {
+        handleBack();
+      }
+    };
+
     return (
       <motion.div
-        className="fixed inset-0 z-[1000] overflow-y-auto overflow-x-hidden bg-[#050507] px-5 pb-12 pt-24 sm:px-8 lg:px-10"
+        className="fixed inset-0 z-[1000] overflow-x-hidden overflow-y-auto bg-[#050507] px-5 pb-12 pt-24 sm:px-8 lg:px-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        transition={{
+          duration: 0.25,
+          ease: "easeOut",
+        }}
+        onDoubleClick={handleShellDoubleClick}
         style={{
           WebkitOverflowScrolling: "touch",
+          overscrollBehavior: "contain",
+          touchAction: "pan-y",
         }}
+        data-experience={experienceId}
       >
         {/* ===================================================
             BACKGROUND ATMOSPHERE
@@ -118,6 +205,8 @@ export default function EntertainmentHub({
         =================================================== */}
 
         <div className="pointer-events-none fixed left-0 right-0 top-0 z-[1100] flex items-center justify-between px-5 py-5 sm:px-8 lg:px-10">
+          {/* BACK */}
+
           <button
             type="button"
             onClick={handleBack}
@@ -127,6 +216,8 @@ export default function EntertainmentHub({
 
             Back to experiences
           </button>
+
+          {/* CLOSE */}
 
           <button
             type="button"
@@ -141,7 +232,7 @@ export default function EntertainmentHub({
             EXPERIENCE CONTENT
         =================================================== */}
 
-        <div className="relative mx-auto min-h-full w-full max-w-[1500px]">
+        <div className="relative mx-auto w-full max-w-[1500px]">
           {children}
         </div>
 
@@ -150,7 +241,7 @@ export default function EntertainmentHub({
         =================================================== */}
 
         <div
-          className="h-10 w-full shrink-0"
+          className="h-16 w-full shrink-0"
           aria-hidden="true"
         />
       </motion.div>
@@ -181,7 +272,10 @@ export default function EntertainmentHub({
       ===================================================== */}
 
       {open && selectedExperience === "explore" && (
-        <ExperienceShell key="explore">
+        <ExperienceShell
+          key="explore"
+          experienceId="explore"
+        >
           <ExploreExperience />
         </ExperienceShell>
       )}
@@ -191,7 +285,10 @@ export default function EntertainmentHub({
       ===================================================== */}
 
       {open && selectedExperience === "break" && (
-        <ExperienceShell key="break">
+        <ExperienceShell
+          key="break"
+          experienceId="break"
+        >
           <BreakTheWebsite />
         </ExperienceShell>
       )}
@@ -201,8 +298,63 @@ export default function EntertainmentHub({
       ===================================================== */}
 
       {open && selectedExperience === "playground" && (
-        <ExperienceShell key="playground">
+        <ExperienceShell
+          key="playground"
+          experienceId="playground"
+        >
           <InteractiveDemo />
+        </ExperienceShell>
+      )}
+
+      {/* =====================================================
+          TIC-TAC-TOE
+      ===================================================== */}
+
+      {open && selectedExperience === "tic-tac-toe" && (
+        <ExperienceShell
+          key="tic-tac-toe"
+          experienceId="tic-tac-toe"
+        >
+          <TicTacToe onClose={handleBack} />
+        </ExperienceShell>
+      )}
+
+      {/* =====================================================
+          SNAKE & LADDER
+      ===================================================== */}
+
+      {open && selectedExperience === "snake-ladder" && (
+        <ExperienceShell
+          key="snake-ladder"
+          experienceId="snake-ladder"
+        >
+          <SnakeLadder onClose={handleBack} />
+        </ExperienceShell>
+      )}
+
+      {/* =====================================================
+          SHATRANJ — CHESS VS AI
+      ===================================================== */}
+
+      {open && selectedExperience === "chess" && (
+        <ExperienceShell
+          key="chess"
+          experienceId="chess"
+        >
+          <ChessAI onClose={handleBack} />
+        </ExperienceShell>
+      )}
+
+      {/* =====================================================
+          PUZZLE — 20 HARD MIND PUZZLES
+      ===================================================== */}
+
+      {open && selectedExperience === "puzzle" && (
+        <ExperienceShell
+          key="puzzle"
+          experienceId="puzzle"
+        >
+          <Puzzle onClose={handleBack} />
         </ExperienceShell>
       )}
 
@@ -211,7 +363,10 @@ export default function EntertainmentHub({
       ===================================================== */}
 
       {open && selectedExperience === "secret" && (
-        <ExperienceShell key="secret">
+        <ExperienceShell
+          key="secret"
+          experienceId="secret"
+        >
           <SecretExperience
             open={true}
             onClose={handleBack}
@@ -224,7 +379,10 @@ export default function EntertainmentHub({
       ===================================================== */}
 
       {open && selectedExperience === "command" && (
-        <ExperienceShell key="command">
+        <ExperienceShell
+          key="command"
+          experienceId="command"
+        >
           <CommandCenter
             open={open}
             onClose={handleBack}
@@ -237,7 +395,10 @@ export default function EntertainmentHub({
       ===================================================== */}
 
       {open && selectedExperience === "hire" && (
-        <ExperienceShell key="hire">
+        <ExperienceShell
+          key="hire"
+          experienceId="hire"
+        >
           <HireExperience onClose={handleBack} />
         </ExperienceShell>
       )}
@@ -247,7 +408,10 @@ export default function EntertainmentHub({
       ===================================================== */}
 
       {open && selectedExperience === "mind-lab" && (
-        <ExperienceShell key="mind-lab">
+        <ExperienceShell
+          key="mind-lab"
+          experienceId="mind-lab"
+        >
           <MindLab />
         </ExperienceShell>
       )}

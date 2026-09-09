@@ -40,6 +40,35 @@ const socialLinks = [
   },
 ];
 
+const particleColors = [
+  "#ff4f9a",
+  "#ff6fae",
+  "#ff365f",
+  "#ff8fab",
+  "#ffd166",
+  "#ffe08a",
+  "#ff9b71",
+  "#ff6b81",
+  "#fda4af",
+  "#ffb4d2",
+  "#fbbf8a",
+  "#fff0a8",
+];
+
+const orbitParticles = Array.from({ length: 22 }, (_, index) => {
+  const angle = (360 / 22) * index;
+  const delay = -(index * 0.17);
+
+  return {
+    index,
+    angle,
+    delay,
+    size: 3 + (index % 3),
+    color: particleColors[index % particleColors.length],
+    duration: 5.8 + (index % 5) * 0.18,
+  };
+});
+
 export default function Footer() {
   const [year, setYear] = useState(2026);
 
@@ -147,9 +176,7 @@ export default function Footer() {
               href="#contact"
               className="group relative inline-flex min-h-[56px] w-full items-center justify-center overflow-hidden rounded-full border border-white/[0.12] bg-white px-7 text-[10px] font-semibold uppercase tracking-[0.2em] text-black transition-all duration-500 hover:scale-[1.025] hover:border-violet-200 hover:bg-violet-100 focus:outline-none focus:ring-2 focus:ring-violet-300/40 sm:w-fit sm:min-w-[200px]"
             >
-              <span className="relative z-10">
-                Start a project
-              </span>
+              <span className="relative z-10">Start a project</span>
 
               <ArrowUpRight className="relative z-10 ml-3 h-4 w-4 transition-transform duration-500 group-hover:-translate-y-1 group-hover:translate-x-1" />
 
@@ -173,8 +200,7 @@ export default function Footer() {
               className="group inline-flex items-center gap-3"
             >
               {/* Logo */}
-              <span className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-300/20 bg-violet-400/[0.05] shadow-[0_0_40px_rgba(139,92,246,0.08)] transition-all duration-500 group-hover:rotate-[-4deg] group-hover:border-violet-300/40 group-hover:bg-violet-400/[0.10]"
-              >
+              <span className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-300/20 bg-violet-400/[0.05] shadow-[0_0_40px_rgba(139,92,246,0.08)] transition-all duration-500 group-hover:rotate-[-4deg] group-hover:border-violet-300/40 group-hover:bg-violet-400/[0.10]">
                 <span className="font-mono text-sm font-semibold text-violet-100">
                   FN
                 </span>
@@ -336,98 +362,90 @@ export default function Footer() {
         </div>
 
         {/* =========================================================
-            3D FAIZA NOOR SIGNATURE
+            FAIZA NOOR — LIVING PARTICLE ORBIT
         ========================================================= */}
 
         <section
-          aria-label="Faiza Noor signature"
-          className="relative mt-20 h-[250px] overflow-hidden sm:mt-28 sm:h-[330px] lg:mt-32 lg:h-[430px]"
+          aria-label="Faiza Noor particle signature"
+          className="relative mt-12 h-[185px] overflow-hidden sm:mt-16 sm:h-[205px] lg:mt-20 lg:h-[220px]"
         >
-          {/* Main aura */}
-          <div className="pointer-events-none absolute left-1/2 top-1/2 h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/[0.12] blur-[105px] sm:h-72 sm:w-72 lg:h-[420px] lg:w-[420px]" />
+          {/* Feminine ambient glow */}
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink-500/[0.055] blur-[75px]" />
 
-          {/* Secondary aura */}
-          <div className="pointer-events-none absolute left-1/2 top-1/2 h-28 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/[0.07] blur-[80px] sm:h-40 sm:w-72 lg:h-56 lg:w-[420px]" />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-rose-400/[0.04] blur-[65px]" />
 
-          {/* =======================================================
-              3D ORBIT 1
-          ======================================================= */}
-
-          <div
-            className="footer-orbit footer-orbit-one pointer-events-none absolute left-1/2 top-1/2 h-[190px] w-[190px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-violet-300/[0.09] sm:h-[270px] sm:w-[270px] lg:h-[350px] lg:w-[350px]"
-          />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-20 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-300/[0.035] blur-[60px]" />
 
           {/* =======================================================
-              3D ORBIT 2
+              OUTER FLYING ORBIT
           ======================================================= */}
 
-          <div
-            className="footer-orbit footer-orbit-two pointer-events-none absolute left-1/2 top-1/2 h-[145px] w-[145px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-300/[0.07] sm:h-[215px] sm:w-[215px] lg:h-[290px] lg:w-[290px]"
-          />
+          <div className="footer-orbit-field absolute left-1/2 top-1/2 h-[135px] w-[255px] -translate-x-1/2 -translate-y-1/2 sm:h-[150px] sm:w-[300px] lg:h-[165px] lg:w-[345px]">
+            <div className="footer-orbit-egg absolute inset-0 rounded-[50%]" />
 
-          {/* =======================================================
-              3D WORDMARK STAGE
-          ======================================================= */}
+            <div className="footer-orbit-egg-two absolute inset-[16%_7%] rounded-[50%]" />
 
-          <div className="absolute left-1/2 top-1/2 h-[150px] w-full -translate-x-1/2 -translate-y-1/2 [perspective:1200px] sm:h-[220px] lg:h-[290px]">
-            <div className="footer-wordmark-stage relative h-full w-full">
-              {/* Deep shadow */}
-              <div className="footer-wordmark-shadow absolute inset-0 flex items-center justify-center whitespace-nowrap">
-                <span className="select-none text-[16vw] font-black leading-none tracking-[-0.095em] text-violet-950/[0.55] sm:text-[13vw] lg:text-[10.5vw]">
-                  FAIZA NOOR
-                </span>
-              </div>
-
-              {/* Deep 3D extrusion */}
-              <div className="footer-wordmark-extrusion absolute inset-0 flex items-center justify-center whitespace-nowrap">
-                <span className="select-none text-[16vw] font-black leading-none tracking-[-0.095em] text-violet-400/[0.045] sm:text-[13vw] lg:text-[10.5vw]">
-                  FAIZA NOOR
-                </span>
-              </div>
-
-              {/* Main face */}
-              <div className="footer-wordmark-face absolute inset-0 flex items-center justify-center whitespace-nowrap">
-                <span className="select-none bg-gradient-to-b from-white/[0.11] via-violet-100/[0.055] to-white/[0.018] bg-clip-text text-[16vw] font-black leading-none tracking-[-0.095em] text-transparent sm:text-[13vw] lg:text-[10.5vw]">
-                  FAIZA NOOR
-                </span>
-              </div>
-
-              {/* Highlight line */}
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center whitespace-nowrap">
-                <span className="footer-highlight select-none text-[16vw] font-black leading-none tracking-[-0.095em] text-white/[0.025] sm:text-[13vw] lg:text-[10.5vw]">
-                  FAIZA NOOR
-                </span>
-              </div>
-            </div>
+            {orbitParticles.map((particle) => (
+              <span
+                key={particle.index}
+                className="footer-orbit-particle absolute left-1/2 top-1/2 rounded-full"
+                style={
+                  {
+                    width: `${particle.size}px`,
+                    height: `${particle.size}px`,
+                    background: particle.color,
+                    boxShadow: `
+                      0 0 6px ${particle.color},
+                      0 0 13px ${particle.color},
+                      0 0 24px ${particle.color}
+                    `,
+                    "--particle-angle": `${particle.angle}deg`,
+                    "--particle-delay": particle.delay,
+                    "--particle-duration": `${particle.duration}s`,
+                  } as React.CSSProperties
+                }
+              />
+            ))}
           </div>
 
           {/* =======================================================
-              SIDE LABELS
+              INNER FLOW RING
           ======================================================= */}
 
-          <div className="absolute left-0 top-1/2 hidden -translate-y-1/2 sm:block">
-            <div className="flex items-center gap-3">
-              <span className="h-px w-8 bg-white/[0.08]" />
+          <div className="footer-inner-flow absolute left-1/2 top-1/2 h-[78px] w-[170px] -translate-x-1/2 -translate-y-1/2 rounded-[50%]" />
 
-              <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-white/15">
-                Digital craft
-              </span>
-            </div>
+          {/* =======================================================
+              CENTER ENERGY
+          ======================================================= */}
+
+          <div className="footer-center-energy pointer-events-none absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
+
+          <div className="footer-center-burst pointer-events-none absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full" />
+
+          {/* =======================================================
+              PARTICLE NAME
+          ======================================================= */}
+
+          <div className="footer-particle-name absolute inset-0 flex items-center justify-center">
+            {/* Soft glow layer */}
+            <span className="footer-name-soft absolute select-none bg-gradient-to-r from-pink-300 via-rose-200 via-red-300 to-yellow-200 bg-clip-text text-[clamp(2.1rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
+              FAIZA NOOR
+            </span>
+
+            {/* Main flowing name */}
+            <span className="footer-name-main relative select-none bg-gradient-to-r from-pink-300 via-baby-pink via-rose-300 via-red-300 via-orange-200 to-yellow-200 bg-[length:250%_100%] bg-clip-text text-[clamp(2.1rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
+              FAIZA NOOR
+            </span>
+
+            {/* Light passing across the name */}
+            <span className="footer-name-shine pointer-events-none absolute select-none bg-gradient-to-r from-transparent via-white/80 to-transparent bg-clip-text text-[clamp(2.1rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
+              FAIZA NOOR
+            </span>
           </div>
 
-          <div className="absolute right-0 top-1/2 hidden -translate-y-1/2 text-right sm:block">
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-[8px] uppercase tracking-[0.3em] text-white/15">
-                Full-stack / 2026
-              </span>
-
-              <span className="h-px w-8 bg-white/[0.08]" />
-            </div>
-          </div>
-
-          {/* Mobile center label */}
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 sm:hidden">
-            <span className="whitespace-nowrap font-mono text-[7px] uppercase tracking-[0.28em] text-white/15">
+          {/* Tiny footer label */}
+          <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
+            <span className="whitespace-nowrap font-mono text-[7px] uppercase tracking-[0.3em] text-white/15">
               Digital craft / full-stack
             </span>
           </div>
@@ -441,9 +459,7 @@ export default function Footer() {
           <div className="flex flex-col gap-7 text-[9px] text-white/20 sm:gap-5 lg:flex-row lg:items-center lg:justify-between">
             {/* Copyright */}
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-              <span>
-                © {year} FAIZA NOOR. ALL RIGHTS RESERVED.
-              </span>
+              <span>© {year} FAIZA NOOR. ALL RIGHTS RESERVED.</span>
 
               <span className="hidden h-1 w-1 rounded-full bg-white/20 sm:block" />
 
@@ -484,176 +500,560 @@ export default function Footer() {
       </div>
 
       {/* =========================================================
-          3D / MOTION CSS
+          PARTICLE ORBIT / NAME MOTION CSS
       ========================================================= */}
 
       <style jsx>{`
-        .footer-wordmark-stage {
+        /* ---------------------------------------------------------
+           MAIN EGG-SHAPED ORBIT
+        --------------------------------------------------------- */
+
+        .footer-orbit-field {
           transform-style: preserve-3d;
-          animation: footerStageFloat 9s ease-in-out infinite;
+          animation: footerEggFloat 6s ease-in-out infinite;
         }
 
-        .footer-wordmark-face {
-          transform: translateZ(0);
-          animation: footerFaceRotate 13s ease-in-out infinite;
+        .footer-orbit-egg {
+          border: 1px solid rgba(255, 105, 165, 0.12);
+          box-shadow:
+            0 0 25px rgba(255, 79, 154, 0.035),
+            inset 0 0 25px rgba(255, 79, 154, 0.025);
+          transform: rotate(-7deg) scaleY(0.82);
+          animation: footerEggRotate 5.8s ease-in-out infinite;
         }
 
-        .footer-wordmark-extrusion {
-          transform: translate3d(11px, 9px, -25px);
-          animation: footerExtrusionRotate 13s ease-in-out infinite;
+        .footer-orbit-egg-two {
+          border: 1px solid rgba(255, 209, 102, 0.065);
+          transform: rotate(9deg) scaleY(0.82);
+          animation: footerEggRotateTwo 7s ease-in-out infinite;
         }
 
-        .footer-wordmark-shadow {
-          transform: translate3d(19px, 16px, -45px);
-          filter: blur(1px);
-          opacity: 0.8;
-          animation: footerShadowRotate 13s ease-in-out infinite;
+        /* ---------------------------------------------------------
+           PARTICLES
+        --------------------------------------------------------- */
+
+        .footer-orbit-particle {
+          margin-left: -50%;
+          margin-top: -50%;
+          transform-origin: 0 0;
+          opacity: 0;
+          animation:
+            footerParticleOrbit var(--particle-duration) cubic-bezier(
+                0.55,
+                0.08,
+                0.25,
+                0.95
+              )
+              var(--particle-delay) infinite;
+          will-change: transform, opacity;
         }
 
-        .footer-highlight {
-          animation: footerHighlight 6s ease-in-out infinite;
+        /* ---------------------------------------------------------
+           INNER FLOW
+        --------------------------------------------------------- */
+
+        .footer-inner-flow {
+          border: 1px solid rgba(255, 105, 165, 0.055);
+          box-shadow:
+            0 0 30px rgba(255, 79, 154, 0.04),
+            inset 0 0 25px rgba(255, 209, 102, 0.025);
+          animation: footerInnerFlow 5.8s ease-in-out infinite;
         }
 
-        .footer-orbit-one {
-          transform-style: preserve-3d;
-          transform: translate(-50%, -50%) perspective(900px)
-            rotateX(68deg) rotateZ(0deg);
-          animation: orbitOne 18s linear infinite;
+        /* ---------------------------------------------------------
+           CENTER ENERGY
+        --------------------------------------------------------- */
+
+        .footer-center-energy {
+          opacity: 0;
+          box-shadow:
+            0 0 8px rgba(255, 255, 255, 0.95),
+            0 0 18px rgba(255, 105, 165, 0.9),
+            0 0 35px rgba(255, 209, 102, 0.65);
+          animation: footerEnergyCore 5.8s ease-in-out infinite;
         }
 
-        .footer-orbit-two {
-          transform-style: preserve-3d;
-          transform: translate(-50%, -50%) perspective(900px)
-            rotateY(68deg) rotateZ(0deg);
-          animation: orbitTwo 14s linear infinite reverse;
+        .footer-center-burst {
+          opacity: 0;
+          background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 105, 165, 0.6) 12%,
+            rgba(255, 54, 95, 0.28) 28%,
+            rgba(255, 209, 102, 0.12) 48%,
+            transparent 72%
+          );
+          filter: blur(3px);
+          animation: footerEnergyBurst 5.8s ease-in-out infinite;
         }
 
-        @keyframes footerStageFloat {
+        /* ---------------------------------------------------------
+           NAME
+        --------------------------------------------------------- */
+
+        .footer-particle-name {
+          pointer-events: none;
+          opacity: 0;
+          transform: scale(0.76);
+          filter: blur(7px);
+          animation: footerNameFormation 5.8s ease-in-out infinite;
+        }
+
+        .footer-name-main {
+          background-image: linear-gradient(
+            90deg,
+            #ff8fbe 0%,
+            #ff4f9a 18%,
+            #ff9dbd 34%,
+            #ff365f 50%,
+            #ff8c69 67%,
+            #ffd166 84%,
+            #ffb4d2 100%
+          );
+          text-shadow:
+            0 0 12px rgba(255, 79, 154, 0.28),
+            0 0 30px rgba(255, 54, 95, 0.16),
+            0 0 55px rgba(255, 209, 102, 0.1);
+          animation: footerNameColorFlow 3.8s linear infinite;
+        }
+
+        .footer-name-soft {
+          opacity: 0.7;
+          filter: blur(13px);
+          background-image: linear-gradient(
+            90deg,
+            #ff4f9a,
+            #ffb4d2,
+            #ff365f,
+            #ffd166,
+            #ff8fab
+          );
+          background-size: 250% 100%;
+          animation:
+            footerNameColorFlow 3.8s linear infinite,
+            footerNameGlow 2.8s ease-in-out infinite;
+        }
+
+        .footer-name-shine {
+          opacity: 0;
+          width: 100%;
+          background-image: linear-gradient(
+            105deg,
+            transparent 20%,
+            transparent 40%,
+            rgba(255, 255, 255, 0.8) 50%,
+            transparent 60%,
+            transparent 80%
+          );
+          background-size: 220% 100%;
+          animation: footerNameShine 5.8s ease-in-out infinite;
+        }
+
+        /* ---------------------------------------------------------
+           EGG FLOAT
+        --------------------------------------------------------- */
+
+        @keyframes footerEggFloat {
           0%,
           100% {
-            transform: perspective(1200px) rotateX(2deg) rotateY(-6deg)
-              translateY(0px);
+            transform: translateY(4px) rotateX(0deg);
           }
 
           50% {
-            transform: perspective(1200px) rotateX(-2deg) rotateY(6deg)
-              translateY(-9px);
+            transform: translateY(-5px) rotateX(4deg);
           }
         }
 
-        @keyframes footerFaceRotate {
+        @keyframes footerEggRotate {
           0%,
           100% {
-            transform: perspective(1200px) rotateY(-5deg) translateZ(0);
+            transform: rotate(-7deg) scaleY(0.82) scaleX(1);
+            opacity: 0.35;
           }
 
           50% {
-            transform: perspective(1200px) rotateY(5deg) translateZ(0);
+            transform: rotate(8deg) scaleY(0.78) scaleX(1.04);
+            opacity: 0.7;
           }
         }
 
-        @keyframes footerExtrusionRotate {
+        @keyframes footerEggRotateTwo {
           0%,
           100% {
-            transform: translate3d(11px, 9px, -25px)
-              perspective(1200px) rotateY(-5deg);
+            transform: rotate(9deg) scaleY(0.82) scaleX(1);
+            opacity: 0.2;
           }
 
           50% {
-            transform: translate3d(-11px, -6px, -25px)
-              perspective(1200px) rotateY(5deg);
+            transform: rotate(-10deg) scaleY(0.75) scaleX(1.05);
+            opacity: 0.55;
           }
         }
 
-        @keyframes footerShadowRotate {
-          0%,
-          100% {
-            transform: translate3d(19px, 16px, -45px)
-              perspective(1200px) rotateY(-5deg);
+        /* ---------------------------------------------------------
+           PARTICLES:
+           0-20% = fly in
+           20-48% = orbit
+           48-64% = spiral inward
+           64-70% = merge
+           70-100% = fly back out
+        --------------------------------------------------------- */
+
+        @keyframes footerParticleOrbit {
+          0% {
+            opacity: 0;
+            transform:
+              rotate(var(--particle-angle))
+              translateX(155px)
+              scale(0.15);
+          }
+
+          8% {
+            opacity: 0.95;
+            transform:
+              rotate(calc(var(--particle-angle) - 15deg))
+              translateX(145px)
+              scale(0.7);
+          }
+
+          20% {
+            opacity: 1;
+            transform:
+              rotate(calc(var(--particle-angle) + 10deg))
+              translateX(125px)
+              scale(1);
+          }
+
+          32% {
+            opacity: 1;
+            transform:
+              rotate(calc(var(--particle-angle) + 100deg))
+              translateX(125px)
+              scale(1.05);
+          }
+
+          43% {
+            opacity: 1;
+            transform:
+              rotate(calc(var(--particle-angle) + 205deg))
+              translateX(125px)
+              scale(0.95);
           }
 
           50% {
-            transform: translate3d(-17px, -10px, -45px)
-              perspective(1200px) rotateY(5deg);
+            opacity: 1;
+            transform:
+              rotate(calc(var(--particle-angle) + 285deg))
+              translateX(108px)
+              scale(1);
+          }
+
+          56% {
+            opacity: 1;
+            transform:
+              rotate(calc(var(--particle-angle) + 390deg))
+              translateX(72px)
+              scale(0.9);
+          }
+
+          61% {
+            opacity: 1;
+            transform:
+              rotate(calc(var(--particle-angle) + 500deg))
+              translateX(34px)
+              scale(0.7);
+          }
+
+          66% {
+            opacity: 0.95;
+            transform:
+              rotate(calc(var(--particle-angle) + 620deg))
+              translateX(8px)
+              scale(0.25);
+          }
+
+          70% {
+            opacity: 0;
+            transform:
+              rotate(calc(var(--particle-angle) + 700deg))
+              translateX(0)
+              scale(0.05);
+          }
+
+          76% {
+            opacity: 0;
+            transform:
+              rotate(calc(var(--particle-angle) + 760deg))
+              translateX(25px)
+              scale(0.05);
+          }
+
+          84% {
+            opacity: 0.75;
+            transform:
+              rotate(calc(var(--particle-angle) + 820deg))
+              translateX(75px)
+              scale(0.7);
+          }
+
+          92% {
+            opacity: 0.95;
+            transform:
+              rotate(calc(var(--particle-angle) + 900deg))
+              translateX(130px)
+              scale(0.95);
+          }
+
+          100% {
+            opacity: 0;
+            transform:
+              rotate(calc(var(--particle-angle) + 980deg))
+              translateX(165px)
+              scale(0.1);
           }
         }
 
-        @keyframes footerHighlight {
+        /* ---------------------------------------------------------
+           INNER RING
+        --------------------------------------------------------- */
+
+        @keyframes footerInnerFlow {
           0%,
+          42% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.7) rotate(0deg);
+          }
+
+          52% {
+            opacity: 0.35;
+            transform: translate(-50%, -50%) scale(0.9) rotate(20deg);
+          }
+
+          62% {
+            opacity: 0.7;
+            transform: translate(-50%, -50%) scale(1.05) rotate(60deg);
+          }
+
+          70% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5) rotate(100deg);
+          }
+
           100% {
-            transform: translateX(-8px);
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.7) rotate(180deg);
+          }
+        }
+
+        /* ---------------------------------------------------------
+           ENERGY
+        --------------------------------------------------------- */
+
+        @keyframes footerEnergyCore {
+          0%,
+          56% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.2);
+          }
+
+          61% {
+            opacity: 0.7;
+            transform: translate(-50%, -50%) scale(0.8);
+          }
+
+          66% {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.7);
+          }
+
+          71% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.4);
+          }
+
+          100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.2);
+          }
+        }
+
+        @keyframes footerEnergyBurst {
+          0%,
+          58% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.2);
+          }
+
+          64% {
+            opacity: 0.9;
+            transform: translate(-50%, -50%) scale(0.7);
+          }
+
+          72% {
             opacity: 0.3;
+            transform: translate(-50%, -50%) scale(1.8);
+          }
+
+          84% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(2.5);
+          }
+
+          100% {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(2.5);
+          }
+        }
+
+        /* ---------------------------------------------------------
+           NAME FORMATION
+        --------------------------------------------------------- */
+
+        @keyframes footerNameFormation {
+          0%,
+          45% {
+            opacity: 0;
+            transform: scale(0.76);
+            filter: blur(8px);
+          }
+
+          53% {
+            opacity: 0.08;
+            transform: scale(0.82);
+            filter: blur(6px);
+          }
+
+          60% {
+            opacity: 0.45;
+            transform: scale(0.94);
+            filter: blur(2px);
+          }
+
+          66% {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0);
+          }
+
+          74%,
+          91% {
+            opacity: 1;
+            transform: scale(1);
+            filter: blur(0);
+          }
+
+          100% {
+            opacity: 0;
+            transform: scale(1.06);
+            filter: blur(6px);
+          }
+        }
+
+        @keyframes footerNameColorFlow {
+          0% {
+            background-position: 0% 50%;
           }
 
           50% {
-            transform: translateX(8px);
-            opacity: 0.8;
+            background-position: 100% 50%;
+          }
+
+          100% {
+            background-position: 0% 50%;
           }
         }
 
-        @keyframes orbitOne {
-          from {
-            transform: translate(-50%, -50%) perspective(900px)
-              rotateX(68deg) rotateZ(0deg);
+        @keyframes footerNameGlow {
+          0%,
+          100% {
+            opacity: 0.45;
           }
 
-          to {
-            transform: translate(-50%, -50%) perspective(900px)
-              rotateX(68deg) rotateZ(360deg);
+          50% {
+            opacity: 0.9;
           }
         }
 
-        @keyframes orbitTwo {
-          from {
-            transform: translate(-50%, -50%) perspective(900px)
-              rotateY(68deg) rotateZ(0deg);
+        @keyframes footerNameShine {
+          0%,
+          58% {
+            opacity: 0;
+            background-position: -100% 50%;
           }
 
-          to {
-            transform: translate(-50%, -50%) perspective(900px)
-              rotateY(68deg) rotateZ(360deg);
+          64% {
+            opacity: 0;
+            background-position: -50% 50%;
+          }
+
+          72% {
+            opacity: 0.75;
+            background-position: 100% 50%;
+          }
+
+          80%,
+          100% {
+            opacity: 0;
+            background-position: 180% 50%;
           }
         }
+
+        /* ---------------------------------------------------------
+           MOBILE
+        --------------------------------------------------------- */
 
         @media (max-width: 640px) {
-          .footer-wordmark-stage {
-            animation-duration: 11s;
+          .footer-orbit-field {
+            transform: scale(0.78);
           }
 
-          .footer-wordmark-face {
-            animation-duration: 14s;
+          .footer-orbit-particle {
+            animation-duration: 5.4s;
           }
 
-          .footer-wordmark-extrusion {
-            animation-duration: 14s;
+          .footer-particle-name,
+          .footer-name-soft,
+          .footer-name-main,
+          .footer-name-shine,
+          .footer-center-energy,
+          .footer-center-burst {
+            animation-duration: 5.4s;
           }
 
-          .footer-wordmark-shadow {
-            animation-duration: 14s;
-          }
-
-          .footer-orbit-one {
-            animation-duration: 22s;
-          }
-
-          .footer-orbit-two {
-            animation-duration: 18s;
-          }
-
-          .footer-highlight {
-            animation-duration: 7s;
+          .footer-name-main,
+          .footer-name-soft,
+          .footer-name-shine {
+            letter-spacing: -0.075em;
           }
         }
 
+        /* ---------------------------------------------------------
+           REDUCED MOTION
+        --------------------------------------------------------- */
+
         @media (prefers-reduced-motion: reduce) {
-          .footer-wordmark-stage,
-          .footer-wordmark-face,
-          .footer-wordmark-extrusion,
-          .footer-wordmark-shadow,
-          .footer-highlight,
-          .footer-orbit-one,
-          .footer-orbit-two {
+          .footer-orbit-field,
+          .footer-orbit-egg,
+          .footer-orbit-egg-two,
+          .footer-orbit-particle,
+          .footer-inner-flow,
+          .footer-center-energy,
+          .footer-center-burst,
+          .footer-particle-name,
+          .footer-name-soft,
+          .footer-name-main,
+          .footer-name-shine {
             animation: none !important;
+          }
+
+          .footer-particle-name {
+            opacity: 1;
+            transform: none;
+            filter: none;
+          }
+
+          .footer-name-main {
+            background-position: 50% 50%;
           }
         }
       `}</style>

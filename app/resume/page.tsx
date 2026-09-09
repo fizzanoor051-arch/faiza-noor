@@ -11,12 +11,25 @@ import {
   GraduationCap,
   Mail,
   MapPin,
+  Printer,
   Sparkles,
   Terminal,
   UserRound,
+  X,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import "./resume.css";
+
+/* =========================================================
+   CV PDF
+========================================================= */
+
+const CV_FILE = "/files/Faiza-Noor-CV.pdf";
+
+/* =========================================================
+   EXPERIENCE
+========================================================= */
 
 const experience = [
   {
@@ -51,6 +64,10 @@ const experience = [
   },
 ];
 
+/* =========================================================
+   EDUCATION
+========================================================= */
+
 const education = [
   {
     year: "2024 — 2025",
@@ -65,6 +82,10 @@ const education = [
     result: "92%",
   },
 ];
+
+/* =========================================================
+   CORE SKILLS
+========================================================= */
 
 const coreSkills = [
   "React.js",
@@ -81,6 +102,10 @@ const coreSkills = [
   "AI Integration",
 ];
 
+/* =========================================================
+   STRENGTHS
+========================================================= */
+
 const strengths = [
   "Responsive Web Development",
   "Modern UI Implementation",
@@ -91,6 +116,10 @@ const strengths = [
   "Problem Solving",
   "Professional Documentation",
 ];
+
+/* =========================================================
+   PROJECTS
+========================================================= */
 
 const projects = [
   {
@@ -113,6 +142,10 @@ const projects = [
   },
 ];
 
+/* =========================================================
+   CERTIFICATIONS / ADDITIONAL
+========================================================= */
+
 const certifications = [
   {
     title: "Web Development",
@@ -126,20 +159,90 @@ const certifications = [
   },
 ];
 
+/* =========================================================
+   RESUME PAGE
+========================================================= */
+
 export default function ResumePage() {
-  const downloadResume = () => {
-    window.print();
+  const [showCV, setShowCV] = useState(false);
+
+  /* =======================================================
+     OPEN CV
+  ======================================================= */
+
+  const openCV = () => {
+    setShowCV(true);
   };
+
+  /* =======================================================
+     CLOSE CV
+  ======================================================= */
+
+  const closeCV = () => {
+    setShowCV(false);
+  };
+
+  /* =======================================================
+     ESC KEY + BODY SCROLL LOCK
+  ======================================================= */
+
+  useEffect(() => {
+    if (!showCV) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowCV(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [showCV]);
+
+  /* =======================================================
+     PRINT CV
+  ======================================================= */
+
+  const printCV = () => {
+    const printWindow = window.open(CV_FILE, "_blank");
+
+    if (printWindow) {
+      printWindow.focus();
+
+      setTimeout(() => {
+        printWindow.print();
+      }, 800);
+    }
+  };
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
 
   return (
     <main className="resume-page">
-      {/* BACKGROUND */}
+      {/* =====================================================
+          BACKGROUND
+      ===================================================== */}
+
       <div className="resume-noise" />
       <div className="resume-grid" />
       <div className="resume-orb resume-orb-one" />
       <div className="resume-orb resume-orb-two" />
 
-      {/* TOP BAR */}
+      {/* =====================================================
+          TOP BAR
+      ===================================================== */}
+
       <div className="resume-topbar">
         <div className="resume-topbar-inner">
           <span className="resume-status">
@@ -147,12 +250,14 @@ export default function ResumePage() {
             AVAILABLE FOR PROJECTS
           </span>
 
-          <span className="resume-top-label">FAIZA NOOR / RESUME</span>
+          <span className="resume-top-label">
+            FAIZA NOOR / RESUME
+          </span>
 
           <button
             type="button"
             className="resume-print-button"
-            onClick={downloadResume}
+            onClick={openCV}
           >
             <Download size={15} />
             DOWNLOAD / PRINT
@@ -160,7 +265,10 @@ export default function ResumePage() {
         </div>
       </div>
 
-      {/* HERO */}
+      {/* =====================================================
+          HERO
+      ===================================================== */}
+
       <section className="resume-hero">
         <div className="resume-container">
           <div className="resume-hero-grid">
@@ -191,13 +299,16 @@ export default function ResumePage() {
                 <button
                   type="button"
                   className="resume-primary-button"
-                  onClick={downloadResume}
+                  onClick={openCV}
                 >
                   <ArrowDownToLine size={17} />
                   DOWNLOAD CV
                 </button>
 
-                <Link href="/contact" className="resume-secondary-button">
+                <Link
+                  href="/contact"
+                  className="resume-secondary-button"
+                >
                   HIRE ME
                   <ArrowUpRight size={17} />
                 </Link>
@@ -243,6 +354,7 @@ export default function ResumePage() {
           </div>
 
           {/* QUICK STATS */}
+
           <div className="resume-stats">
             <div className="resume-stat">
               <span>01</span>
@@ -271,7 +383,10 @@ export default function ResumePage() {
         </div>
       </section>
 
-      {/* ABOUT */}
+      {/* =====================================================
+          ABOUT
+      ===================================================== */}
+
       <section className="resume-section resume-about">
         <div className="resume-container">
           <div className="resume-section-heading">
@@ -320,7 +435,10 @@ export default function ResumePage() {
         </div>
       </section>
 
-      {/* EXPERIENCE */}
+      {/* =====================================================
+          EXPERIENCE
+      ===================================================== */}
+
       <section className="resume-section">
         <div className="resume-container">
           <div className="resume-section-heading split-heading">
@@ -345,7 +463,10 @@ export default function ResumePage() {
 
           <div className="resume-timeline">
             {experience.map((item) => (
-              <article className="resume-experience" key={item.number}>
+              <article
+                className="resume-experience"
+                key={item.number}
+              >
                 <div className="resume-experience-number">
                   {item.number}
                 </div>
@@ -377,7 +498,10 @@ export default function ResumePage() {
         </div>
       </section>
 
-      {/* EDUCATION */}
+      {/* =====================================================
+          EDUCATION
+      ===================================================== */}
+
       <section className="resume-section resume-dark-section">
         <div className="resume-container">
           <div className="resume-section-heading">
@@ -395,7 +519,10 @@ export default function ResumePage() {
 
           <div className="resume-education-grid">
             {education.map((item) => (
-              <article className="resume-education-card" key={item.title}>
+              <article
+                className="resume-education-card"
+                key={item.title}
+              >
                 <div className="resume-education-icon">
                   <GraduationCap size={23} />
                 </div>
@@ -408,14 +535,20 @@ export default function ResumePage() {
 
                 <strong>{item.result}</strong>
 
-                <ChevronRight className="resume-arrow" size={19} />
+                <ChevronRight
+                  className="resume-arrow"
+                  size={19}
+                />
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SKILLS */}
+      {/* =====================================================
+          SKILLS
+      ===================================================== */}
+
       <section className="resume-section">
         <div className="resume-container">
           <div className="resume-section-heading split-heading">
@@ -453,6 +586,7 @@ export default function ResumePage() {
               </h3>
 
               <div className="resume-skill-feature-line" />
+
               <p>
                 React-driven interfaces, Next.js applications, TypeScript,
                 backend APIs and database-powered systems.
@@ -461,9 +595,16 @@ export default function ResumePage() {
 
             <div className="resume-skill-list">
               {coreSkills.map((skill, index) => (
-                <div className="resume-skill-item" key={skill}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
+                <div
+                  className="resume-skill-item"
+                  key={skill}
+                >
+                  <span>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
                   <strong>{skill}</strong>
+
                   <ArrowUpRight size={15} />
                 </div>
               ))}
@@ -472,7 +613,10 @@ export default function ResumePage() {
 
           <div className="resume-strengths">
             {strengths.map((strength) => (
-              <div className="resume-strength" key={strength}>
+              <div
+                className="resume-strength"
+                key={strength}
+              >
                 <Check size={14} />
                 {strength}
               </div>
@@ -481,7 +625,10 @@ export default function ResumePage() {
         </div>
       </section>
 
-      {/* PROJECTS */}
+      {/* =====================================================
+          PROJECTS
+      ===================================================== */}
+
       <section className="resume-section resume-project-section">
         <div className="resume-container">
           <div className="resume-section-heading">
@@ -499,14 +646,19 @@ export default function ResumePage() {
 
           <div className="resume-projects">
             {projects.map((project, index) => (
-              <article className="resume-project-card" key={project.title}>
+              <article
+                className="resume-project-card"
+                key={project.title}
+              >
                 <div className="resume-project-number">
                   0{index + 1}
                 </div>
 
                 <div className="resume-project-content">
                   <span>{project.type}</span>
+
                   <h3>{project.title}</h3>
+
                   <p>{project.description}</p>
 
                   <Link href="/projects">
@@ -520,7 +672,10 @@ export default function ResumePage() {
         </div>
       </section>
 
-      {/* CERTIFICATIONS / ADDITIONAL */}
+      {/* =====================================================
+          ADDITIONAL
+      ===================================================== */}
+
       <section className="resume-section">
         <div className="resume-container">
           <div className="resume-section-heading">
@@ -538,7 +693,10 @@ export default function ResumePage() {
 
           <div className="resume-cert-grid">
             {certifications.map((item, index) => (
-              <article className="resume-cert-card" key={item.title}>
+              <article
+                className="resume-cert-card"
+                key={item.title}
+              >
                 <div className="resume-cert-top">
                   <Sparkles size={19} />
                   <span>0{index + 1}</span>
@@ -553,7 +711,10 @@ export default function ResumePage() {
         </div>
       </section>
 
-      {/* CONTACT */}
+      {/* =====================================================
+          CONTACT
+      ===================================================== */}
+
       <section className="resume-contact">
         <div className="resume-contact-bg" />
 
@@ -576,12 +737,18 @@ export default function ResumePage() {
             </p>
 
             <div className="resume-contact-actions">
-              <Link href="/contact" className="resume-primary-button">
+              <Link
+                href="/contact"
+                className="resume-primary-button"
+              >
                 <Mail size={17} />
                 START A PROJECT
               </Link>
 
-              <Link href="/services" className="resume-secondary-button">
+              <Link
+                href="/services"
+                className="resume-secondary-button"
+              >
                 VIEW SERVICES
                 <ArrowUpRight size={17} />
               </Link>
@@ -602,7 +769,10 @@ export default function ResumePage() {
         </div>
       </section>
 
-      {/* FOOTER */}
+      {/* =====================================================
+          FOOTER
+      ===================================================== */}
+
       <footer className="resume-footer">
         <div className="resume-container">
           <span>FAIZA NOOR © 2026</span>
@@ -610,6 +780,102 @@ export default function ResumePage() {
           <span>BUILT WITH INTENT.</span>
         </div>
       </footer>
+
+      {/* =====================================================
+          CV PDF PREVIEW MODAL
+      ===================================================== */}
+
+      {showCV && (
+        <div
+          className="cv-preview-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="cv-preview-title"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeCV();
+            }
+          }}
+        >
+          <div
+            className="cv-preview-modal"
+            onMouseDown={(event) => {
+              event.stopPropagation();
+            }}
+          >
+            {/* HEADER */}
+
+            <div className="cv-preview-header">
+              <div>
+                <span className="cv-preview-label">
+                  FAIZA NOOR / DOCUMENT
+                </span>
+
+                <h2 id="cv-preview-title">
+                  CURRICULUM VITAE
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                className="cv-preview-close"
+                onClick={closeCV}
+                aria-label="Close CV preview"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            {/* PDF BODY */}
+
+            <div className="cv-preview-body">
+              <div className="cv-preview-pdf-wrap">
+                <iframe
+                  src={`${CV_FILE}#toolbar=1&navpanes=0&scrollbar=1`}
+                  title="Faiza Noor CV"
+                  className="cv-preview-pdf"
+                />
+              </div>
+            </div>
+
+            {/* FOOTER */}
+
+            <div className="cv-preview-footer">
+              <span>
+                PROFESSIONAL CV / FAIZA NOOR
+              </span>
+
+              <div className="cv-preview-actions">
+                <button
+                  type="button"
+                  className="cv-preview-secondary"
+                  onClick={closeCV}
+                >
+                  CLOSE
+                </button>
+
+                <button
+                  type="button"
+                  className="cv-preview-print"
+                  onClick={printCV}
+                >
+                  <Printer size={16} />
+                  PRINT
+                </button>
+
+                <a
+                  href={CV_FILE}
+                  download="Faiza-Noor-CV.pdf"
+                  className="cv-preview-download"
+                >
+                  <Download size={16} />
+                  DOWNLOAD CV
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
