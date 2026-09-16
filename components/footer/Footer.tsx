@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -93,16 +94,12 @@ export default function Footer() {
       ========================================================= */}
 
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Top violet atmosphere */}
         <div className="absolute left-1/2 top-[-220px] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-violet-600/[0.075] blur-[160px]" />
 
-        {/* Right blue atmosphere */}
         <div className="absolute right-[-180px] top-[28%] h-[440px] w-[440px] rounded-full bg-blue-600/[0.045] blur-[150px]" />
 
-        {/* Bottom violet atmosphere */}
         <div className="absolute bottom-[-220px] left-[-160px] h-[480px] w-[480px] rounded-full bg-fuchsia-600/[0.035] blur-[160px]" />
 
-        {/* Subtle grid */}
         <div
           className="absolute inset-0 opacity-[0.025]"
           style={{
@@ -112,7 +109,6 @@ export default function Footer() {
           }}
         />
 
-        {/* Noise texture */}
         <div
           className="absolute inset-0 opacity-[0.035] mix-blend-overlay"
           style={{
@@ -122,24 +118,22 @@ export default function Footer() {
         />
       </div>
 
-      <div className="relative mx-auto w-full max-w-[1500px] px-5 pb-8 pt-14 sm:px-8 sm:pb-10 sm:pt-20 lg:px-12 lg:pt-24 xl:px-16">
+      <div className="relative mx-auto w-full max-w-[1500px] px-4 pb-6 pt-10 sm:px-8 sm:pb-10 sm:pt-20 lg:px-12 lg:pt-24 xl:px-16">
         {/* =========================================================
             FINAL CTA
         ========================================================= */}
 
-        <section className="relative overflow-hidden rounded-[28px] border border-white/[0.08] bg-white/[0.025] px-6 py-10 backdrop-blur-sm sm:rounded-[32px] sm:px-10 sm:py-12 lg:px-14 lg:py-16">
-          {/* CTA glows */}
+        <section className="relative overflow-hidden rounded-[24px] border border-white/[0.08] bg-white/[0.025] px-5 py-8 backdrop-blur-sm sm:rounded-[32px] sm:px-10 sm:py-12 lg:px-14 lg:py-16">
           <div className="pointer-events-none absolute -right-24 -top-28 h-80 w-80 rounded-full bg-violet-600/[0.11] blur-[110px]" />
 
           <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-blue-500/[0.07] blur-[110px]" />
 
-          {/* Decorative corner */}
           <div className="pointer-events-none absolute right-6 top-6 hidden h-20 w-20 rounded-full border border-white/[0.04] sm:block" />
 
-          <div className="relative grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
+          <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
             {/* CTA text */}
             <div>
-              <div className="mb-6 flex items-center gap-3">
+              <div className="mb-5 flex items-center gap-3 sm:mb-6">
                 <span className="relative flex h-8 w-8 items-center justify-center rounded-full border border-violet-300/20 bg-violet-400/[0.06]">
                   <Sparkles className="h-3.5 w-3.5 text-violet-200/70" />
 
@@ -151,7 +145,7 @@ export default function Footer() {
                 </span>
               </div>
 
-              <h2 className="max-w-5xl text-[clamp(2.7rem,7vw,7.2rem)] font-semibold leading-[0.87] tracking-[-0.06em] text-white">
+              <h2 className="max-w-5xl text-[clamp(2.35rem,7vw,7.2rem)] font-semibold leading-[0.87] tracking-[-0.06em] text-white">
                 LET&apos;S BUILD
                 <br />
 
@@ -164,7 +158,7 @@ export default function Footer() {
                 IMPOSSIBLE.
               </h2>
 
-              <p className="mt-7 max-w-xl text-sm leading-7 text-white/40 sm:text-[15px]">
+              <p className="mt-6 max-w-xl text-sm leading-6 text-white/40 sm:mt-7 sm:leading-7 sm:text-[15px]">
                 Have an idea that deserves more than a template? Let&apos;s
                 turn it into a fast, immersive and memorable digital
                 experience.
@@ -172,18 +166,18 @@ export default function Footer() {
             </div>
 
             {/* CTA Button */}
-             <a
-  href="/contact"
-  className="group relative inline-flex min-h-[56px] w-full items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-7 text-[14px] font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.025] hover:border-pink-300/70 hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40 sm:w-fit sm:min-w-[200px]"
->
-  <span className="relative z-10"><strong>Start a project</strong></span>
+            <a
+              href="/contact"
+              className="group relative inline-flex min-h-[54px] w-full items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-7 text-[13px] font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.025] hover:border-pink-300/70 hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40 sm:min-h-[56px] sm:w-fit sm:min-w-[200px] sm:text-[14px]"
+            >
+              <span className="relative z-10">
+                <strong>Start a project</strong>
+              </span>
 
-  <ArrowUpRight
-    className="relative z-10 ml-3 h-4 w-4 text-white transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.95)]"
-  />
+              <ArrowUpRight className="relative z-10 ml-3 h-4 w-4 text-white transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.95)]" />
 
-  <span className="absolute inset-0 translate-y-full bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-700 ease-out group-hover:translate-y-0" />
-</a>
+              <span className="absolute inset-0 translate-y-full bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-700 ease-out group-hover:translate-y-0" />
+            </a>
           </div>
         </section>
 
@@ -191,59 +185,56 @@ export default function Footer() {
             BRAND / NAV / SERVICES / CONNECT
         ========================================================= */}
 
-        <div className="mt-16 grid gap-14 sm:mt-20 lg:grid-cols-[1.45fr_0.7fr_0.9fr_0.9fr] lg:gap-10 xl:mt-24">
+        <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-8 sm:mt-20 sm:grid-cols-2 sm:gap-10 lg:grid-cols-[1.45fr_0.7fr_0.9fr_0.9fr] lg:gap-10 xl:mt-24">
           {/* =======================================================
               BRAND
           ======================================================= */}
 
-          <div>
+          <div className="col-span-2 lg:col-span-1">
             <Link
               href="#home"
               className="group inline-flex items-center gap-3"
             >
-              {/* Logo */}
-              <span className="relative flex h-12 w-12 items-center justify-center rounded-2xl border border-violet-300/20 bg-violet-400/[0.05] shadow-[0_0_40px_rgba(139,92,246,0.08)] transition-all duration-500 group-hover:rotate-[-4deg] group-hover:border-violet-300/40 group-hover:bg-violet-400/[0.10]">
-                <span className="font-mono text-sm font-semibold text-violet-100">
+              <span className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-violet-300/20 bg-violet-400/[0.05] shadow-[0_0_40px_rgba(139,92,246,0.08)] transition-all duration-500 group-hover:rotate-[-4deg] group-hover:border-violet-300/40 group-hover:bg-violet-400/[0.10] sm:h-12 sm:w-12 sm:rounded-2xl">
+                <span className="font-mono text-xs font-semibold text-violet-100 sm:text-sm">
                   FN
                 </span>
 
                 <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-violet-300 shadow-[0_0_14px_rgba(196,181,253,0.85)]" />
               </span>
 
-              <span className="text-sm font-semibold tracking-[0.08em] text-white">
+              <span className="text-xs font-semibold tracking-[0.08em] text-white sm:text-sm">
                 FAIZA NOOR
               </span>
             </Link>
 
-            <p className="mt-7 max-w-md text-[14px] leading-7 text-white/38">
+            <p className="mt-5 max-w-md text-[12px] leading-6 text-white/38 sm:mt-7 sm:text-[14px] sm:leading-7">
               Full-Stack Web Engineer crafting thoughtful interfaces,
               scalable applications and cinematic digital experiences from
               frontend to backend.
             </p>
 
-            {/* Availability */}
-            <div className="mt-7 inline-flex max-w-full items-center gap-3 rounded-full border border-emerald-300/[0.12] bg-emerald-400/[0.035] px-4 py-2.5">
+            <div className="mt-5 inline-flex max-w-full items-center gap-2 rounded-full border border-emerald-300/[0.12] bg-emerald-400/[0.035] px-3 py-2 sm:mt-7 sm:gap-3 sm:px-4 sm:py-2.5">
               <span className="relative flex h-2 w-2 shrink-0">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-40" />
 
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
               </span>
 
-              <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-emerald-300/65">
+              <span className="font-mono text-[8px] uppercase tracking-[0.12em] text-emerald-300/65 sm:text-[9px] sm:tracking-[0.16em]">
                 Available for selected projects
               </span>
             </div>
 
-            {/* Email */}
             <a
               href="mailto:hello@faizanoor.dev"
-              className="group mt-6 flex min-h-[44px] w-fit items-center gap-3 py-2 text-sm text-white/35 transition-colors duration-300 hover:text-white"
+              className="group mt-4 flex min-h-[40px] w-fit items-center gap-2 py-2 text-[12px] text-white/35 transition-colors duration-300 hover:text-white sm:mt-6 sm:min-h-[44px] sm:gap-3 sm:text-sm"
             >
-              <Mail className="h-4 w-4 text-white/25 transition-colors duration-300 group-hover:text-violet-300" />
+              <Mail className="h-3.5 w-3.5 text-white/25 transition-colors duration-300 group-hover:text-violet-300 sm:h-4 sm:w-4" />
 
               <span>hello@faizanoor.dev</span>
 
-              <ArrowUpRight className="h-3.5 w-3.5 text-white/20 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              <ArrowUpRight className="h-3 w-3 text-white/20 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 sm:h-3.5 sm:w-3.5" />
             </a>
           </div>
 
@@ -252,22 +243,22 @@ export default function Footer() {
           ======================================================= */}
 
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.28em] text-white/25">
+            <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-white/25 sm:text-[9px] sm:tracking-[0.28em]">
               Explore
             </p>
 
-            <nav className="mt-5 flex flex-col">
+            <nav className="mt-3 flex flex-col sm:mt-5">
               {navigation.map((item, index) => (
                 <a
                   key={item.label}
                   href={item.href}
-                  className="group flex min-h-[46px] items-center justify-between border-b border-white/[0.045] text-[13px] text-white/40 transition-colors duration-300 hover:text-white sm:min-h-[39px]"
+                  className="group flex min-h-[36px] items-center justify-between border-b border-white/[0.045] text-[11px] text-white/40 transition-colors duration-300 hover:text-white sm:min-h-[39px] sm:text-[13px]"
                 >
                   <span className="transition-transform duration-300 group-hover:translate-x-1">
                     {item.label}
                   </span>
 
-                  <span className="font-mono text-[8px] text-white/15 transition-colors duration-300 group-hover:text-violet-300/60">
+                  <span className="font-mono text-[7px] text-white/15 transition-colors duration-300 group-hover:text-violet-300/60 sm:text-[8px]">
                     0{index + 1}
                   </span>
                 </a>
@@ -280,17 +271,17 @@ export default function Footer() {
           ======================================================= */}
 
           <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.28em] text-white/25">
+            <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-white/25 sm:text-[9px] sm:tracking-[0.28em]">
               Capabilities
             </p>
 
-            <div className="mt-5 flex flex-col">
+            <div className="mt-3 flex flex-col sm:mt-5">
               {services.map((service, index) => (
                 <div
                   key={service}
-                  className="group flex min-h-[46px] items-center border-b border-white/[0.045] text-[13px] text-white/40 sm:min-h-[39px]"
+                  className="group flex min-h-[36px] items-center border-b border-white/[0.045] text-[10px] text-white/40 sm:min-h-[39px] sm:text-[13px]"
                 >
-                  <span className="mr-3 shrink-0 font-mono text-[8px] text-white/15">
+                  <span className="mr-2 shrink-0 font-mono text-[7px] text-white/15 sm:mr-3 sm:text-[8px]">
                     0{index + 1}
                   </span>
 
@@ -306,12 +297,12 @@ export default function Footer() {
               CONNECT
           ======================================================= */}
 
-          <div>
-            <p className="font-mono text-[9px] uppercase tracking-[0.28em] text-white/25">
+          <div className="col-span-2 lg:col-span-1">
+            <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-white/25 sm:text-[9px] sm:tracking-[0.28em]">
               Connect
             </p>
 
-            <div className="mt-5 flex flex-col">
+            <div className="mt-3 flex flex-col sm:mt-5">
               {socialLinks.map((link) => {
                 const Icon = link.icon;
 
@@ -321,37 +312,35 @@ export default function Footer() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex min-h-[48px] items-center justify-between border-b border-white/[0.045] text-[13px] text-white/40 transition-colors duration-300 hover:text-white sm:min-h-[42px]"
+                    className="group flex min-h-[40px] items-center justify-between border-b border-white/[0.045] text-[11px] text-white/40 transition-colors duration-300 hover:text-white sm:min-h-[42px] sm:text-[13px]"
                   >
-                    <span className="flex items-center gap-3">
-                      <Icon className="h-4 w-4 text-white/20 transition-colors duration-300 group-hover:text-violet-300" />
+                    <span className="flex items-center gap-2 sm:gap-3">
+                      <Icon className="h-3.5 w-3.5 text-white/20 transition-colors duration-300 group-hover:text-violet-300 sm:h-4 sm:w-4" />
 
                       {link.label}
                     </span>
 
-                    <ArrowUpRight className="h-3.5 w-3.5 text-white/15 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white/60" />
+                    <ArrowUpRight className="h-3 w-3 text-white/15 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white/60 sm:h-3.5 sm:w-3.5" />
                   </a>
                 );
               })}
 
-              {/* Email */}
               <a
                 href="mailto:hello@faizanoor.dev"
-                className="group flex min-h-[48px] items-center justify-between border-b border-white/[0.045] text-[13px] text-white/40 transition-colors duration-300 hover:text-white sm:min-h-[42px]"
+                className="group flex min-h-[40px] items-center justify-between border-b border-white/[0.045] text-[11px] text-white/40 transition-colors duration-300 hover:text-white sm:min-h-[42px] sm:text-[13px]"
               >
-                <span className="flex items-center gap-3">
-                  <Mail className="h-4 w-4 text-white/20 transition-colors duration-300 group-hover:text-violet-300" />
+                <span className="flex items-center gap-2 sm:gap-3">
+                  <Mail className="h-3.5 w-3.5 text-white/20 transition-colors duration-300 group-hover:text-violet-300 sm:h-4 sm:w-4" />
 
                   Email
                 </span>
 
-                <ArrowUpRight className="h-3.5 w-3.5 text-white/15 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                <ArrowUpRight className="h-3 w-3 text-white/15 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white/60 sm:h-3.5 sm:w-3.5" />
               </a>
 
-              {/* Contact */}
               <a
                 href="#contact"
-                className="group flex min-h-[48px] items-center justify-between border-b border-white/[0.045] text-[13px] text-white/40 transition-colors duration-300 hover:text-white sm:min-h-[42px]"
+                className="group flex min-h-[40px] items-center justify-between border-b border-white/[0.045] text-[11px] text-white/40 transition-colors duration-300 hover:text-white sm:min-h-[42px] sm:text-[13px]"
               >
                 <span>Let&apos;s work together</span>
 
@@ -369,20 +358,16 @@ export default function Footer() {
 
         <section
           aria-label="Faiza Noor particle signature"
-          className="relative mt-12 h-[185px] overflow-hidden sm:mt-16 sm:h-[205px] lg:mt-20 lg:h-[220px]"
+          className="relative mt-10 h-[160px] overflow-hidden sm:mt-16 sm:h-[205px] lg:mt-20 lg:h-[220px]"
         >
-          {/* Feminine ambient glow */}
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-pink-500/[0.055] blur-[75px]" />
 
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-24 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-rose-400/[0.04] blur-[65px]" />
 
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-20 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-300/[0.035] blur-[60px]" />
 
-          {/* =======================================================
-              OUTER FLYING ORBIT
-          ======================================================= */}
-
-          <div className="footer-orbit-field absolute left-1/2 top-1/2 h-[135px] w-[255px] -translate-x-1/2 -translate-y-1/2 sm:h-[150px] sm:w-[300px] lg:h-[165px] lg:w-[345px]">
+          {/* Outer orbit */}
+          <div className="footer-orbit-field absolute left-1/2 top-1/2 h-[125px] w-[235px] -translate-x-1/2 -translate-y-1/2 sm:h-[150px] sm:w-[300px] lg:h-[165px] lg:w-[345px]">
             <div className="footer-orbit-egg absolute inset-0 rounded-[50%]" />
 
             <div className="footer-orbit-egg-two absolute inset-[16%_7%] rounded-[50%]" />
@@ -410,44 +395,31 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* =======================================================
-              INNER FLOW RING
-          ======================================================= */}
+          {/* Inner flow ring */}
+          <div className="footer-inner-flow absolute left-1/2 top-1/2 h-[72px] w-[155px] -translate-x-1/2 -translate-y-1/2 rounded-[50%] sm:h-[78px] sm:w-[170px]" />
 
-          <div className="footer-inner-flow absolute left-1/2 top-1/2 h-[78px] w-[170px] -translate-x-1/2 -translate-y-1/2 rounded-[50%]" />
-
-          {/* =======================================================
-              CENTER ENERGY
-          ======================================================= */}
-
-          <div className="footer-center-energy pointer-events-none absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" />
+          {/* Center energy */}
+          <div className="footer-center-energy pointer-events-none absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full" />
 
           <div className="footer-center-burst pointer-events-none absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full" />
 
-          {/* =======================================================
-              PARTICLE NAME
-          ======================================================= */}
-
+          {/* Particle name */}
           <div className="footer-particle-name absolute inset-0 flex items-center justify-center">
-            {/* Soft glow layer */}
-            <span className="footer-name-soft absolute select-none bg-gradient-to-r from-pink-300 via-rose-200 via-red-300 to-yellow-200 bg-clip-text text-[clamp(2.1rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
+            <span className="footer-name-soft absolute select-none bg-gradient-to-r from-pink-300 via-rose-200 via-red-300 to-yellow-200 bg-clip-text text-[clamp(1.8rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
               FAIZA NOOR
             </span>
 
-            {/* Main flowing name */}
-            <span className="footer-name-main relative select-none bg-gradient-to-r from-pink-300 via-baby-pink via-rose-300 via-red-300 via-orange-200 to-yellow-200 bg-[length:250%_100%] bg-clip-text text-[clamp(2.1rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
+            <span className="footer-name-main relative select-none bg-gradient-to-r from-pink-300 via-baby-pink via-rose-300 via-red-300 via-orange-200 to-yellow-200 bg-[length:250%_100%] bg-clip-text text-[clamp(1.8rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
               FAIZA NOOR
             </span>
 
-            {/* Light passing across the name */}
-            <span className="footer-name-shine pointer-events-none absolute select-none bg-gradient-to-r from-transparent via-white/80 to-transparent bg-clip-text text-[clamp(2.1rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
+            <span className="footer-name-shine pointer-events-none absolute select-none bg-gradient-to-r from-transparent via-white/80 to-transparent bg-clip-text text-[clamp(1.8rem,7vw,6.5rem)] font-black leading-none tracking-[-0.08em] text-transparent">
               FAIZA NOOR
             </span>
           </div>
 
-          {/* Tiny footer label */}
           <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
-            <span className="whitespace-nowrap font-mono text-[7px] uppercase tracking-[0.3em] text-white/15">
+            <span className="whitespace-nowrap font-mono text-[6px] uppercase tracking-[0.25em] text-white/15 sm:text-[7px] sm:tracking-[0.3em]">
               Digital craft / full-stack
             </span>
           </div>
@@ -457,9 +429,8 @@ export default function Footer() {
             BOTTOM SYSTEM BAR
         ========================================================= */}
 
-        <div className="relative border-t border-white/[0.07] pt-7">
-          <div className="flex flex-col gap-7 text-[9px] text-white/20 sm:gap-5 lg:flex-row lg:items-center lg:justify-between">
-            {/* Copyright */}
+        <div className="relative border-t border-white/[0.07] pt-5 sm:pt-7">
+          <div className="flex flex-col gap-5 text-[8px] text-white/20 sm:gap-5 sm:text-[9px] lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
               <span>© {year} FAIZA NOOR. ALL RIGHTS RESERVED.</span>
 
@@ -470,26 +441,24 @@ export default function Footer() {
               </span>
             </div>
 
-            {/* System status */}
-            <div className="flex items-center justify-between gap-4 sm:justify-start sm:gap-5">
-              <span className="font-mono uppercase tracking-[0.18em]">
+            <div className="flex items-center justify-between gap-3 sm:justify-start sm:gap-5">
+              <span className="font-mono uppercase tracking-[0.15em]">
                 Design
               </span>
 
-              <span className="font-mono uppercase tracking-[0.18em]">
+              <span className="font-mono uppercase tracking-[0.15em]">
                 Engineer
               </span>
 
-              <span className="font-mono uppercase tracking-[0.18em]">
+              <span className="font-mono uppercase tracking-[0.15em]">
                 Ship
               </span>
 
-              {/* Back to top */}
               <button
                 type="button"
                 onClick={scrollToTop}
                 aria-label="Back to top"
-                className="group ml-auto flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.025] transition-all duration-300 hover:border-violet-300/30 hover:bg-violet-400/[0.07] focus:outline-none focus:ring-2 focus:ring-violet-300/30 sm:ml-2"
+                className="group ml-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.025] transition-all duration-300 hover:border-violet-300/30 hover:bg-violet-400/[0.07] focus:outline-none focus:ring-2 focus:ring-violet-300/30 sm:ml-2 sm:h-11 sm:w-11"
               >
                 <MoveUpRight className="h-3.5 w-3.5 text-white/35 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:text-violet-200" />
               </button>
@@ -497,8 +466,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom breathing room */}
-        <div className="h-6 sm:h-10" />
+        <div className="h-4 sm:h-10" />
       </div>
 
       {/* =========================================================
@@ -506,10 +474,6 @@ export default function Footer() {
       ========================================================= */}
 
       <style jsx>{`
-        /* ---------------------------------------------------------
-           MAIN EGG-SHAPED ORBIT
-        --------------------------------------------------------- */
-
         .footer-orbit-field {
           transform-style: preserve-3d;
           animation: footerEggFloat 6s ease-in-out infinite;
@@ -530,29 +494,17 @@ export default function Footer() {
           animation: footerEggRotateTwo 7s ease-in-out infinite;
         }
 
-        /* ---------------------------------------------------------
-           PARTICLES
-        --------------------------------------------------------- */
-
         .footer-orbit-particle {
           margin-left: -50%;
           margin-top: -50%;
           transform-origin: 0 0;
           opacity: 0;
           animation:
-            footerParticleOrbit var(--particle-duration) cubic-bezier(
-                0.55,
-                0.08,
-                0.25,
-                0.95
-              )
+            footerParticleOrbit var(--particle-duration)
+              cubic-bezier(0.55, 0.08, 0.25, 0.95)
               var(--particle-delay) infinite;
           will-change: transform, opacity;
         }
-
-        /* ---------------------------------------------------------
-           INNER FLOW
-        --------------------------------------------------------- */
 
         .footer-inner-flow {
           border: 1px solid rgba(255, 105, 165, 0.055);
@@ -561,10 +513,6 @@ export default function Footer() {
             inset 0 0 25px rgba(255, 209, 102, 0.025);
           animation: footerInnerFlow 5.8s ease-in-out infinite;
         }
-
-        /* ---------------------------------------------------------
-           CENTER ENERGY
-        --------------------------------------------------------- */
 
         .footer-center-energy {
           opacity: 0;
@@ -588,10 +536,6 @@ export default function Footer() {
           filter: blur(3px);
           animation: footerEnergyBurst 5.8s ease-in-out infinite;
         }
-
-        /* ---------------------------------------------------------
-           NAME
-        --------------------------------------------------------- */
 
         .footer-particle-name {
           pointer-events: none;
@@ -651,10 +595,6 @@ export default function Footer() {
           animation: footerNameShine 5.8s ease-in-out infinite;
         }
 
-        /* ---------------------------------------------------------
-           EGG FLOAT
-        --------------------------------------------------------- */
-
         @keyframes footerEggFloat {
           0%,
           100% {
@@ -691,15 +631,6 @@ export default function Footer() {
             opacity: 0.55;
           }
         }
-
-        /* ---------------------------------------------------------
-           PARTICLES:
-           0-20% = fly in
-           20-48% = orbit
-           48-64% = spiral inward
-           64-70% = merge
-           70-100% = fly back out
-        --------------------------------------------------------- */
 
         @keyframes footerParticleOrbit {
           0% {
@@ -815,10 +746,6 @@ export default function Footer() {
           }
         }
 
-        /* ---------------------------------------------------------
-           INNER RING
-        --------------------------------------------------------- */
-
         @keyframes footerInnerFlow {
           0%,
           42% {
@@ -846,10 +773,6 @@ export default function Footer() {
             transform: translate(-50%, -50%) scale(0.7) rotate(180deg);
           }
         }
-
-        /* ---------------------------------------------------------
-           ENERGY
-        --------------------------------------------------------- */
 
         @keyframes footerEnergyCore {
           0%,
@@ -906,10 +829,6 @@ export default function Footer() {
             transform: translate(-50%, -50%) scale(2.5);
           }
         }
-
-        /* ---------------------------------------------------------
-           NAME FORMATION
-        --------------------------------------------------------- */
 
         @keyframes footerNameFormation {
           0%,
@@ -1000,10 +919,6 @@ export default function Footer() {
           }
         }
 
-        /* ---------------------------------------------------------
-           MOBILE
-        --------------------------------------------------------- */
-
         @media (max-width: 640px) {
           .footer-orbit-field {
             transform: scale(0.78);
@@ -1028,10 +943,6 @@ export default function Footer() {
             letter-spacing: -0.075em;
           }
         }
-
-        /* ---------------------------------------------------------
-           REDUCED MOTION
-        --------------------------------------------------------- */
 
         @media (prefers-reduced-motion: reduce) {
           .footer-orbit-field,
