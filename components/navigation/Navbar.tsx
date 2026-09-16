@@ -135,10 +135,8 @@ export default function Navbar() {
     "Service"
   );
 
-  const cvItem = findItem(
-    "CV",
-    "Resume"
-  );
+
+  
 
   const experienceItem =
     findItem("Experience");
@@ -152,7 +150,7 @@ export default function Navbar() {
     certificatesItem,
     skillsItem,
     servicesItem,
-    cvItem,
+    
   ].filter(Boolean) as NavItem[];
 
   /* =========================================================

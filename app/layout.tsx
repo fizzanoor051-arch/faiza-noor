@@ -8,6 +8,7 @@ import CustomCursor from "@/components/effects/CustomCursor";
 import ScrollProgress from "@/components/effects/ScrollProgress";
 import SmoothScroll from "@/components/effects/SmoothScroll";
 import PortfolioAI from "@/components/ai/PortfolioAI";
+import PortfolioIntro from "@/components/PortfolioIntro";
 
 import ThemeProvider from "@/components/themes/ThemeProvider";
 import ThemeEngine from "@/components/themes/ThemeEngine";
@@ -89,17 +90,18 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-[#05050a] text-white">
-        {/* =====================================================
-            THEME SYSTEM
-            ThemeProvider controls the active world.
-            ThemeEngine renders the visual world/effects.
-        ===================================================== */}
 
         <ThemeProvider>
           <ThemeEngine>
 
-            {/* =================================================
-                CINEMATIC BACKGROUND LAYERS
+            {/* ================================================
+                CINEMATIC INTRO
+            ================================================= */}
+
+            <PortfolioIntro />
+
+            {/* ================================================
+                BACKGROUND EFFECTS
             ================================================= */}
 
             <div
@@ -112,25 +114,25 @@ export default function RootLayout({
               aria-hidden="true"
             />
 
-            {/* =================================================
+            {/* ================================================
                 SMOOTH SCROLL
             ================================================= */}
 
             <SmoothScroll />
 
-            {/* =================================================
+            {/* ================================================
                 GLOBAL SCROLL PROGRESS
             ================================================= */}
 
             <ScrollProgress />
 
-            {/* =================================================
+            {/* ================================================
                 MAIN NAVIGATION
             ================================================= */}
 
             <Navbar />
 
-            {/* =================================================
+            {/* ================================================
                 PAGE CONTENT
             ================================================= */}
 
@@ -138,21 +140,20 @@ export default function RootLayout({
               {children}
             </main>
 
-            {/* =================================================
+            {/* ================================================
                 FOOTER
             ================================================= */}
 
             <Footer />
 
-            {/* =================================================
+            {/* ================================================
                 FAIZA AI
-                GLOBAL PORTFOLIO ASSISTANT
             ================================================= */}
 
             <PortfolioAI />
 
-            {/* =================================================
-                CUSTOM CINEMATIC CURSOR
+            {/* ================================================
+                CUSTOM CURSOR
             ================================================= */}
 
             <CustomCursor />

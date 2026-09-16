@@ -200,35 +200,8 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        {/* CTA */}
-        <div className="mt-12 overflow-hidden rounded-3xl border border-white/8 bg-white/[0.018]">
-          <div className="relative p-7 sm:p-10">
-            <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-purple-500/5 to-transparent" />
-
-            <div className="relative flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
-              <div>
-                <p className="font-mono text-[9px] uppercase tracking-[0.25em] text-purple-300/50">
-                  have a project in mind?
-                </p>
-
-                <h3 className="mt-3 max-w-2xl text-2xl font-medium tracking-tight sm:text-3xl">
-                  Let&apos;s turn the idea into something people can use.
-                </h3>
-              </div>
-
-              <a
-                href="#contact"
-                className="group inline-flex w-fit items-center gap-4 rounded-full border border-white/10 bg-white/[0.04] px-6 py-3.5 font-mono text-[9px] uppercase tracking-[0.2em] text-white/60 transition-all duration-300 hover:border-purple-300/25 hover:bg-purple-300/10 hover:text-white"
-              >
-                Start a conversation
-
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
+       
+       
       </div>
     </section>
   );

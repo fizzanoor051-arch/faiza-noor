@@ -456,30 +456,7 @@ export default function ServicesPage() {
             </p>
 
             <div className="services-hero-actions">
-             <a
-  href="#service-matrix"
-  className="group relative inline-flex min-h-[56px] w-full items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-7 py-4 text-[14px] font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.025] hover:border-pink-300/70 hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40 sm:w-fit sm:min-w-[200px]"
->
-  {/* Liquid pink fill */}
-  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
-
-  {/* Liquid glow */}
-  <span className="absolute -bottom-10 left-1/2 h-24 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-xl opacity-0 transition-all duration-700 group-hover:bottom-[-5px] group-hover:opacity-100" />
-
-  {/* Floating liquid bubble */}
-  <span className="absolute bottom-[-20px] left-[15%] h-16 w-16 rounded-full bg-pink-300/70 blur-md opacity-0 transition-all duration-700 group-hover:bottom-[8px] group-hover:opacity-100" />
-
-  <span className="relative z-10 flex items-center">
-    <span className="font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
-      EXPLORE SERVICES
-    </span>
-
-    <ArrowDown
-      size={16}
-      className="ml-3 text-white transition-all duration-500 group-hover:translate-y-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.95)]"
-    />
-  </span>
-</a>
+             
               <a href="/contact" className="services-secondary-button">
                 <span>START A PROJECT</span>
                 <ArrowUpRight size={16} />
@@ -776,100 +753,13 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* WHY */}
+ 
+ 
+       
 
-      <section className="services-why-section">
-        <div className="services-section-label">
-          <span>05 / WHY WORK TOGETHER</span>
-          <div />
-        </div>
 
-        <div className="services-why-grid">
-          <h2>
-            Built with
-            <span>intention.</span>
-          </h2>
-
-          <div className="services-why-list">
-            <div>
-              <span>01</span>
-              <div>
-                <h3>Modern Technology</h3>
-                <p>
-                  React, Next.js, TypeScript, Node.js and modern web
-                  development practices.
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <span>02</span>
-              <div>
-                <h3>Design Meets Engineering</h3>
-                <p>
-                  Visual polish and technical quality are treated as
-                  part of the same product.
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <span>03</span>
-              <div>
-                <h3>Responsive by Default</h3>
-                <p>
-                  The experience is designed to work beautifully across
-                  phones, tablets and desktop screens.
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <span>04</span>
-              <div>
-                <h3>Clear Communication</h3>
-                <p>
-                  Straightforward collaboration, organized work and
-                  transparent project progress.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-
-      <section className="services-cta">
-        <div className="services-cta-grid" />
-
-        <div className="services-cta-content">
-          <span className="services-section-eyebrow">
-            06 / YOUR NEXT MOVE
-          </span>
-
-          <h2>
-            Have a project
-            <br />
-            <span>in mind?</span>
-          </h2>
-
-          <p>
-            Tell me what you are building. Let&apos;s turn the idea
-            into a polished digital experience.
-          </p>
-
-          <a href="/contact" className="services-cta-button">
-            <span>LET&apos;S WORK TOGETHER</span>
-            <ArrowUpRight size={18} />
-          </a>
-        </div>
-
-        <div className="services-cta-corner">
-          <span>FN / 2026</span>
-          <span>WEB ENGINEER</span>
-        </div>
-      </section>
+  
+  
 
       {/* MODAL */}
 

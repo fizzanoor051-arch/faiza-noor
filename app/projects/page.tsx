@@ -44,6 +44,83 @@ type Project = {
 };
 
 const projects: Project[] = [
+
+    /* =========================================================
+     01 — NEXAFLOW AI
+     ========================================================= */
+
+  {
+    id: "nexaflow-ai",
+    number: "01",
+    title: "NexaFlow AI",
+    shortTitle: "NexaFlow AI",
+    category: "FULL STACK",
+    year: "2026",
+    type: "AI OPERATIONS CONTROL CENTER",
+
+    description:
+      "A premium AI-powered operations platform designed to bring workflows, leads, tasks, conversations, analytics and intelligent automation into one unified command center.",
+
+    longDescription:
+      "NexaFlow AI is a modern SaaS operations platform built to demonstrate how AI can transform everyday business workflows into intelligent, connected and actionable systems. The experience combines workflow automation, AI-assisted actions, lead management, task coordination, conversations, analytics and operational insights inside a polished control-center interface. Designed with a premium product aesthetic, NexaFlow focuses on turning complex business operations into a clear, scalable and highly interactive digital experience.",
+
+    technologies: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Node.js",
+      "REST APIs",
+      "AI Integration",
+      "Framer Motion",
+    ],
+
+    features: [
+      "AI-powered operations dashboard",
+      "Intelligent workflow automation",
+      "AI-assisted task creation",
+      "Lead management",
+      "Task management",
+      "AI conversations",
+      "Workflow monitoring",
+      "Analytics dashboard",
+      "Operational performance tracking",
+      "Command-center interface",
+      "Responsive SaaS architecture",
+      "Premium motion-based UI",
+    ],
+
+    screenshots: [
+      "/images/projects/nexaflow-ai/1.png",
+      "/images/projects/nexaflow-ai/2.png",
+      "/images/projects/nexaflow-ai/3.png",
+      "/images/projects/nexaflow-ai/4.png",
+      "/images/projects/nexaflow-ai/5.png",
+      "/images/projects/nexaflow-ai/6.png",
+      "/images/projects/nexaflow-ai/7.png",
+      "/images/projects/nexaflow-ai/8.png",
+      "/images/projects/nexaflow-ai/9.png",
+     
+    ],
+
+    video:
+      "/videos/projects/nexaflow-ai-demo.mp4",
+
+    featured: true,
+
+    liveUrl: "https://nexaflow-ai-by-faiza.vercel.app/",
+    githubUrl:
+      "https://github.com/fizzanoor051-arch/-Nexaflow-AI-by-FAIZA.git",
+  },
+
+
+
+
+
+
+
+
+
   /* =========================================================
      01 — LUXORA STORE
      ========================================================= */
@@ -96,7 +173,7 @@ const projects: Project[] = [
     ],
 
     video:
-      "/videos/projects/LUXORA _ Premium AI-Powered Shopping - Google Chrome 2026-09-09 09-00-36.mp4",
+      "",
 
     featured: true,
 
@@ -148,11 +225,11 @@ const projects: Project[] = [
       "/images/projects/shopsphere/2.png",
       "/images/projects/shopsphere/3.png",
       "/images/projects/shopsphere/4.png",
-      "/images/projects/shopsphere/5.png",
+      
     ],
 
     video:
-      "/videos/projects/client - Google Chrome 2026-09-09 09-06-45.mp4",
+      "",
 
     liveUrl: "https://shopsphere-ecommerce-beta.vercel.app/",
     githubUrl:
@@ -208,7 +285,7 @@ const projects: Project[] = [
     ],
 
     video:
-      "/videos/projects/NOOR Health & Medical Center - Google Chrome 2026-09-09 09-05-03.mp4",
+      "",
 
     liveUrl: "https://classy-vacherin-7a04fc.netlify.app/",
     githubUrl:
@@ -258,111 +335,15 @@ const projects: Project[] = [
       "/images/projects/portfolio/5.png",
     ],
 
-    video: "/videos/projects/portfolio-demo.mp4",
+    video: "",
 
     liveUrl: "https://faiza-noor-portfolio.vercel.app/",
     githubUrl:
       "https://github.com/fizzanoor051-arch/Faiza-Noor-portfolio.git",
   },
 
-  /* =========================================================
-     05 — RESUME SYSTEM
-     ========================================================= */
 
-  {
-    id: "resume",
-    number: "05",
-    title: "RESUME SYSTEM",
-    shortTitle: "Resume",
-    category: "UI / UX",
-    year: "2026",
-    type: "PROFESSIONAL PROFILE",
-
-    description:
-      "A cinematic digital resume system presenting experience, education, skills and selected work in an editorial format.",
-
-    longDescription:
-      "A digital resume experience designed to move beyond a traditional static CV. The page combines structured professional information with a strong visual identity and responsive presentation.",
-
-    technologies: [
-      "Next.js",
-      "TypeScript",
-      "React",
-      "CSS",
-    ],
-
-    features: [
-      "Professional profile",
-      "Experience timeline",
-      "Education section",
-      "Technical stack",
-      "Project showcase",
-      "Print-ready layout",
-    ],
-
-    screenshots: [
-      "/images/projects/resume/01-profile.png",
-      "/images/projects/resume/02-experience.png",
-      "/images/projects/resume/03-skills.png",
-      "/images/projects/resume/04-projects.png",
-      "/images/projects/resume/05-contact.png",
-    ],
-
-    video: "/videos/projects/resume-demo.mp4",
-
-    liveUrl: "",
-    githubUrl: "",
-  },
-
-  /* =========================================================
-     06 — CARE DASHBOARD
-     ========================================================= */
-
-  {
-    id: "hospital-dashboard",
-    number: "06",
-    title: "CARE DASHBOARD",
-    shortTitle: "Dashboard",
-    category: "FULL STACK",
-    year: "2026",
-    type: "DATA / DASHBOARD UI",
-
-    description:
-      "A dashboard concept focused on presenting operational information through clean data structures and intuitive interfaces.",
-
-    longDescription:
-      "Care Dashboard explores how complex operational information can be presented through a focused interface. The concept emphasizes hierarchy, reusable components and clear data visualization patterns.",
-
-    technologies: [
-      "React.js",
-      "TypeScript",
-      "API Integration",
-      "CSS",
-    ],
-
-    features: [
-      "Dashboard layout",
-      "Data cards",
-      "Navigation system",
-      "Reusable UI",
-      "API-ready structure",
-      "Responsive interface",
-    ],
-
-    screenshots: [
-      "/images/projects/care-dashboard/01-overview.png",
-      "/images/projects/care-dashboard/02-analytics.png",
-      "/images/projects/care-dashboard/03-patients.png",
-      "/images/projects/care-dashboard/04-reports.png",
-      "/images/projects/care-dashboard/05-settings.png",
-    ],
-
-    video: "/videos/projects/care-dashboard-demo.mp4",
-
-    liveUrl: "",
-    githubUrl: "",
-  },
-
+  
   /* =========================================================
      07 — BUSINESS SUITE
      ========================================================= */
@@ -1346,303 +1327,10 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* =====================================================
-          FEATURED
-          ===================================================== */}
 
-      {featuredProject && (
-        <section className="projects-featured">
-          <div className="projects-container">
-            <div className="projects-section-label">
-              <span>02</span>
-              FEATURED WORK
-            </div>
+             
 
-            <article
-              className="projects-featured-card"
-              onClick={() =>
-                setSelectedProject(featuredProject)
-              }
-              role="button"
-              tabIndex={0}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  setSelectedProject(featuredProject);
-                }
-              }}
-            >
-              <div className="projects-featured-visual">
-                <div className="projects-visual-grid" />
-
-                <div className="projects-visual-orbit orbit-one" />
-                <div className="projects-visual-orbit orbit-two" />
-
-                <div
-                  className="projects-featured-window"
-                  style={{
-                    overflow: "hidden",
-                    position: "relative",
-                  }}
-                >
-                  <div className="projects-window-bar">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-
-                  <div
-                    style={{
-                      position: "relative",
-                      height: "calc(100% - 30px)",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <img
-                      src={featuredProject.screenshots[0]}
-                      alt={`${featuredProject.title} preview`}
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        openImageViewer(
-                          featuredProject,
-                          0
-                        );
-                      }}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        objectPosition: "center",
-                        display: "block",
-                        cursor: "zoom-in",
-                      }}
-                    />
-
-                    <div
-                      style={{
-                        position: "absolute",
-                        inset: 0,
-                        background:
-                          "linear-gradient(to top, rgba(5,5,12,.65), transparent 55%)",
-                        pointerEvents: "none",
-                      }}
-                    />
-
-                    <button
-                      type="button"
-                      aria-label="Open screenshot"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        openImageViewer(
-                          featuredProject,
-                          0
-                        );
-                      }}
-                      style={{
-                        position: "absolute",
-                        right: 12,
-                        top: 12,
-                        zIndex: 5,
-                        width: 38,
-                        height: 38,
-                        borderRadius: 8,
-                        border:
-                          "1px solid rgba(255,255,255,.18)",
-                        background:
-                          "rgba(0,0,0,.48)",
-                        color: "#fff",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                        backdropFilter:
-                          "blur(10px)",
-                      }}
-                    >
-                      <Maximize2 size={16} />
-                    </button>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 18,
-                    bottom: 38,
-                    display: "flex",
-                    gap: 7,
-                    zIndex: 5,
-                  }}
-                >
-                  {featuredProject.screenshots.map(
-                    (screenshot, index) => (
-                      <button
-                        type="button"
-                        key={screenshot}
-                        aria-label={`Open screenshot ${
-                          index + 1
-                        }`}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          openImageViewer(
-                            featuredProject,
-                            index
-                          );
-                        }}
-                        style={{
-                          width: 42,
-                          height: 30,
-                          padding: 0,
-                          borderRadius: 5,
-                          overflow: "hidden",
-                          border:
-                            index === 0
-                              ? "1px solid rgba(255,255,255,.85)"
-                              : "1px solid rgba(255,255,255,.22)",
-                          background: "#111",
-                          cursor: "zoom-in",
-                        }}
-                      >
-                        <img
-                          src={screenshot}
-                          alt=""
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            display: "block",
-                          }}
-                        />
-                      </button>
-                    )
-                  )}
-                </div>
-
-                <span className="projects-visual-label">
-                  01 / SELECTED EXPERIENCE
-                </span>
-              </div>
-
-              <div className="projects-featured-info">
-                <div className="projects-featured-top">
-                  <span>{featuredProject.category}</span>
-                  <span>{featuredProject.year}</span>
-                </div>
-
-                <h2>{featuredProject.title}</h2>
-
-                <p>{featuredProject.description}</p>
-
-                <div className="projects-tech-row">
-                  {featuredProject.technologies
-                    .slice(0, 5)
-                    .map((tech) => (
-                      <span key={tech}>{tech}</span>
-                    ))}
-                </div>
-
-                <div className="projects-featured-actions">
-                  {featuredProject.liveUrl ? (
-                   <a
-  href={featuredProject.liveUrl}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="group relative inline-flex min-h-[56px] w-full items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-7 py-4 text-[14px] font-semibold uppercase tracking-[0.2em] text-white shadow-[0_0_25px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.025] hover:border-pink-300/70 hover:shadow-[0_0_40px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40 sm:w-fit sm:min-w-[200px]"
-  onClick={(event) => event.stopPropagation()}
->
-  {/* Liquid pink fill */}
-  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
-
-  {/* Liquid glow */}
-  <span className="absolute -bottom-10 left-1/2 h-24 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-xl opacity-0 transition-all duration-700 group-hover:bottom-[-5px] group-hover:opacity-100" />
-
-  {/* Floating liquid bubble */}
-  <span className="absolute bottom-[-20px] left-[15%] h-16 w-16 rounded-full bg-pink-300/70 blur-md opacity-0 transition-all duration-700 group-hover:bottom-[8px] group-hover:opacity-100" />
-
-  {/* Content */}
-  <span className="relative z-10 flex items-center">
-    <span className="font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
-      VIEW LIVE
-    </span>
-
-    <ExternalLink
-      size={16}
-      className="ml-3 text-white transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_8px_rgba(251,113,133,0.95)]"
-    />
-  </span>
-</a>
-                  ) : null}
-
-                  <div className="project-links">
-                    {featuredProject.githubUrl && (
-                      <a
-                        href={featuredProject.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link"
-                        onClick={(event) =>
-                          event.stopPropagation()
-                        }
-                      >
-                        <GitBranch size={16} />
-                        Frontend
-                        <ArrowUpRight size={14} />
-                      </a>
-                    )}
-
-                    {featuredProject.backendGithubUrl && (
-                      <a
-                        href={
-                          featuredProject.backendGithubUrl
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link"
-                        onClick={(event) =>
-                          event.stopPropagation()
-                        }
-                      >
-                        <GitBranch size={16} />
-                        Backend
-                        <ArrowUpRight size={14} />
-                      </a>
-                    )}
-
-                    {featuredProject.liveUrl && (
-                      <a
-                        href={featuredProject.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="project-link"
-                        onClick={(event) =>
-                          event.stopPropagation()
-                        }
-                      >
-                        <ExternalLink size={16} />
-                        Live Demo
-                        <ArrowUpRight size={14} />
-                      </a>
-                    )}
-                  </div>
-
-                  <button
-                    type="button"
-                    className="projects-open-button"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      setSelectedProject(
-                        featuredProject
-                      );
-                    }}
-                  >
-                    EXPLORE
-                    <ArrowUpRight size={17} />
-                  </button>
-                </div>
-              </div>
-            </article>
-          </div>
-        </section>
-      )}
+            
 
       {/* =====================================================
           PROJECT ARCHIVE
@@ -1896,8 +1584,8 @@ export default function ProjectsPage() {
                           event.stopPropagation()
                         }
                       >
-                        VIEW BACKEND
-                        <GitBranch size={13} />
+                        
+                        
                       </a>
                     ) : null}
                   </div>
