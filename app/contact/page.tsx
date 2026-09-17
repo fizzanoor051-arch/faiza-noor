@@ -36,7 +36,7 @@ const CONTACT = {
   // Pakistan WhatsApp number with country code.
   whatsappNumber: "+923019346310",
 
-  linkedin: "www.linkedin.com/in/faiza-noor-b2711b42b",
+  linkedin: "https://www.linkedin.com/in/faiza-noor-b2711b42b/",
   github: "https://github.com/fizzanoor051-arch",
   indeed: "https://profile.indeed.com/",
 
