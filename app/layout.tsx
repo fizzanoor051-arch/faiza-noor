@@ -110,11 +110,11 @@ export default function RootLayout({
 
             <ScrollProgress />
 
-            <PortfolioChrome />
-
-            <main className="relative z-10 flex-1">
-              {children}
-            </main>
+            <PortfolioChrome>
+              <main className="relative z-10 flex-1">
+                {children}
+              </main>
+            </PortfolioChrome>
 
             <PortfolioAI />
 

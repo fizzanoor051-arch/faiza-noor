@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -5,27 +6,33 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/footer/Footer";
 
-export default function PortfolioChrome() {
-const [isSecretAdmin, setIsSecretAdmin] = useState(false);
+export default function PortfolioChrome({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const [isSecretAdmin, setIsSecretAdmin] = useState(false);
 
-useEffect(() => {
-const pathname = window.location.pathname;
+  useEffect(() => {
+    const pathname = window.location.pathname;
 
+    setIsSecretAdmin(
+      pathname === "/secret-admin" ||
+        pathname.startsWith("/secret-admin/")
+    );
+  }, []);
 
-setIsSecretAdmin(
-  pathname === "/secret-admin" ||
-  pathname.startsWith("/secret-admin/")
-);
+  if (isSecretAdmin) {
+    return <>{children}</>;
+  }
 
+  return (
+    <>
+      <Navbar />
 
-}, []);
+      {children}
 
-if (isSecretAdmin) {
-return null;
-}
-
-return (
-<> <Navbar /> <Footer />
-</>
-);
+      <Footer />
+    </>
+  );
 }
