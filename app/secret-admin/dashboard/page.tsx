@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -49,7 +50,10 @@ interface Visitor {
   lastVisit: string;
   pages?: string[];
   referrer?: string;
-  projectClicks?: string[];
+  projectClicks?: number;
+  latitude?: number | null;
+  longitude?: number | null;
+  locationAccuracy?: number | null;
 }
 
 interface AnalyticsData {
@@ -115,10 +119,13 @@ const timeFilters = [
 export default function AnalyticsDashboard() {
   const [data, setData] =
     useState<AnalyticsData | null>(null);
+
   const [loading, setLoading] =
     useState(true);
+
   const [error, setError] =
     useState("");
+
   const [period, setPeriod] =
     useState("all");
 
@@ -152,14 +159,15 @@ export default function AnalyticsDashboard() {
         );
       }
 
-      const response = await fetch(
-        `/api/analytics/stats?${query.toString()}`,
-        {
-          method: "GET",
-          cache: "no-store",
-          credentials: "include",
-        }
-      );
+      const response =
+        await fetch(
+          `/api/analyticsa/stats?${query.toString()}`,
+          {
+            method: "GET",
+            cache: "no-store",
+            credentials: "include",
+          }
+        );
 
       const result =
         await response.json();
@@ -208,7 +216,9 @@ export default function AnalyticsDashboard() {
       event.target.value;
 
     setPeriod(selectedPeriod);
-    loadAnalytics(selectedPeriod);
+    void loadAnalytics(
+      selectedPeriod
+    );
   }
 
   if (loading) {
@@ -235,7 +245,7 @@ export default function AnalyticsDashboard() {
 
           <button
             onClick={() =>
-              loadAnalytics(period)
+              void loadAnalytics(period)
             }
             className="mt-5 rounded-xl bg-[#E7B84B] px-5 py-2.5 text-sm font-semibold text-black transition hover:bg-[#F5D98B]"
           >
@@ -303,7 +313,9 @@ export default function AnalyticsDashboard() {
 
             <button
               onClick={() =>
-                loadAnalytics(period)
+                void loadAnalytics(
+                  period
+                )
               }
               className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white/70 transition hover:border-[#E7B84B]/40 hover:text-white"
             >
@@ -463,6 +475,7 @@ export default function AnalyticsDashboard() {
                       <p className="mt-2 text-sm font-medium text-white/80">
                         {visitor.country ||
                           "Unknown"}
+
                         {visitor.city &&
                         visitor.city !==
                           "Unknown"
@@ -477,6 +490,28 @@ export default function AnalyticsDashboard() {
                           }
                         </p>
                       )}
+
+                      {typeof visitor.latitude ===
+                        "number" &&
+                        typeof visitor.longitude ===
+                          "number" && (
+                          <p className="mt-2 text-[11px] text-white/25">
+                            GPS:{" "}
+                            {visitor.latitude.toFixed(
+                              5
+                            )}
+                            ,{" "}
+                            {visitor.longitude.toFixed(
+                              5
+                            )}
+                            {typeof visitor.locationAccuracy ===
+                              "number"
+                              ? ` · ±${Math.round(
+                                  visitor.locationAccuracy
+                                )}m`
+                              : ""}
+                          </p>
+                        )}
                     </div>
 
                     {/* Device Information */}
@@ -523,9 +558,11 @@ export default function AnalyticsDashboard() {
                         </p>
 
                         <p className="mt-2 text-xs text-white/70">
-                          {new Date(
-                            visitor.firstVisit
-                          ).toLocaleString()}
+                          {visitor.firstVisit
+                            ? new Date(
+                                visitor.firstVisit
+                              ).toLocaleString()
+                            : "Unknown"}
                         </p>
                       </div>
 
@@ -535,9 +572,11 @@ export default function AnalyticsDashboard() {
                         </p>
 
                         <p className="mt-2 text-xs text-white/70">
-                          {new Date(
-                            visitor.lastVisit
-                          ).toLocaleString()}
+                          {visitor.lastVisit
+                            ? new Date(
+                                visitor.lastVisit
+                              ).toLocaleString()
+                            : "Unknown"}
                         </p>
                       </div>
                     </div>
@@ -590,33 +629,26 @@ export default function AnalyticsDashboard() {
                         Project Clicks
                       </p>
 
-                      {visitor.projectClicks &&
-                      visitor.projectClicks
-                        .length >
-                        0 ? (
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {visitor.projectClicks.map(
-                            (
-                              project
-                            ) => (
-                              <span
-                                key={
-                                  project
-                                }
-                                className="rounded-full border border-[#E7B84B]/20 bg-[#E7B84B]/10 px-3 py-1 text-xs text-[#F5D98B]"
-                              >
-                                {
-                                  project
-                                }
-                              </span>
-                            )
-                          )}
-                        </div>
-                      ) : (
-                        <p className="mt-2 text-xs text-white/30">
-                          No project clicks
-                        </p>
-                      )}
+                      <div className="mt-2">
+                        {visitor.projectClicks &&
+                        visitor.projectClicks >
+                          0 ? (
+                          <span className="rounded-full border border-[#E7B84B]/20 bg-[#E7B84B]/10 px-3 py-1 text-xs text-[#F5D98B]">
+                            {
+                              visitor.projectClicks
+                            }{" "}
+                            project{" "}
+                            {visitor.projectClicks ===
+                            1
+                              ? "click"
+                              : "clicks"}
+                          </span>
+                        ) : (
+                          <p className="text-xs text-white/30">
+                            No project clicks
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )
@@ -759,6 +791,15 @@ export default function AnalyticsDashboard() {
                             activity.projectSlug ||
                             "Portfolio"}
                         </p>
+
+                        {activity.referrer && (
+                          <p className="mt-1 pl-5 truncate max-w-[600px] text-xs text-white/20">
+                            From:{" "}
+                            {
+                              activity.referrer
+                            }
+                          </p>
+                        )}
                       </div>
 
                       <p className="text-xs text-white/35">

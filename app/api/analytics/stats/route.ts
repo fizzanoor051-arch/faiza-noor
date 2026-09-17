@@ -1,10 +1,14 @@
-
 import { NextRequest, NextResponse } from "next/server";
-
 import clientPromise from "@/lib/mongodb";
 
 const DB_NAME =
   process.env.MONGODB_DB || "portfolio_analytics";
+
+type ResolvedLocation = {
+  city: string;
+  country: string;
+  region: string;
+};
 
 function getStartDate(period: string, now: Date) {
   if (!period || period === "all") {
@@ -37,9 +41,11 @@ function getStartDate(period: string, now: Date) {
 
   if (monthsMatch) {
     const months = Number(monthsMatch[1]);
+
     start.setMonth(
       start.getMonth() - months
     );
+
     return start;
   }
 
@@ -47,10 +53,90 @@ function getStartDate(period: string, now: Date) {
     start.setFullYear(
       start.getFullYear() - 1
     );
+
     return start;
   }
 
   return null;
+}
+
+/*
+ * =========================================================
+ * GPS REVERSE GEOCODING
+ * =========================================================
+ *
+ * Browser GPS gives us latitude + longitude.
+ * We convert those coordinates into:
+ *
+ * City
+ * Country
+ * Region / State
+ *
+ * GPS is preferred over Vercel IP location because
+ * GPS represents the visitor's actual device location
+ * when the visitor has granted browser location permission.
+ */
+async function reverseGeocode(
+  latitude: number,
+  longitude: number
+): Promise<ResolvedLocation | null> {
+  try {
+    const response = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${encodeURIComponent(
+        latitude
+      )}&longitude=${encodeURIComponent(
+        longitude
+      )}&localityLanguage=en`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = await response.json();
+
+    const city =
+      typeof data.city === "string" &&
+      data.city.trim()
+        ? data.city.trim()
+        : typeof data.locality === "string" &&
+          data.locality.trim()
+        ? data.locality.trim()
+        : "";
+
+    const country =
+      typeof data.countryName === "string" &&
+      data.countryName.trim()
+        ? data.countryName.trim()
+        : "";
+
+    const region =
+      typeof data.principalSubdivision ===
+        "string" &&
+      data.principalSubdivision.trim()
+        ? data.principalSubdivision.trim()
+        : "";
+
+    if (!city && !country && !region) {
+      return null;
+    }
+
+    return {
+      city: city || "Unknown",
+      country: country || "Unknown",
+      region,
+    };
+  } catch (error) {
+    console.error(
+      "Reverse geocoding failed:",
+      error
+    );
+
+    return null;
+  }
 }
 
 export async function GET(
@@ -86,10 +172,6 @@ export async function GET(
      * =========================================================
      * CURRENT ADMIN VISITOR
      * =========================================================
-     *
-     * The dashboard sends the browser's visitorId.
-     * This allows "Your Clicks" to show only clicks generated
-     * from the browser currently being used by the admin.
      */
 
     const yourVisitorId =
@@ -111,19 +193,6 @@ export async function GET(
      * =========================================================
      * ANALYTICS RESET CONTROLS
      * =========================================================
-     *
-     * Each section has its own reset timestamp.
-     *
-     * visitorDetails
-     * projectClicks
-     * recentActivity
-     * referrers
-     *
-     * Events before the corresponding reset timestamp are
-     * hidden from that section.
-     *
-     * The original events are NOT deleted. This allows the
-     * future Trash / Undo system to restore them.
      */
 
     const controlsCollection =
@@ -156,74 +225,73 @@ export async function GET(
         : null;
 
     const globalReset =
-  resetControls?.global
-    ? new Date(
-        resetControls.global
-      )
-    : null;
+      resetControls?.global
+        ? new Date(
+            resetControls.global
+          )
+        : null;
+
     const referrersReset =
-  resetControls?.referrers
-    ? new Date(
-        resetControls.referrers
-      )
-    : null;
+      resetControls?.referrers
+        ? new Date(
+            resetControls.referrers
+          )
+        : null;
 
     /*
      * =========================================================
      * DATE FILTER HELPERS
      * =========================================================
      */
-const createDateFilter = (
-  resetDate: Date | null
-) => {
-  const effectiveReset =
-    globalReset &&
-    resetDate
-      ? globalReset > resetDate
-        ? globalReset
-        : resetDate
-      : globalReset || resetDate;
 
-  const filter: {
-    createdAt?: {
-      $gte?: Date;
-      $lte?: Date;
-    };
-  } = {};
+    const createDateFilter = (
+      resetDate: Date | null
+    ) => {
+      const effectiveReset =
+        globalReset && resetDate
+          ? globalReset > resetDate
+            ? globalReset
+            : resetDate
+          : globalReset || resetDate;
 
-  if (
-    selectedStartDate &&
-    effectiveReset
-  ) {
-    filter.createdAt = {
-      $gte:
-        selectedStartDate >
+      const filter: {
+        createdAt?: {
+          $gte?: Date;
+          $lte?: Date;
+        };
+      } = {};
+
+      if (
+        selectedStartDate &&
         effectiveReset
-          ? selectedStartDate
-          : effectiveReset,
-      $lte: now,
-    };
-  } else if (selectedStartDate) {
-    filter.createdAt = {
-      $gte: selectedStartDate,
-      $lte: now,
-    };
-  } else if (effectiveReset) {
-    filter.createdAt = {
-      $gte: effectiveReset,
-      $lte: now,
-    };
-  }
+      ) {
+        filter.createdAt = {
+          $gte:
+            selectedStartDate >
+            effectiveReset
+              ? selectedStartDate
+              : effectiveReset,
+          $lte: now,
+        };
+      } else if (selectedStartDate) {
+        filter.createdAt = {
+          $gte: selectedStartDate,
+          $lte: now,
+        };
+      } else if (effectiveReset) {
+        filter.createdAt = {
+          $gte: effectiveReset,
+          $lte: now,
+        };
+      }
 
-  return filter;
-};
+      return filter;
+    };
+
     /*
      * =========================================================
      * ADMIN PATH PROTECTION
      * =========================================================
-     *
-     * /secret-admin should never be counted as a normal
-     * portfolio visit.
      */
 
     const portfolioVisitFilter = {
@@ -235,7 +303,8 @@ const createDateFilter = (
         },
         {
           path: {
-              $not: /^\/secret-admin(?:\/|$)/
+            $not:
+              /^\/secret-admin(?:\/|$)/,
           },
         },
       ],
@@ -271,8 +340,6 @@ const createDateFilter = (
      * =========================================================
      * VISITOR DETAILS
      * =========================================================
-     *
-     * This section uses its own reset timestamp.
      */
 
     const visitMatch = {
@@ -285,8 +352,6 @@ const createDateFilter = (
      * =========================================================
      * PROJECT CLICKS
      * =========================================================
-     *
-     * This section uses its own reset timestamp.
      */
 
     const projectClickMatch = {
@@ -298,9 +363,6 @@ const createDateFilter = (
      * =========================================================
      * YOUR CLICKS
      * =========================================================
-     *
-     * Your clicks follow the Project Clicks reset because
-     * they are a filtered view of project click events.
      */
 
     const yourClicksMatch = yourVisitorId
@@ -320,8 +382,6 @@ const createDateFilter = (
      * =========================================================
      * RECENT ACTIVITY
      * =========================================================
-     *
-     * Recent Activity has its own independent reset.
      */
 
     const recentVisitMatch = {
@@ -353,10 +413,6 @@ const createDateFilter = (
       storedVisitors,
       projectClickEvents,
     ] = await Promise.all([
-      /*
-       * Visitor Details totals
-       */
-
       events.countDocuments(
         visitMatch
       ),
@@ -366,10 +422,6 @@ const createDateFilter = (
         visitMatch
       ),
 
-      /*
-       * Project Click totals
-       */
-
       events.countDocuments(
         projectClickMatch
       ),
@@ -378,16 +430,13 @@ const createDateFilter = (
         yourClicksMatch
       ),
 
-      /*
-       * Project performance
-       */
-
       events
         .aggregate([
           {
             $match:
               projectClickMatch,
           },
+
           {
             $group: {
               _id: {
@@ -396,29 +445,37 @@ const createDateFilter = (
                 projectName:
                   "$projectName",
               },
+
               clicks: {
                 $sum: 1,
               },
+
               uniqueVisitors: {
                 $addToSet:
                   "$visitorId",
               },
             },
           },
+
           {
             $project: {
               _id: 0,
+
               projectSlug:
                 "$_id.projectSlug",
+
               projectName:
                 "$_id.projectName",
+
               clicks: 1,
+
               uniqueVisitors: {
                 $size:
                   "$uniqueVisitors",
               },
             },
           },
+
           {
             $sort: {
               clicks: -1,
@@ -426,12 +483,6 @@ const createDateFilter = (
           },
         ])
         .toArray(),
-
-      /*
-       * Recent Activity
-       *
-       * Uses its own reset timestamp.
-       */
 
       events
         .find(
@@ -461,12 +512,6 @@ const createDateFilter = (
         .limit(20)
         .toArray(),
 
-      /*
-       * Referrers
-       *
-       * Uses its own reset timestamp.
-       */
-
       events
         .aggregate([
           {
@@ -474,42 +519,44 @@ const createDateFilter = (
               type: "visit",
               ...referrersDateFilter,
               ...portfolioVisitFilter,
+
               referrer: {
                 $nin: ["", null],
               },
             },
           },
+
           {
             $group: {
               _id: "$referrer",
+
               visits: {
                 $sum: 1,
               },
             },
           },
+
           {
             $project: {
               _id: 0,
+
               referrer: "$_id",
+
               visits: 1,
             },
           },
+
           {
             $sort: {
               visits: -1,
             },
           },
+
           {
             $limit: 10,
           },
         ])
         .toArray(),
-
-      /*
-       * Visitor intelligence
-       *
-       * Uses Visitor Details reset.
-       */
 
       events
         .find(
@@ -521,6 +568,9 @@ const createDateFilter = (
               country: 1,
               region: 1,
               city: 1,
+              latitude: 1,
+              longitude: 1,
+              locationAccuracy: 1,
               device: 1,
               browser: 1,
               os: 1,
@@ -535,10 +585,6 @@ const createDateFilter = (
         })
         .toArray(),
 
-      /*
-       * Stored visitor information
-       */
-
       visitors
         .find(
           {},
@@ -549,6 +595,9 @@ const createDateFilter = (
               country: 1,
               region: 1,
               city: 1,
+              latitude: 1,
+              longitude: 1,
+              locationAccuracy: 1,
               device: 1,
               browser: 1,
               os: 1,
@@ -561,10 +610,6 @@ const createDateFilter = (
           }
         )
         .toArray(),
-
-      /*
-       * Project click intelligence
-       */
 
       events
         .find(
@@ -593,6 +638,9 @@ const createDateFilter = (
         country: string;
         region: string;
         city: string;
+        latitude: number | null;
+        longitude: number | null;
+        locationAccuracy: number | null;
         device: string;
         browser: string;
         os: string;
@@ -604,14 +652,81 @@ const createDateFilter = (
       }
     >();
 
+    /*
+     * Cache reverse-geocoding requests so the same
+     * coordinates are not looked up repeatedly.
+     */
+    const locationCache = new Map<
+      string,
+      ResolvedLocation | null
+    >();
+
+    const getResolvedLocation = async (
+      latitude: number | null,
+      longitude: number | null
+    ) => {
+      if (
+        typeof latitude !== "number" ||
+        typeof longitude !== "number"
+      ) {
+        return null;
+      }
+
+      const key = `${latitude.toFixed(
+        5
+      )},${longitude.toFixed(5)}`;
+
+      if (locationCache.has(key)) {
+        return (
+          locationCache.get(key) ||
+          null
+        );
+      }
+
+      const location =
+        await reverseGeocode(
+          latitude,
+          longitude
+        );
+
+      locationCache.set(
+        key,
+        location
+      );
+
+      return location;
+    };
+
+    /*
+     * Resolve GPS locations first.
+     */
     for (const event of visitorEvents) {
       if (!event.visitorId) {
         continue;
       }
 
-      const eventDate = event.createdAt
-        ? new Date(event.createdAt)
-        : null;
+      const eventLatitude =
+        typeof event.latitude ===
+        "number"
+          ? event.latitude
+          : null;
+
+      const eventLongitude =
+        typeof event.longitude ===
+        "number"
+          ? event.longitude
+          : null;
+
+      const gpsLocation =
+        await getResolvedLocation(
+          eventLatitude,
+          eventLongitude
+        );
+
+      const eventDate =
+        event.createdAt
+          ? new Date(event.createdAt)
+          : null;
 
       const existing =
         visitorMap.get(
@@ -624,33 +739,64 @@ const createDateFilter = (
           {
             visitorId:
               event.visitorId,
+
+            /*
+             * GPS location gets priority.
+             * Vercel IP location is only fallback.
+             */
             country:
+              gpsLocation?.country ||
               event.country ||
               "Unknown",
+
             region:
-              event.region || "",
+              gpsLocation?.region ||
+              event.region ||
+              "",
+
             city:
+              gpsLocation?.city ||
               event.city ||
               "Unknown",
+
+            latitude:
+              eventLatitude,
+
+            longitude:
+              eventLongitude,
+
+            locationAccuracy:
+              typeof event.locationAccuracy ===
+              "number"
+                ? event.locationAccuracy
+                : null,
+
             device:
               event.device ||
               "Unknown",
+
             browser:
               event.browser ||
               "Unknown",
+
             os:
               event.os ||
               "Unknown",
+
             firstVisit:
               eventDate,
+
             lastVisit:
               eventDate,
+
             pages: event.path
               ? [event.path]
               : [],
+
             referrer:
               event.referrer ||
               "",
+
             projectClicks: [],
           }
         );
@@ -693,7 +839,13 @@ const createDateFilter = (
         );
       }
 
-      if (
+      /*
+       * GPS ALWAYS wins over IP location.
+       */
+      if (gpsLocation?.country) {
+        existing.country =
+          gpsLocation.country;
+      } else if (
         (!existing.country ||
           existing.country ===
             "Unknown") &&
@@ -703,7 +855,10 @@ const createDateFilter = (
           event.country;
       }
 
-      if (
+      if (gpsLocation?.region) {
+        existing.region =
+          gpsLocation.region;
+      } else if (
         !existing.region &&
         event.region
       ) {
@@ -711,7 +866,10 @@ const createDateFilter = (
           event.region;
       }
 
-      if (
+      if (gpsLocation?.city) {
+        existing.city =
+          gpsLocation.city;
+      } else if (
         (!existing.city ||
           existing.city ===
             "Unknown") &&
@@ -719,6 +877,29 @@ const createDateFilter = (
       ) {
         existing.city =
           event.city;
+      }
+
+      /*
+       * =======================================================
+       * GPS LOCATION
+       * =======================================================
+       */
+
+      if (
+        eventLatitude !== null &&
+        eventLongitude !== null
+      ) {
+        existing.latitude =
+          eventLatitude;
+
+        existing.longitude =
+          eventLongitude;
+
+        existing.locationAccuracy =
+          typeof event.locationAccuracy ===
+          "number"
+            ? event.locationAccuracy
+            : null;
       }
 
       if (
@@ -780,7 +961,34 @@ const createDateFilter = (
         continue;
       }
 
-      if (
+      /*
+       * Resolve stored GPS location too.
+       */
+      const storedLatitude =
+        typeof visitor.latitude ===
+        "number"
+          ? visitor.latitude
+          : null;
+
+      const storedLongitude =
+        typeof visitor.longitude ===
+        "number"
+          ? visitor.longitude
+          : null;
+
+      const storedGpsLocation =
+        await getResolvedLocation(
+          storedLatitude,
+          storedLongitude
+        );
+
+      /*
+       * GPS location has highest priority.
+       */
+      if (storedGpsLocation?.country) {
+        existing.country =
+          storedGpsLocation.country;
+      } else if (
         (!existing.country ||
           existing.country ===
             "Unknown") &&
@@ -790,7 +998,10 @@ const createDateFilter = (
           visitor.country;
       }
 
-      if (
+      if (storedGpsLocation?.region) {
+        existing.region =
+          storedGpsLocation.region;
+      } else if (
         !existing.region &&
         visitor.region
       ) {
@@ -798,7 +1009,10 @@ const createDateFilter = (
           visitor.region;
       }
 
-      if (
+      if (storedGpsLocation?.city) {
+        existing.city =
+          storedGpsLocation.city;
+      } else if (
         (!existing.city ||
           existing.city ===
             "Unknown") &&
@@ -806,6 +1020,29 @@ const createDateFilter = (
       ) {
         existing.city =
           visitor.city;
+      }
+
+      /*
+       * =======================================================
+       * GPS LOCATION FROM STORED VISITOR
+       * =======================================================
+       */
+
+      if (
+        storedLatitude !== null &&
+        storedLongitude !== null
+      ) {
+        existing.latitude =
+          storedLatitude;
+
+        existing.longitude =
+          storedLongitude;
+
+        existing.locationAccuracy =
+          typeof visitor.locationAccuracy ===
+          "number"
+            ? visitor.locationAccuracy
+            : null;
       }
 
       if (
@@ -836,6 +1073,14 @@ const createDateFilter = (
       ) {
         existing.os =
           visitor.os;
+      }
+
+      if (
+        !existing.referrer &&
+        visitor.referrer
+      ) {
+        existing.referrer =
+          visitor.referrer;
       }
     }
 
@@ -896,12 +1141,14 @@ const createDateFilter = (
         })
         .map((visitor) => ({
           ...visitor,
+
           firstVisit:
             visitor.firstVisit
               ? new Date(
                   visitor.firstVisit
                 )
               : null,
+
           lastVisit:
             visitor.lastVisit
               ? new Date(
@@ -940,12 +1187,6 @@ const createDateFilter = (
       0
     );
 
-    /*
-     * Last 30 Days is intentionally no longer used by the
-     * dashboard card. It is kept in the API temporarily so
-     * existing code does not break.
-     */
-
     const startOf30Days =
       new Date(now);
 
@@ -962,14 +1203,19 @@ const createDateFilter = (
 
     /*
      * =========================================================
-     * TODAY / 7 DAYS / 30 DAYS
+     * OVERVIEW RESET DATE
      * =========================================================
-     *
-     * These overview values follow the Visitor Details reset.
      */
 
     const overviewResetDate =
-      visitorDetailsReset;
+      globalReset &&
+      visitorDetailsReset
+        ? globalReset >
+          visitorDetailsReset
+          ? globalReset
+          : visitorDetailsReset
+        : globalReset ||
+          visitorDetailsReset;
 
     const todayFilter =
       overviewResetDate &&
@@ -1024,7 +1270,8 @@ const createDateFilter = (
       events.countDocuments({
         type: "visit",
         ...portfolioVisitFilter,
-        createdAt: todayFilter,
+        createdAt:
+          todayFilter,
       }),
 
       events.countDocuments({
@@ -1046,23 +1293,27 @@ const createDateFilter = (
      * =========================================================
      * RESPONSE
      * =========================================================
-     *
-     * resetTimes are returned so the dashboard can know when
-     * each section was last cleared.
      */
 
     return NextResponse.json({
       success: true,
+
       period,
 
       overview: {
         totalVisits,
+
         uniqueVisitors:
           uniqueVisitors.length,
+
         todayVisits,
+
         last7DaysVisits,
+
         last30DaysVisits,
+
         totalProjectClicks,
+
         yourClicks,
       },
 
@@ -1086,9 +1337,15 @@ const createDateFilter = (
           referrersReset
             ? referrersReset.toISOString()
             : null,
+
+        global:
+          globalReset
+            ? globalReset.toISOString()
+            : null,
       },
 
-      projects: projectStats,
+      projects:
+        projectStats,
 
       recentActivity,
 

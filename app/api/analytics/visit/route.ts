@@ -128,6 +128,28 @@ export async function POST(
       body.visitorId.trim().length > 0
         ? body.visitorId.trim()
         : null;
+            const latitude =
+      typeof body.latitude === "number" &&
+      Number.isFinite(body.latitude) &&
+      body.latitude >= -90 &&
+      body.latitude <= 90
+        ? body.latitude
+        : null;
+
+    const longitude =
+      typeof body.longitude === "number" &&
+      Number.isFinite(body.longitude) &&
+      body.longitude >= -180 &&
+      body.longitude <= 180
+        ? body.longitude
+        : null;
+
+    const locationAccuracy =
+      typeof body.accuracy === "number" &&
+      Number.isFinite(body.accuracy) &&
+      body.accuracy >= 0
+        ? body.accuracy
+        : null;
 
     const path =
       typeof body.path === "string" &&
@@ -221,6 +243,9 @@ export async function POST(
           country,
           region,
           city,
+          latitude,
+          longitude,
+          locationAccuracy,
           device,
           browser,
           os,
@@ -241,6 +266,14 @@ export async function POST(
         lastVisit: now,
         lastActivity: now,
         updatedAt: now,
+          ...(latitude !== null &&
+        longitude !== null
+          ? {
+              latitude,
+              longitude,
+              locationAccuracy,
+            }
+          : {}),
       };
 
       if (
@@ -304,6 +337,9 @@ export async function POST(
         country,
         region,
         city,
+        latitude,
+        longitude,
+        locationAccuracy,
         createdAt: now,
       });
 
