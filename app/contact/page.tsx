@@ -790,13 +790,23 @@ export default function ContactPage() {
             const Icon = item.icon;
 
             return (
+            
               <a
-                key={item.number}
-                href={item.href}
-                target="_blank"
-                rel="noreferrer"
-                className={`contact-social-card ${item.accent}`}
-              >
+  key={item.number}
+  href={item.href}
+  target="_blank"
+  rel="noopener noreferrer"
+  onClick={(event) => {
+    event.preventDefault();
+
+    window.open(
+      item.href,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }}
+  className={`contact-social-card ${item.accent}`}
+>
                 <div className="contact-social-number">
                   {item.number}
                 </div>
