@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -9,6 +10,7 @@ import ScrollProgress from "@/components/effects/ScrollProgress";
 import SmoothScroll from "@/components/effects/SmoothScroll";
 import PortfolioAI from "@/components/ai/PortfolioAI";
 import PortfolioIntro from "@/components/PortfolioIntro";
+import VisitorTracker from "@/components/analytics/VisitorTracker";
 
 import ThemeProvider from "@/components/themes/ThemeProvider";
 import ThemeEngine from "@/components/themes/ThemeEngine";
@@ -157,6 +159,12 @@ export default function RootLayout({
             ================================================= */}
 
             <CustomCursor />
+
+            {/* ================================================
+                PRIVATE ANALYTICS
+            ================================================= */}
+
+            <VisitorTracker />
 
           </ThemeEngine>
         </ThemeProvider>

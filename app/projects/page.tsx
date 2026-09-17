@@ -1,5 +1,6 @@
 "use client";
 
+import { trackProjectClick } from "@/components/analytics/ProjectTracker";
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
@@ -1548,45 +1549,65 @@ export default function ProjectsPage() {
 
                   <div className="project-card-links">
                     {project.liveUrl ? (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(event) =>
-                          event.stopPropagation()
-                        }
-                      >
-                        VIEW LIVE
-                        <ExternalLink size={13} />
-                      </a>
+                    <a
+  href={project.liveUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  onClick={(event) => {
+    event.stopPropagation();
+
+    trackProjectClick({
+      projectSlug: `${project.id}-live`,
+      projectName: `${project.title} — Live Demo`,
+      projectUrl: project.liveUrl,
+    });
+  }}
+>
+  VIEW LIVE
+  <ExternalLink size={13} />
+</a>  
+             
                     ) : null}
 
                     {project.githubUrl ? (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(event) =>
-                          event.stopPropagation()
-                        }
-                      >
-                        VIEW GITHUB
-                        <GitBranch size={13} />
-                      </a>
+                   
+                   <a
+  href={project.githubUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  onClick={(event) => {
+    event.stopPropagation();
+
+    trackProjectClick({
+      projectSlug: `${project.id}-github`,
+      projectName: `${project.title} — GitHub`,
+      projectUrl: project.githubUrl,
+    });
+  }}
+>
+  VIEW GITHUB
+  <GitBranch size={13} />
+</a>
                     ) : null}
 
                     {project.backendGithubUrl ? (
-                      <a
-                        href={project.backendGithubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(event) =>
-                          event.stopPropagation()
-                        }
-                      >
-                        
-                        
-                      </a>
+                   
+                   <a
+  href={project.backendGithubUrl}
+  target="_blank"
+  rel="noopener noreferrer"
+  onClick={(event) => {
+    event.stopPropagation();
+
+    trackProjectClick({
+      projectSlug: `${project.id}-backend-github`,
+      projectName: `${project.title} — Backend GitHub`,
+      projectUrl: project.backendGithubUrl,
+    });
+  }}
+>
+  VIEW BACKEND
+</a>
                     ) : null}
                   </div>
                 </div>

@@ -52,13 +52,11 @@ export default function Navbar() {
     useRef<ReturnType<typeof setTimeout> | null>(null);
 
   /* =========================================================
-     DETECT MOBILE
+     DETECT MOBILE / RESPONSIVE MODE
   ========================================================= */
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(
-      "(max-width: 767px)"
-    );
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
 
     const handleResize = () => {
       const mobile = mediaQuery.matches;
@@ -77,16 +75,10 @@ export default function Navbar() {
 
     handleResize();
 
-    mediaQuery.addEventListener(
-      "change",
-      handleResize
-    );
+    mediaQuery.addEventListener("change", handleResize);
 
     return () => {
-      mediaQuery.removeEventListener(
-        "change",
-        handleResize
-      );
+      mediaQuery.removeEventListener("change", handleResize);
     };
   }, []);
 
@@ -119,27 +111,21 @@ export default function Navbar() {
   const projectsItem = findItem("Projects");
   const contactItem = findItem("Contact");
 
-  const educationItem =
-    findItem("Education");
+  const educationItem = findItem("Education");
 
   const certificatesItem = findItem(
     "Certificates",
     "Certificate"
   );
 
-  const skillsItem =
-    findItem("Skills");
+  const skillsItem = findItem("Skills");
 
   const servicesItem = findItem(
     "Services",
     "Service"
   );
 
-
-  
-
-  const experienceItem =
-    findItem("Experience");
+  const experienceItem = findItem("Experience");
 
   /* =========================================================
      ABOUT DROPDOWN
@@ -150,7 +136,6 @@ export default function Navbar() {
     certificatesItem,
     skillsItem,
     servicesItem,
-    
   ].filter(Boolean) as NavItem[];
 
   /* =========================================================
@@ -229,21 +214,21 @@ export default function Navbar() {
   const toggleNavigation = () => {
     clearCloseTimer();
 
-    // MOBILE
+    /* MOBILE */
+
     if (isMobile) {
       setMobileMenuOpen((current) => !current);
       setMobileExpandedItem(null);
       return;
     }
 
-    // DESKTOP
+    /* DESKTOP */
+
     if (verticalMode) {
-      // Vertical → Horizontal
       setVerticalMode(false);
       setSideOpen(false);
       setHoveredItem(null);
     } else {
-      // Horizontal → Vertical
       setVerticalMode(true);
       setSideOpen(true);
     }
@@ -346,9 +331,7 @@ export default function Navbar() {
      MOBILE DROPDOWN TOGGLE
   ========================================================= */
 
-  const toggleMobileDropdown = (
-    href: string
-  ) => {
+  const toggleMobileDropdown = (href: string) => {
     setMobileExpandedItem((current) =>
       current === href ? null : href
     );
@@ -397,7 +380,6 @@ export default function Navbar() {
             : ""
         } relative z-[1300]`}
       >
-
         {/* LAPTOP ICON */}
 
         <span
@@ -415,8 +397,7 @@ export default function Navbar() {
 
         <span
           className={`nav-hamburger ${
-            verticalMode ||
-            mobileMenuOpen
+            verticalMode || mobileMenuOpen
               ? "nav-hamburger--close"
               : ""
           }`}
@@ -494,8 +475,7 @@ export default function Navbar() {
 
             if (
               aboutItem &&
-              item.href ===
-                aboutItem.href
+              item.href === aboutItem.href
             ) {
               return (
                 <div
@@ -507,9 +487,7 @@ export default function Navbar() {
                   }`}
                   onMouseEnter={() => {
                     clearCloseTimer();
-                    setHoveredItem(
-                      item.href
-                    );
+                    setHoveredItem(item.href);
                   }}
                   onMouseLeave={() => {
                     setHoveredItem(null);
@@ -557,8 +535,7 @@ export default function Navbar() {
                     />
                   </Link>
 
-                  {aboutDropdownItems.length >
-                    0 && (
+                  {aboutDropdownItems.length > 0 && (
                     <div
                       className={`premium-about-dropdown ${
                         isHovered
@@ -601,10 +578,7 @@ export default function Navbar() {
                               <span className="dropdown-number">
                                 {String(
                                   index + 1
-                                ).padStart(
-                                  2,
-                                  "0"
-                                )}
+                                ).padStart(2, "0")}
                               </span>
 
                               <span className="dropdown-label">
@@ -632,8 +606,7 @@ export default function Navbar() {
 
             if (
               projectsItem &&
-              item.href ===
-                projectsItem.href
+              item.href === projectsItem.href
             ) {
               return (
                 <div
@@ -645,9 +618,7 @@ export default function Navbar() {
                   }`}
                   onMouseEnter={() => {
                     clearCloseTimer();
-                    setHoveredItem(
-                      item.href
-                    );
+                    setHoveredItem(item.href);
                   }}
                   onMouseLeave={() => {
                     setHoveredItem(null);
@@ -695,8 +666,7 @@ export default function Navbar() {
                     />
                   </Link>
 
-                  {projectsDropdownItems.length >
-                    0 && (
+                  {projectsDropdownItems.length > 0 && (
                     <div
                       className={`premium-projects-dropdown ${
                         isHovered
@@ -739,10 +709,7 @@ export default function Navbar() {
                               <span className="dropdown-number">
                                 {String(
                                   index + 1
-                                ).padStart(
-                                  2,
-                                  "0"
-                                )}
+                                ).padStart(2, "0")}
                               </span>
 
                               <span className="dropdown-label">
@@ -774,9 +741,7 @@ export default function Navbar() {
                 href={item.href}
                 onMouseEnter={() => {
                   clearCloseTimer();
-                  setHoveredItem(
-                    item.href
-                  );
+                  setHoveredItem(item.href);
                 }}
                 onMouseLeave={() =>
                   setHoveredItem(null)
@@ -828,17 +793,14 @@ export default function Navbar() {
             onClick={openEntertainment}
             onMouseEnter={() => {
               clearCloseTimer();
-              setHoveredItem(
-                "entertainment"
-              );
+              setHoveredItem("entertainment");
             }}
             onMouseLeave={() => {
               setHoveredItem(null);
             }}
             className={`premium-horizontal-link ${
               entertainmentOpen ||
-              hoveredItem ===
-                "entertainment"
+              hoveredItem === "entertainment"
                 ? "is-hovered"
                 : ""
             }`}
@@ -1066,85 +1028,110 @@ export default function Navbar() {
           className="sidebar-links"
           aria-label="Sidebar navigation"
         >
-          {sidebarNavigation.map(
-            (item) => {
-              const isActive =
-                isItemActive(item);
+          {sidebarNavigation.map((item) => {
+            const isActive =
+              isItemActive(item);
 
-              const isHovered =
-                hoveredItem ===
-                item.href;
+            const isHovered =
+              hoveredItem === item.href;
 
-              const isAbout =
-                aboutItem &&
-                item.href ===
-                  aboutItem.href;
+            const isAbout =
+              aboutItem &&
+              item.href === aboutItem.href;
 
-              const isProjects =
-                projectsItem &&
-                item.href ===
-                  projectsItem.href;
+            const isProjects =
+              projectsItem &&
+              item.href === projectsItem.href;
 
-              const hasDropdown =
-                Boolean(
-                  isAbout &&
-                  aboutDropdownItems.length >
-                    0
-                ) ||
-                Boolean(
-                  isProjects &&
-                  projectsDropdownItems.length >
-                    0
-                );
+            const hasDropdown =
+              Boolean(
+                isAbout &&
+                aboutDropdownItems.length > 0
+              ) ||
+              Boolean(
+                isProjects &&
+                projectsDropdownItems.length > 0
+              );
 
-              const childItems =
-                isAbout
-                  ? aboutDropdownItems
-                  : isProjects
-                  ? projectsDropdownItems
-                  : [];
+            const childItems =
+              isAbout
+                ? aboutDropdownItems
+                : isProjects
+                ? projectsDropdownItems
+                : [];
 
-              return (
+            return (
+              <div
+                key={item.href}
+                className={`sidebar-nav-group ${
+                  hasDropdown
+                    ? "sidebar-nav-group--dropdown"
+                    : ""
+                }`}
+                onMouseEnter={() => {
+                  clearCloseTimer();
+                  setHoveredItem(item.href);
+                  openSidebar();
+                }}
+                onMouseLeave={() => {
+                  setHoveredItem(null);
+                }}
+              >
+                {/* MAIN ROW */}
+
                 <div
-                  key={item.href}
-                  className={`sidebar-nav-group ${
-                    hasDropdown
-                      ? "sidebar-nav-group--dropdown"
+                  className={`sidebar-main-row ${
+                    isActive
+                      ? "is-active"
+                      : ""
+                  } ${
+                    isHovered
+                      ? "is-hovered"
                       : ""
                   }`}
-                  onMouseEnter={() => {
-                    clearCloseTimer();
-                    setHoveredItem(
-                      item.href
-                    );
-                    openSidebar();
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredItem(null);
-                  }}
                 >
+                  <span
+                    className="sidebar-link-light"
+                    aria-hidden="true"
+                  />
 
-                  {/* MAIN ROW */}
-
-                  <div
-                    className={`sidebar-main-row ${
-                      isActive
-                        ? "is-active"
-                        : ""
-                    } ${
-                      isHovered
-                        ? "is-hovered"
-                        : ""
-                    }`}
+                  <Link
+                    href={item.href}
+                    className="sidebar-main-link"
+                    onClick={() => {
+                      clearCloseTimer();
+                      setSideOpen(false);
+                      setVerticalMode(false);
+                      setHoveredItem(null);
+                      setEntertainmentOpen(false);
+                    }}
                   >
-                    <span
-                      className="sidebar-link-light"
-                      aria-hidden="true"
-                    />
+                    <span className="sidebar-number">
+                      {item.number}
+                    </span>
 
+                    <span className="sidebar-label">
+                      {item.label}
+                    </span>
+                  </Link>
+
+                  {hasDropdown ? (
+                    <span
+                      className={`sidebar-expand-indicator ${
+                        isHovered
+                          ? "is-open"
+                          : ""
+                      }`}
+                      aria-hidden="true"
+                    >
+                      ↓
+                    </span>
+                  ) : (
                     <Link
                       href={item.href}
-                      className="sidebar-main-link"
+                      aria-hidden="true"
+                      tabIndex={-1}
+                      className="sidebar-main-arrow"
                       onClick={() => {
                         clearCloseTimer();
                         setSideOpen(false);
@@ -1153,134 +1140,94 @@ export default function Navbar() {
                         setEntertainmentOpen(false);
                       }}
                     >
-                      <span className="sidebar-number">
-                        {item.number}
-                      </span>
-
-                      <span className="sidebar-label">
-                        {item.label}
-                      </span>
+                      →
                     </Link>
+                  )}
 
-                    {/* DROPDOWN */}
+                  <span
+                    className="sidebar-energy-line"
+                    aria-hidden="true"
+                  />
+                </div>
 
-                    {hasDropdown ? (
-                      <span
-                        className={`sidebar-expand-indicator ${
-                          isHovered
-                            ? "is-open"
-                            : ""
-                        }`}
-                        aria-hidden="true"
-                      >
-                        ↓
-                      </span>
-                    ) : (
-                      <Link
-                        href={item.href}
-                        aria-hidden="true"
-                        tabIndex={-1}
-                        className="sidebar-main-arrow"
-                        onClick={() => {
-                          clearCloseTimer();
-                          setSideOpen(false);
-                          setVerticalMode(false);
-                          setHoveredItem(null);
-                          setEntertainmentOpen(false);
-                        }}
-                      >
-                        →
-                      </Link>
-                    )}
+                {/* SUBMENU */}
 
-                    <span
-                      className="sidebar-energy-line"
-                      aria-hidden="true"
-                    />
-                  </div>
+                {hasDropdown && (
+                  <div
+                    className={`sidebar-submenu ${
+                      isHovered
+                        ? "is-open"
+                        : ""
+                    }`}
+                  >
+                    <div className="sidebar-submenu-inner">
 
-                  {/* SUBMENU */}
+                      <div className="sidebar-submenu-rail">
+                        <span />
+                      </div>
 
-                  {hasDropdown && (
-                    <div
-                      className={`sidebar-submenu ${
-                        isHovered
-                          ? "is-open"
-                          : ""
-                      }`}
-                    >
-                      <div className="sidebar-submenu-inner">
+                      <div className="sidebar-submenu-items">
 
-                        <div className="sidebar-submenu-rail">
-                          <span />
-                        </div>
-
-                        <div className="sidebar-submenu-items">
-
-                          {childItems.map(
-                            (
-                              childItem,
-                              index
-                            ) => {
-                              const childActive =
-                                isItemActive(
-                                  childItem
-                                );
-
-                              return (
-                                <Link
-                                  key={`${childItem.href}-${childItem.label}-${index}`}
-                                  href={
-                                    childItem.href
-                                  }
-                                  className={`sidebar-submenu-item ${
-                                    childActive
-                                      ? "is-active"
-                                      : ""
-                                  }`}
-                                  onMouseEnter={() => {
-                                    clearCloseTimer();
-                                    openSidebar();
-                                  }}
-                                  onClick={() => {
-                                    clearCloseTimer();
-                                    setSideOpen(false);
-                                    setVerticalMode(false);
-                                    setHoveredItem(null);
-                                    setEntertainmentOpen(false);
-                                  }}
-                                >
-                                  <span className="sidebar-sub-number">
-                                    {String(
-                                      index + 1
-                                    ).padStart(
-                                      2,
-                                      "0"
-                                    )}
-                                  </span>
-
-                                  <span className="sidebar-sub-label">
-                                    {
-                                      childItem.label
-                                    }
-                                  </span>
-
-                                  <span className="sidebar-sub-arrow">
-                                    ↗
-                                  </span>
-                                </Link>
+                        {childItems.map(
+                          (
+                            childItem,
+                            index
+                          ) => {
+                            const childActive =
+                              isItemActive(
+                                childItem
                               );
-                            }
-                          )}
 
-                        </div>
+                            return (
+                              <Link
+                                key={`${childItem.href}-${childItem.label}-${index}`}
+                                href={
+                                  childItem.href
+                                }
+                                className={`sidebar-submenu-item ${
+                                  childActive
+                                    ? "is-active"
+                                    : ""
+                                }`}
+                                onMouseEnter={() => {
+                                  clearCloseTimer();
+                                  openSidebar();
+                                }}
+                                onClick={() => {
+                                  clearCloseTimer();
+                                  setSideOpen(false);
+                                  setVerticalMode(false);
+                                  setHoveredItem(null);
+                                  setEntertainmentOpen(false);
+                                }}
+                              >
+                                <span className="sidebar-sub-number">
+                                  {String(
+                                    index + 1
+                                  ).padStart(2, "0")}
+                                </span>
+
+                                <span className="sidebar-sub-label">
+                                  {
+                                    childItem.label
+                                  }
+                                </span>
+
+                                <span className="sidebar-sub-arrow">
+                                  ↗
+                                </span>
+                              </Link>
+                            );
+                          }
+                        )}
+
                       </div>
                     </div>
-                  )}
-                </div>
-              );
-            }
-          )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
           {/* =================================================
               ENTERTAINMENT — SIDEBAR
@@ -1413,9 +1360,7 @@ export default function Navbar() {
         !sideOpen && (
           <div
             className="sidebar-hot-zone"
-            onMouseEnter={
-              openSidebar
-            }
+            onMouseEnter={openSidebar}
             aria-hidden="true"
           />
         )}
@@ -1439,9 +1384,7 @@ export default function Navbar() {
           <Link
             href="/"
             className="mobile-panel-brand"
-            onClick={
-              handleMobileLinkClick
-            }
+            onClick={handleMobileLinkClick}
           >
             <span className="mobile-panel-mark">
               FN
@@ -1469,156 +1412,144 @@ export default function Navbar() {
           className="mobile-panel-links"
           aria-label="Mobile navigation"
         >
-          {mainNavigation.map(
-            (item) => {
-              const isActive =
-                isItemActive(item);
+          {mainNavigation.map((item) => {
+            const isActive =
+              isItemActive(item);
 
-              const isAbout =
-                aboutItem &&
-                item.href ===
-                  aboutItem.href;
+            const isAbout =
+              aboutItem &&
+              item.href === aboutItem.href;
 
-              const isProjects =
-                projectsItem &&
-                item.href ===
-                  projectsItem.href;
+            const isProjects =
+              projectsItem &&
+              item.href === projectsItem.href;
 
-              const hasDropdown =
-                Boolean(
-                  isAbout &&
-                  aboutDropdownItems.length >
-                    0
-                ) ||
-                Boolean(
-                  isProjects &&
-                  projectsDropdownItems.length >
-                    0
-                );
+            const hasDropdown =
+              Boolean(
+                isAbout &&
+                aboutDropdownItems.length > 0
+              ) ||
+              Boolean(
+                isProjects &&
+                projectsDropdownItems.length > 0
+              );
 
-              const childItems =
-                isAbout
-                  ? aboutDropdownItems
-                  : isProjects
-                  ? projectsDropdownItems
-                  : [];
+            const childItems =
+              isAbout
+                ? aboutDropdownItems
+                : isProjects
+                ? projectsDropdownItems
+                : [];
 
-              const expanded =
-                mobileExpandedItem ===
-                item.href;
+            const expanded =
+              mobileExpandedItem === item.href;
 
-              return (
+            return (
+              <div
+                key={item.href}
+                className={`mobile-nav-group ${
+                  expanded
+                    ? "is-expanded"
+                    : ""
+                }`}
+              >
+                {/* MAIN MOBILE ITEM */}
+
                 <div
-                  key={item.href}
-                  className={`mobile-nav-group ${
-                    expanded
-                      ? "is-expanded"
+                  className={`mobile-nav-main ${
+                    isActive
+                      ? "is-active"
                       : ""
                   }`}
                 >
+                  <Link
+                    href={item.href}
+                    onClick={handleMobileLinkClick}
+                    className="mobile-nav-link"
+                  >
+                    <span className="mobile-nav-number">
+                      {item.number}
+                    </span>
 
-                  {/* MAIN MOBILE ITEM */}
+                    <span className="mobile-nav-label">
+                      {item.label}
+                    </span>
+                  </Link>
 
+                  {hasDropdown && (
+                    <button
+                      type="button"
+                      aria-label={`Toggle ${item.label} submenu`}
+                      aria-expanded={expanded}
+                      className="mobile-nav-expand"
+                      onClick={() =>
+                        toggleMobileDropdown(
+                          item.href
+                        )
+                      }
+                    >
+                      ↓
+                    </button>
+                  )}
+                </div>
+
+                {/* MOBILE SUBMENU */}
+
+                {hasDropdown && (
                   <div
-                    className={`mobile-nav-main ${
-                      isActive
-                        ? "is-active"
+                    className={`mobile-nav-submenu ${
+                      expanded
+                        ? "is-open"
                         : ""
                     }`}
                   >
-                    <Link
-                      href={item.href}
-                      onClick={
-                        handleMobileLinkClick
-                      }
-                      className="mobile-nav-link"
-                    >
-                      <span className="mobile-nav-number">
-                        {item.number}
-                      </span>
+                    {childItems.map(
+                      (
+                        childItem,
+                        index
+                      ) => (
+                        <Link
+                          key={`${childItem.href}-${childItem.label}-${index}`}
+                          href={
+                            childItem.href
+                          }
+                          onClick={
+                            handleMobileLinkClick
+                          }
+                          className={`mobile-nav-subitem ${
+                            isItemActive(
+                              childItem
+                            )
+                              ? "is-active"
+                              : ""
+                          }`}
+                        >
+                          <span>
+                            {String(
+                              index + 1
+                            ).padStart(
+                              2,
+                              "0"
+                            )}
+                          </span>
 
-                      <span className="mobile-nav-label">
-                        {item.label}
-                      </span>
-                    </Link>
+                          <span>
+                            {
+                              childItem.label
+                            }
+                          </span>
 
-                    {hasDropdown && (
-                      <button
-                        type="button"
-                        aria-label={`Toggle ${item.label} submenu`}
-                        aria-expanded={
-                          expanded
-                        }
-                        className="mobile-nav-expand"
-                        onClick={() =>
-                          toggleMobileDropdown(
-                            item.href
-                          )
-                        }
-                      >
-                        ↓
-                      </button>
+                          <span>
+                            ↗
+                          </span>
+                        </Link>
+                      )
                     )}
                   </div>
-
-                  {/* MOBILE SUBMENU */}
-
-                  {hasDropdown && (
-                    <div
-                      className={`mobile-nav-submenu ${
-                        expanded
-                          ? "is-open"
-                          : ""
-                      }`}
-                    >
-                      {childItems.map(
-                        (
-                          childItem,
-                          index
-                        ) => (
-                          <Link
-                            key={`${childItem.href}-${childItem.label}-${index}`}
-                            href={
-                              childItem.href
-                            }
-                            onClick={
-                              handleMobileLinkClick
-                            }
-                            className={`mobile-nav-subitem ${
-                              isItemActive(
-                                childItem
-                              )
-                                ? "is-active"
-                                : ""
-                            }`}
-                          >
-                            <span>
-                              {String(
-                                index + 1
-                              ).padStart(
-                                2,
-                                "0"
-                              )}
-                            </span>
-
-                            <span>
-                              {
-                                childItem.label
-                              }
-                            </span>
-
-                            <span>
-                              ↗
-                            </span>
-                          </Link>
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-          )}
+                )}
+              </div>
+            );
+          })}
 
           {/* =================================================
               MOBILE ENTERTAINMENT
@@ -1653,7 +1584,7 @@ export default function Navbar() {
         <div className="mobile-panel-actions">
 
           <a
-           href="/files/Faiza-Noor-CV.pdf"
+            href="/files/Faiza-Noor-CV.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="mobile-cv-button"
@@ -1670,9 +1601,7 @@ export default function Navbar() {
           <Link
             href="/contact"
             className="mobile-hire-button"
-            onClick={
-              handleMobileLinkClick
-            }
+            onClick={handleMobileLinkClick}
           >
             <span>
               HIRE ME
