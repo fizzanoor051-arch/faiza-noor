@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -17,40 +18,24 @@ type Message = {
   content: string;
 };
 
-const responses: Record<string, string> = {
-  "Tell me about Faiza":
-    "Absolutely! Faiza Noor is a Full Stack Web Engineer focused on creating modern, responsive and cinematic digital experiences. She works with React, Next.js, TypeScript, Node.js and modern web technologies.",
-
-  "Show me her projects":
-    "Of course! You can explore projects such as ShopSphere, a modern e-commerce experience, her hospital website project, and this cinematic portfolio. Want me to guide you to the Projects section?",
-
-  "What are her skills?":
-    "Faiza works across the full stack — React, Next.js, TypeScript, Tailwind CSS, Node.js, Express.js, MongoDB, PostgreSQL, REST APIs, authentication, Git, Docker and AI integration.",
-
-  "What can she build?":
-    "She can build modern business websites, e-commerce platforms, portfolios, dashboards, REST APIs, authentication systems and AI-powered web experiences.",
-
-  "Is she available for work?":
-    "Yes. Faiza is open to selected freelance projects and collaborations. If you'd like to work with her, the Contact section is the best place to start.",
+type AIChatProps = {
+  onClose: () => void;
 };
 
-export function AIChat() {
-  const [messages, setMessages] =
-    useState<Message[]>([
-      {
-        id: 1,
-        role: "assistant",
-        content:
-          "Welcome to Faiza's portfolio. 👋 I'm Faiza AI — your intelligent portfolio assistant. Ask me anything about Faiza, her projects, skills or services.",
-      },
-    ]);
+export function AIChat({ onClose }: AIChatProps) {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      role: "assistant",
+      content:
+        "Welcome to Faiza's portfolio. 👋 I'm Faiza AI — your intelligent portfolio assistant. Ask me anything about Faiza, her projects, skills or services.",
+    },
+  ]);
 
   const [input, setInput] = useState("");
-  const [thinking, setThinking] =
-    useState(false);
+  const [thinking, setThinking] = useState(false);
 
-  const bottomRef =
-    useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({
@@ -58,7 +43,7 @@ export function AIChat() {
     });
   }, [messages, thinking]);
 
-  const sendMessage = (text: string) => {
+  const sendMessage = async (text: string) => {
     const cleanText = text.trim();
 
     if (!cleanText || thinking) return;
@@ -69,33 +54,72 @@ export function AIChat() {
       content: cleanText,
     };
 
-    setMessages((current) => [
-      ...current,
+    const updatedMessages = [
+      ...messages,
       userMessage,
-    ]);
+    ];
 
+    setMessages(updatedMessages);
     setInput("");
     setThinking(true);
 
-    window.setTimeout(() => {
-      const exactResponse =
-        responses[cleanText];
+    try {
+      /*
+       * Send the complete recent conversation to the
+       * AI backend so the assistant understands context
+       * and follow-up questions.
+       */
+      const response = await fetch("/api/ai", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: updatedMessages.map(
+            (message) => ({
+              role: message.role,
+              content: message.content,
+            })
+          ),
+        }),
+      });
 
-      const response =
-        exactResponse ||
-        "That's a great question. I'm currently running in portfolio preview mode. Tomorrow, we'll connect me to the real AI backend so I can have a much deeper conversation with you.";
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data?.error ||
+            "Something went wrong with the AI."
+        );
+      }
+
+      const assistantMessage: Message = {
+        id: Date.now() + 1,
+        role: "assistant",
+        content:
+          data?.message ||
+          "I'm sorry, I couldn't generate a response right now.",
+      };
+
+      setMessages((current) => [
+        ...current,
+        assistantMessage,
+      ]);
+    } catch (error) {
+      console.error("AI chat error:", error);
 
       setMessages((current) => [
         ...current,
         {
           id: Date.now() + 1,
           role: "assistant",
-          content: response,
+          content:
+            "I'm having trouble connecting to my AI brain right now. Please try again in a moment. 🤍",
         },
       ]);
-
+    } finally {
       setThinking(false);
-    }, 900);
+    }
   };
 
   const handleSubmit = (
@@ -107,10 +131,22 @@ export function AIChat() {
   };
 
   return (
-    <div className="ai-chat">
+    <div
+      className="ai-chat"
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+      }}
+    >
       {/* HEADER */}
 
-      <header className="ai-chat-header">
+      <header
+        className="ai-chat-header"
+        style={{
+          position: "relative",
+        }}
+      >
         <div className="ai-chat-identity">
           <div className="ai-chat-avatar">
             FN
@@ -127,10 +163,69 @@ export function AIChat() {
           </div>
         </div>
 
-        <div className="ai-online">
-          <span />
-          ONLINE
+        <div className="ai-chat-header-actions">
+          <div className="ai-online">
+            <span />
+            ONLINE
+          </div>
         </div>
+
+        {/* CLOSE BUTTON BOX */}
+            
+        
+<button
+  type="button"
+  onClick={onClose}
+  aria-label="Close Faiza AI"
+  title="Close Faiza AI"
+  className="ai-chat-close"
+  style={{
+    position: "absolute",
+    top: "8px",
+    left: "8px",
+    right: "auto",
+    zIndex: 9999,
+
+    width: "36px",
+    height: "36px",
+    minWidth: "36px",
+    minHeight: "36px",
+
+    padding: 0,
+    margin: 0,
+
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+
+    borderRadius: "9px",
+    border: "1px solid rgba(255,255,255,0.18)",
+
+    background: "rgba(255,255,255,0.09)",
+
+    color: "#ffffff",
+
+    fontSize: "25px",
+    fontWeight: "300",
+    lineHeight: "1",
+
+    cursor: "pointer",
+
+    boxShadow:
+      "0 4px 15px rgba(0,0,0,0.25)",
+
+    backdropFilter: "blur(8px)",
+
+    visibility: "visible",
+    opacity: 1,
+  }}
+>
+  ×
+</button>
+
+
+      
+              
       </header>
 
       {/* CHAT AREA */}
@@ -204,15 +299,14 @@ export function AIChat() {
         </form>
 
         <div className="ai-composer-meta">
-          <span>
-            FAIZA AI
-          </span>
+          <span>FAIZA AI</span>
 
           <span>
-            FRONTEND PREVIEW • V1.0
+            AI ASSISTANT • V1.0
           </span>
         </div>
       </div>
     </div>
   );
 }
+

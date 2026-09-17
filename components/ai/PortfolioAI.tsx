@@ -10,6 +10,7 @@ export default function PortfolioAI() {
 
   const [thinking] = useState(false);
   const [speaking] = useState(false);
+
   const [dragPosition, setDragPosition] = useState<{
     x: number;
     y: number;
@@ -19,15 +20,66 @@ export default function PortfolioAI() {
     "left" | "right"
   >("left");
 
-  // ADDED: vertical direction for chat
   const [chatVertical, setChatVertical] = useState<
     "top" | "bottom"
   >("top");
+
+  /* =========================================================
+     CHAT RESIZE
+     ========================================================= */
+
+  const [chatWidth, setChatWidth] = useState(340);
+  const [chatHeight, setChatHeight] = useState(520);
+
+  const increaseChatSize = () => {
+    setChatWidth((value) => Math.min(value + 40, 520));
+    setChatHeight((value) => Math.min(value + 40, 700));
+  };
+
+  const decreaseChatSize = () => {
+    setChatWidth((value) => Math.max(value - 40, 260));
+    setChatHeight((value) => Math.max(value - 40, 360));
+  };
 
   const dragRef = useRef({
     offsetX: 0,
     offsetY: 0,
   });
+
+  const updateChatDirection = (
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) => {
+    const centerX = x + width / 2;
+    const centerY = y + height / 2;
+
+    const isLeft =
+      centerX < window.innerWidth / 2;
+
+    const isTop =
+      centerY < window.innerHeight / 2;
+
+    /*
+     * AI bottom-right  → Chat top-left
+     * AI bottom-left   → Chat top-right
+     * AI top-right     → Chat bottom-left
+     * AI top-left      → Chat bottom-right
+     */
+
+    if (isTop) {
+      setChatVertical("bottom");
+    } else {
+      setChatVertical("top");
+    }
+
+    if (isLeft) {
+      setChatSide("right");
+    } else {
+      setChatSide("left");
+    }
+  };
 
   const handleDragStart = (
     event: React.PointerEvent<HTMLDivElement>
@@ -46,7 +98,6 @@ export default function PortfolioAI() {
       y: rect.top,
     });
 
-    // ADDED: calculate chat direction
     updateChatDirection(
       rect.left,
       rect.top,
@@ -89,7 +140,6 @@ export default function PortfolioAI() {
 
     setDragPosition({ x, y });
 
-    // ADDED: update chat direction while dragging
     updateChatDirection(
       x,
       y,
@@ -98,69 +148,16 @@ export default function PortfolioAI() {
     );
   };
 
-  // ADDED: determine opposite corner
-  const updateChatDirection = (
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ) => {
-    const centerX = x + width / 2;
-    const centerY = y + height / 2;
-
-    const isLeft =
-      centerX < window.innerWidth / 2;
-
-    const isTop =
-      centerY < window.innerHeight / 2;
-
-    /*
-     * AI bottom-right  → Chat top-left
-     * AI bottom-left   → Chat top-right
-     * AI top-right     → Chat bottom-left
-     * AI top-left      → Chat bottom-right
-     */
-
-    if (isTop) {
-      setChatVertical("bottom");
-    } else {
-      setChatVertical("top");
-    }
-
-    if (isLeft) {
-      setChatSide("right");
-    } else {
-      setChatSide("left");
-    }
-  };
-
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
-
-  const clearCloseTimer = () => {
-    if (closeTimer.current !== null) {
-      clearTimeout(closeTimer.current);
-      closeTimer.current = null;
-    }
-  };
-
-  const openAI = () => {
-    clearCloseTimer();
-    setOpen(true);
-  };
-
-  const closeAI = () => {
-    clearCloseTimer();
-
-    closeTimer.current = setTimeout(() => {
-      setOpen(false);
-    }, 250);
-  };
-
   const toggleAI = () => {
-    clearCloseTimer();
     setOpen((value) => !value);
+  };
+
+  /*
+   * Direct close function for the AIChat cross button.
+   * This closes the chat immediately.
+   */
+  const handleChatClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -179,8 +176,6 @@ export default function PortfolioAI() {
             }
           : undefined
       }
-      onMouseEnter={clearCloseTimer}
-      onMouseLeave={closeAI}
     >
       {/* CHAT PANEL */}
       {open && (
@@ -197,15 +192,15 @@ export default function PortfolioAI() {
           style={{
             /*
              * CHAT SIZE
-             * Smaller than the previous version.
              */
-            width: "min(340px, 76vw)",
-            maxWidth: "340px",
-            maxHeight: "min(520px, 68vh)",
+            width: `min(${chatWidth}px, 76vw)`,
+            maxWidth: `${chatWidth}px`,
+            height: `min(${chatHeight}px, 68vh)`,
+            maxHeight: `min(${chatHeight}px, 68vh)`,
 
             /*
-             * Keep chat attached very close to AI Orb.
-             * No large gap / separate floating position.
+             * Keep chat directly attached
+             * to the AI Orb.
              */
             ...(chatSide === "left"
               ? {
@@ -227,10 +222,71 @@ export default function PortfolioAI() {
                   bottom: "auto",
                 }),
           }}
-          onMouseEnter={clearCloseTimer}
-          onMouseLeave={closeAI}
         >
-          <AIChat />
+          {/* =====================================================
+              CHAT RESIZE CONTROLS
+              ===================================================== */}
+
+          <div
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              zIndex: 50,
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+            }}
+          >
+            <button
+              type="button"
+              onClick={decreaseChatSize}
+              aria-label="Make chat smaller"
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "8px",
+                border: "1px solid rgba(255,255,255,0.15)",
+                background: "rgba(20,20,20,0.75)",
+                color: "#F4F0E6",
+                fontSize: "20px",
+                lineHeight: "1",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              −
+            </button>
+
+            <button
+              type="button"
+              onClick={increaseChatSize}
+              aria-label="Make chat larger"
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "8px",
+                border: "1px solid rgba(255,255,255,0.15)",
+                background: "rgba(20,20,20,0.75)",
+                color: "#F4F0E6",
+                fontSize: "20px",
+                lineHeight: "1",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              +
+            </button>
+          </div>
+
+          {/* Cross button inside AIChat closes this box */}
+          <AIChat onClose={handleChatClose} />
         </div>
       )}
 
@@ -254,3 +310,4 @@ export default function PortfolioAI() {
     </div>
   );
 }
+
