@@ -5,6 +5,11 @@ import { useEffect } from "react";
 
 export default function VisitorTracker() {
   useEffect(() => {
+    // Do not count private analytics pages as portfolio visits.
+    if (window.location.pathname.startsWith("/secret-admin")) {
+      return;
+    }
+
     try {
       const STORAGE_KEY = "faiza_portfolio_visitor_id";
       const SESSION_KEY = "faiza_portfolio_visit_tracked";
@@ -17,7 +22,9 @@ export default function VisitorTracker() {
       }
 
       // Prevent duplicate visit events during the same browser session.
-      if (sessionStorage.getItem(SESSION_KEY)) {
+      const existingSession = sessionStorage.getItem(SESSION_KEY);
+
+      if (existingSession) {
         return;
       }
 

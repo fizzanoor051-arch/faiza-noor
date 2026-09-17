@@ -39,16 +39,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const now = new Date();
+
+    const referrer = request.headers.get("referer") || "";
+    const userAgent = request.headers.get("user-agent") || "";
+
+    // Existing project click event tracking
     await db.collection("analytics_events").insertOne({
       type: "project_click",
       visitorId,
       projectSlug,
       projectName,
       projectUrl,
-      referrer: request.headers.get("referer") || "",
-      userAgent: request.headers.get("user-agent") || "",
-      createdAt: new Date(),
+      referrer,
+      userAgent,
+      createdAt: now,
     });
+
+    // Add the project to this visitor's profile
+    await db.collection("analytics_visitors").updateOne(
+      { visitorId },
+      {
+        $addToSet: {
+          projectClicks: projectName,
+        },
+        $set: {
+          lastVisit: now,
+          updatedAt: now,
+        },
+      },
+      {
+        upsert: false,
+      }
+    );
 
     return NextResponse.json({
       success: true,

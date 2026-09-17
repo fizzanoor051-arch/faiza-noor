@@ -3,14 +3,14 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-import Navbar from "@/components/navigation/Navbar";
-import Footer from "@/components/footer/Footer";
 import CustomCursor from "@/components/effects/CustomCursor";
 import ScrollProgress from "@/components/effects/ScrollProgress";
 import SmoothScroll from "@/components/effects/SmoothScroll";
 import PortfolioAI from "@/components/ai/PortfolioAI";
 import PortfolioIntro from "@/components/PortfolioIntro";
 import VisitorTracker from "@/components/analytics/VisitorTracker";
+
+import PortfolioChrome from "@/components/layout/PortfolioChrome";
 
 import ThemeProvider from "@/components/themes/ThemeProvider";
 import ThemeEngine from "@/components/themes/ThemeEngine";
@@ -92,19 +92,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-[#05050a] text-white">
-
         <ThemeProvider>
           <ThemeEngine>
-
-            {/* ================================================
-                CINEMATIC INTRO
-            ================================================= */}
-
             <PortfolioIntro />
-
-            {/* ================================================
-                BACKGROUND EFFECTS
-            ================================================= */}
 
             <div
               className="site-noise pointer-events-none fixed inset-0 z-[9990]"
@@ -116,56 +106,21 @@ export default function RootLayout({
               aria-hidden="true"
             />
 
-            {/* ================================================
-                SMOOTH SCROLL
-            ================================================= */}
-
             <SmoothScroll />
-
-            {/* ================================================
-                GLOBAL SCROLL PROGRESS
-            ================================================= */}
 
             <ScrollProgress />
 
-            {/* ================================================
-                MAIN NAVIGATION
-            ================================================= */}
-
-            <Navbar />
-
-            {/* ================================================
-                PAGE CONTENT
-            ================================================= */}
+            <PortfolioChrome />
 
             <main className="relative z-10 flex-1">
               {children}
             </main>
 
-            {/* ================================================
-                FOOTER
-            ================================================= */}
-
-            <Footer />
-
-            {/* ================================================
-                FAIZA AI
-            ================================================= */}
-
             <PortfolioAI />
-
-            {/* ================================================
-                CUSTOM CURSOR
-            ================================================= */}
 
             <CustomCursor />
 
-            {/* ================================================
-                PRIVATE ANALYTICS
-            ================================================= */}
-
             <VisitorTracker />
-
           </ThemeEngine>
         </ThemeProvider>
       </body>
