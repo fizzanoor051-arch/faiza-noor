@@ -10,7 +10,34 @@ type ResolvedLocation = {
   region: string;
 };
 
-function getStartDate(period: string, now: Date) {
+type ProjectConfig = {
+  name: string;
+  slug: string;
+};
+
+const PROJECTS: ProjectConfig[] = [
+  {
+    name: "NexaFlow AI",
+    slug: "nexaflow-ai",
+  },
+  {
+    name: "Luxora Store",
+    slug: "luxora",
+  },
+  {
+    name: "ShopSphere",
+    slug: "shopsphere",
+  },
+  {
+    name: "Medicare",
+    slug: "medicare",
+  },
+];
+
+function getStartDate(
+  period: string,
+  now: Date
+) {
   if (!period || period === "all") {
     return null;
   }
@@ -31,16 +58,22 @@ function getStartDate(period: string, now: Date) {
 
   if (days[period]) {
     start.setHours(0, 0, 0, 0);
+
     start.setDate(
-      start.getDate() - (days[period] - 1)
+      start.getDate() -
+        (days[period] - 1)
     );
+
     return start;
   }
 
-  const monthsMatch = period.match(/^(\d+)m$/);
+  const monthsMatch =
+    period.match(/^(\d+)m$/);
 
   if (monthsMatch) {
-    const months = Number(monthsMatch[1]);
+    const months = Number(
+      monthsMatch[1]
+    );
 
     start.setMonth(
       start.getMonth() - months
@@ -64,18 +97,8 @@ function getStartDate(period: string, now: Date) {
  * =========================================================
  * GPS REVERSE GEOCODING
  * =========================================================
- *
- * Browser GPS gives us latitude + longitude.
- * We convert those coordinates into:
- *
- * City
- * Country
- * Region / State
- *
- * GPS is preferred over Vercel IP location because
- * GPS represents the visitor's actual device location
- * when the visitor has granted browser location permission.
  */
+
 async function reverseGeocode(
   latitude: number,
   longitude: number
@@ -96,19 +119,22 @@ async function reverseGeocode(
       return null;
     }
 
-    const data = await response.json();
+    const data =
+      await response.json();
 
     const city =
       typeof data.city === "string" &&
       data.city.trim()
         ? data.city.trim()
-        : typeof data.locality === "string" &&
+        : typeof data.locality ===
+              "string" &&
           data.locality.trim()
         ? data.locality.trim()
         : "";
 
     const country =
-      typeof data.countryName === "string" &&
+      typeof data.countryName ===
+        "string" &&
       data.countryName.trim()
         ? data.countryName.trim()
         : "";
@@ -120,13 +146,18 @@ async function reverseGeocode(
         ? data.principalSubdivision.trim()
         : "";
 
-    if (!city && !country && !region) {
+    if (
+      !city &&
+      !country &&
+      !region
+    ) {
       return null;
     }
 
     return {
       city: city || "Unknown",
-      country: country || "Unknown",
+      country:
+        country || "Unknown",
       region,
     };
   } catch (error) {
@@ -143,11 +174,21 @@ export async function GET(
   request: NextRequest
 ) {
   try {
-    const adminCookie =
-      request.cookies.get("analytics_admin")
-        ?.value;
+    /*
+     * =======================================================
+     * ADMIN AUTH
+     * =======================================================
+     */
 
-    if (adminCookie !== "authenticated") {
+    const adminCookie =
+      request.cookies.get(
+        "analytics_admin"
+      )?.value;
+
+    if (
+      adminCookie !==
+      "authenticated"
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -159,19 +200,26 @@ export async function GET(
       );
     }
 
-    const client = await clientPromise;
-    const db = client.db(DB_NAME);
+    const client =
+      await clientPromise;
+
+    const db =
+      client.db(DB_NAME);
 
     const events =
-      db.collection("analytics_events");
+      db.collection(
+        "analytics_events"
+      );
 
     const visitors =
-      db.collection("analytics_visitors");
+      db.collection(
+        "analytics_visitors"
+      );
 
     /*
-     * =========================================================
+     * =======================================================
      * CURRENT ADMIN VISITOR
-     * =========================================================
+     * =======================================================
      */
 
     const yourVisitorId =
@@ -187,21 +235,28 @@ export async function GET(
       ) || "all";
 
     const selectedStartDate =
-      getStartDate(period, now);
+      getStartDate(
+        period,
+        now
+      );
 
     /*
-     * =========================================================
+     * =======================================================
      * ANALYTICS RESET CONTROLS
-     * =========================================================
+     * =======================================================
      */
 
     const controlsCollection =
-      db.collection("analytics_controls");
+      db.collection(
+        "analytics_controls"
+      );
 
     const resetControls =
-      await controlsCollection.findOne({
-        key: "analytics_resets",
-      });
+      await controlsCollection.findOne(
+        {
+          key: "analytics_resets",
+        }
+      );
 
     const visitorDetailsReset =
       resetControls?.visitorDetails
@@ -239,20 +294,23 @@ export async function GET(
         : null;
 
     /*
-     * =========================================================
-     * DATE FILTER HELPERS
-     * =========================================================
+     * =======================================================
+     * DATE FILTER HELPER
+     * =======================================================
      */
 
     const createDateFilter = (
       resetDate: Date | null
     ) => {
       const effectiveReset =
-        globalReset && resetDate
-          ? globalReset > resetDate
+        globalReset &&
+        resetDate
+          ? globalReset >
+            resetDate
             ? globalReset
             : resetDate
-          : globalReset || resetDate;
+          : globalReset ||
+            resetDate;
 
       const filter: {
         createdAt?: {
@@ -273,14 +331,20 @@ export async function GET(
               : effectiveReset,
           $lte: now,
         };
-      } else if (selectedStartDate) {
+      } else if (
+        selectedStartDate
+      ) {
         filter.createdAt = {
-          $gte: selectedStartDate,
+          $gte:
+            selectedStartDate,
           $lte: now,
         };
-      } else if (effectiveReset) {
+      } else if (
+        effectiveReset
+      ) {
         filter.createdAt = {
-          $gte: effectiveReset,
+          $gte:
+            effectiveReset,
           $lte: now,
         };
       }
@@ -289,9 +353,9 @@ export async function GET(
     };
 
     /*
-     * =========================================================
+     * =======================================================
      * ADMIN PATH PROTECTION
-     * =========================================================
+     * =======================================================
      */
 
     const portfolioVisitFilter = {
@@ -311,9 +375,9 @@ export async function GET(
     };
 
     /*
-     * =========================================================
+     * =======================================================
      * SECTION DATE FILTERS
-     * =========================================================
+     * =======================================================
      */
 
     const visitorDetailsDateFilter =
@@ -337,9 +401,9 @@ export async function GET(
       );
 
     /*
-     * =========================================================
+     * =======================================================
      * VISITOR DETAILS
-     * =========================================================
+     * =======================================================
      */
 
     const visitMatch = {
@@ -349,9 +413,14 @@ export async function GET(
     };
 
     /*
-     * =========================================================
-     * PROJECT CLICKS
-     * =========================================================
+     * =======================================================
+     * PROJECT EVENTS
+     * =======================================================
+     *
+     * External project trackers currently save their
+     * project visits as type = "project_click".
+     *
+     * We use the real MongoDB events here.
      */
 
     const projectClickMatch = {
@@ -360,28 +429,30 @@ export async function GET(
     };
 
     /*
-     * =========================================================
+     * =======================================================
      * YOUR CLICKS
-     * =========================================================
+     * =======================================================
      */
 
-    const yourClicksMatch = yourVisitorId
-      ? {
-          type: "project_click",
-          visitorId: yourVisitorId,
-          ...projectClicksDateFilter,
-        }
-      : {
-          type: "project_click",
-          ...projectClicksDateFilter,
-          visitorId:
-            "__no_current_visitor__",
-        };
+    const yourClicksMatch =
+      yourVisitorId
+        ? {
+            type: "project_click",
+            visitorId:
+              yourVisitorId,
+            ...projectClicksDateFilter,
+          }
+        : {
+            type: "project_click",
+            ...projectClicksDateFilter,
+            visitorId:
+              "__no_current_visitor__",
+          };
 
     /*
-     * =========================================================
+     * =======================================================
      * RECENT ACTIVITY
-     * =========================================================
+     * =======================================================
      */
 
     const recentVisitMatch = {
@@ -390,15 +461,16 @@ export async function GET(
       ...portfolioVisitFilter,
     };
 
-    const recentProjectClickMatch = {
-      type: "project_click",
-      ...recentActivityDateFilter,
-    };
+    const recentProjectClickMatch =
+      {
+        type: "project_click",
+        ...recentActivityDateFilter,
+      };
 
     /*
-     * =========================================================
-     * LOAD MAIN ANALYTICS DATA
-     * =========================================================
+     * =======================================================
+     * LOAD MAIN DATA
+     * =======================================================
      */
 
     const [
@@ -406,7 +478,7 @@ export async function GET(
       uniqueVisitors,
       totalProjectClicks,
       yourClicks,
-      projectStats,
+      projectStatsRaw,
       recentActivity,
       referrerStats,
       visitorEvents,
@@ -442,6 +514,7 @@ export async function GET(
               _id: {
                 projectSlug:
                   "$projectSlug",
+
                 projectName:
                   "$projectName",
               },
@@ -453,6 +526,11 @@ export async function GET(
               uniqueVisitors: {
                 $addToSet:
                   "$visitorId",
+              },
+
+              lastVisit: {
+                $max:
+                  "$createdAt",
               },
             },
           },
@@ -473,6 +551,8 @@ export async function GET(
                 $size:
                   "$uniqueVisitors",
               },
+
+              lastVisit: 1,
             },
           },
 
@@ -521,7 +601,10 @@ export async function GET(
               ...portfolioVisitFilter,
 
               referrer: {
-                $nin: ["", null],
+                $nin: [
+                  "",
+                  null,
+                ],
               },
             },
           },
@@ -540,7 +623,8 @@ export async function GET(
             $project: {
               _id: 0,
 
-              referrer: "$_id",
+              referrer:
+                "$_id",
 
               visits: 1,
             },
@@ -611,6 +695,12 @@ export async function GET(
         )
         .toArray(),
 
+      /*
+       * IMPORTANT:
+       * Load ALL project event information needed
+       * for the project detail section.
+       */
+
       events
         .find(
           projectClickMatch,
@@ -619,16 +709,123 @@ export async function GET(
               _id: 0,
               visitorId: 1,
               projectName: 1,
+              projectSlug: 1,
+              referrer: 1,
+              path: 1,
+              country: 1,
+              region: 1,
+              city: 1,
+              latitude: 1,
+              longitude: 1,
+              locationAccuracy: 1,
+              device: 1,
+              browser: 1,
+              os: 1,
+              createdAt: 1,
             },
           }
         )
+        .sort({
+          createdAt: -1,
+        })
         .toArray(),
     ]);
 
     /*
-     * =========================================================
+     * =======================================================
+     * BUILD PROJECT STATS
+     * =======================================================
+     */
+
+    const projectStatsMap =
+      new Map<
+        string,
+        {
+          projectSlug: string;
+          projectName: string;
+          clicks: number;
+          uniqueVisitors: number;
+          lastVisit: Date | null;
+        }
+      >();
+
+    /*
+     * Start with all four projects.
+     *
+     * This means a project will still appear as 0
+     * even before anyone visits it.
+     */
+
+    for (const project of PROJECTS) {
+      projectStatsMap.set(
+        project.slug,
+        {
+          projectSlug:
+            project.slug,
+
+          projectName:
+            project.name,
+
+          clicks: 0,
+
+          uniqueVisitors: 0,
+
+          lastVisit: null,
+        }
+      );
+    }
+
+    for (const project of projectStatsRaw) {
+      if (
+        typeof project.projectSlug !==
+        "string"
+      ) {
+        continue;
+      }
+
+      projectStatsMap.set(
+        project.projectSlug,
+        {
+          projectSlug:
+            project.projectSlug,
+
+          projectName:
+            project.projectName ||
+            project.projectSlug,
+
+          clicks:
+            Number(
+              project.clicks || 0
+            ),
+
+          uniqueVisitors:
+            Number(
+              project.uniqueVisitors ||
+                0
+            ),
+
+          lastVisit:
+            project.lastVisit
+              ? new Date(
+                  project.lastVisit
+                )
+              : null,
+        }
+      );
+    }
+
+    const projectStats =
+      PROJECTS.map(
+        (project) =>
+          projectStatsMap.get(
+            project.slug
+          )!
+      );
+
+    /*
+     * =======================================================
      * BUILD VISITOR INTELLIGENCE
-     * =========================================================
+     * =======================================================
      */
 
     const visitorMap = new Map<
@@ -653,53 +850,68 @@ export async function GET(
     >();
 
     /*
-     * Cache reverse-geocoding requests so the same
-     * coordinates are not looked up repeatedly.
+     * =======================================================
+     * GPS CACHE
+     * =======================================================
      */
-    const locationCache = new Map<
-      string,
-      ResolvedLocation | null
-    >();
 
-    const getResolvedLocation = async (
-      latitude: number | null,
-      longitude: number | null
-    ) => {
-      if (
-        typeof latitude !== "number" ||
-        typeof longitude !== "number"
-      ) {
-        return null;
-      }
+    const locationCache =
+      new Map<
+        string,
+        ResolvedLocation | null
+      >();
 
-      const key = `${latitude.toFixed(
-        5
-      )},${longitude.toFixed(5)}`;
+    const getResolvedLocation =
+      async (
+        latitude: number | null,
+        longitude: number | null
+      ) => {
+        if (
+          typeof latitude !==
+            "number" ||
+          typeof longitude !==
+            "number"
+        ) {
+          return null;
+        }
 
-      if (locationCache.has(key)) {
-        return (
-          locationCache.get(key) ||
-          null
+        const key =
+          `${latitude.toFixed(
+            5
+          )},${longitude.toFixed(
+            5
+          )}`;
+
+        if (
+          locationCache.has(key)
+        ) {
+          return (
+            locationCache.get(
+              key
+            ) || null
+          );
+        }
+
+        const location =
+          await reverseGeocode(
+            latitude,
+            longitude
+          );
+
+        locationCache.set(
+          key,
+          location
         );
-      }
 
-      const location =
-        await reverseGeocode(
-          latitude,
-          longitude
-        );
-
-      locationCache.set(
-        key,
-        location
-      );
-
-      return location;
-    };
+        return location;
+      };
 
     /*
-     * Resolve GPS locations first.
+     * =======================================================
+     * PROCESS PORTFOLIO VISITS
+     * =======================================================
      */
+
     for (const event of visitorEvents) {
       if (!event.visitorId) {
         continue;
@@ -725,7 +937,9 @@ export async function GET(
 
       const eventDate =
         event.createdAt
-          ? new Date(event.createdAt)
+          ? new Date(
+              event.createdAt
+            )
           : null;
 
       const existing =
@@ -740,10 +954,6 @@ export async function GET(
             visitorId:
               event.visitorId,
 
-            /*
-             * GPS location gets priority.
-             * Vercel IP location is only fallback.
-             */
             country:
               gpsLocation?.country ||
               event.country ||
@@ -839,10 +1049,9 @@ export async function GET(
         );
       }
 
-      /*
-       * GPS ALWAYS wins over IP location.
-       */
-      if (gpsLocation?.country) {
+      if (
+        gpsLocation?.country
+      ) {
         existing.country =
           gpsLocation.country;
       } else if (
@@ -855,7 +1064,9 @@ export async function GET(
           event.country;
       }
 
-      if (gpsLocation?.region) {
+      if (
+        gpsLocation?.region
+      ) {
         existing.region =
           gpsLocation.region;
       } else if (
@@ -866,7 +1077,9 @@ export async function GET(
           event.region;
       }
 
-      if (gpsLocation?.city) {
+      if (
+        gpsLocation?.city
+      ) {
         existing.city =
           gpsLocation.city;
       } else if (
@@ -878,12 +1091,6 @@ export async function GET(
         existing.city =
           event.city;
       }
-
-      /*
-       * =======================================================
-       * GPS LOCATION
-       * =======================================================
-       */
 
       if (
         eventLatitude !== null &&
@@ -942,9 +1149,9 @@ export async function GET(
     }
 
     /*
-     * =========================================================
+     * =======================================================
      * MERGE STORED VISITOR INFORMATION
-     * =========================================================
+     * =======================================================
      */
 
     for (const visitor of storedVisitors) {
@@ -961,9 +1168,6 @@ export async function GET(
         continue;
       }
 
-      /*
-       * Resolve stored GPS location too.
-       */
       const storedLatitude =
         typeof visitor.latitude ===
         "number"
@@ -982,10 +1186,9 @@ export async function GET(
           storedLongitude
         );
 
-      /*
-       * GPS location has highest priority.
-       */
-      if (storedGpsLocation?.country) {
+      if (
+        storedGpsLocation?.country
+      ) {
         existing.country =
           storedGpsLocation.country;
       } else if (
@@ -998,7 +1201,9 @@ export async function GET(
           visitor.country;
       }
 
-      if (storedGpsLocation?.region) {
+      if (
+        storedGpsLocation?.region
+      ) {
         existing.region =
           storedGpsLocation.region;
       } else if (
@@ -1009,7 +1214,9 @@ export async function GET(
           visitor.region;
       }
 
-      if (storedGpsLocation?.city) {
+      if (
+        storedGpsLocation?.city
+      ) {
         existing.city =
           storedGpsLocation.city;
       } else if (
@@ -1021,12 +1228,6 @@ export async function GET(
         existing.city =
           visitor.city;
       }
-
-      /*
-       * =======================================================
-       * GPS LOCATION FROM STORED VISITOR
-       * =======================================================
-       */
 
       if (
         storedLatitude !== null &&
@@ -1085,9 +1286,9 @@ export async function GET(
     }
 
     /*
-     * =========================================================
-     * PROJECT CLICKS FOR VISITORS
-     * =========================================================
+     * =======================================================
+     * PROJECT CLICKS FOR PORTFOLIO VISITORS
+     * =======================================================
      */
 
     for (const click of projectClickEvents) {
@@ -1117,6 +1318,12 @@ export async function GET(
         );
       }
     }
+
+    /*
+     * =======================================================
+     * STANDARD VISITOR RESPONSE
+     * =======================================================
+     */
 
     const visitorStats =
       Array.from(
@@ -1155,12 +1362,548 @@ export async function GET(
                   visitor.lastVisit
                 )
               : null,
+
+          projectClicks:
+            visitor.projectClicks.length,
         }));
 
     /*
-     * =========================================================
+     * =======================================================
+     * PROJECT DETAIL DATA
+     * =======================================================
+     *
+     * This is the new section.
+     *
+     * Each project gets its own visitor intelligence.
+     * Only REAL project event data is used.
+     */
+
+    type ProjectVisitorDetail = {
+      visitorId: string;
+      country: string;
+      region: string;
+      city: string;
+      latitude: number | null;
+      longitude: number | null;
+      locationAccuracy:
+        number | null;
+      referrer: string;
+      device: string;
+      browser: string;
+      os: string;
+      firstVisit: Date | null;
+      lastVisit: Date | null;
+      visits: number;
+    };
+
+    type ProjectDetail = {
+      projectSlug: string;
+      projectName: string;
+      totalVisits: number;
+      uniqueVisitors: number;
+      lastVisit: Date | null;
+      countries: string[];
+      cities: string[];
+      referrers: string[];
+      devices: string[];
+      browsers: string[];
+      operatingSystems: string[];
+      visitors: ProjectVisitorDetail[];
+    };
+
+    const projectDetailsMap =
+      new Map<
+        string,
+        ProjectDetail
+      >();
+
+    /*
+     * Initialize all projects.
+     */
+
+    for (const project of PROJECTS) {
+      projectDetailsMap.set(
+        project.slug,
+        {
+          projectSlug:
+            project.slug,
+
+          projectName:
+            project.name,
+
+          totalVisits: 0,
+
+          uniqueVisitors: 0,
+
+          lastVisit: null,
+
+          countries: [],
+
+          cities: [],
+
+          referrers: [],
+
+          devices: [],
+
+          browsers: [],
+
+          operatingSystems: [],
+
+          visitors: [],
+        }
+      );
+    }
+
+    /*
+     * Temporary per-project visitor maps.
+     */
+
+    const projectVisitorMaps =
+      new Map<
+        string,
+        Map<
+          string,
+          ProjectVisitorDetail
+        >
+      >();
+
+    for (const project of PROJECTS) {
+      projectVisitorMaps.set(
+        project.slug,
+        new Map()
+      );
+    }
+
+    /*
+     * Process every real project visit.
+     */
+
+    for (
+      const event of projectClickEvents
+    ) {
+      const slug =
+        typeof event.projectSlug ===
+        "string"
+          ? event.projectSlug
+          : "";
+
+      if (!slug) {
+        continue;
+      }
+
+      const project =
+        projectDetailsMap.get(
+          slug
+        );
+
+      if (!project) {
+        continue;
+      }
+
+      /*
+       * Total project visits.
+       */
+
+      project.totalVisits += 1;
+
+      /*
+       * Last project visit.
+       */
+
+      const eventDate =
+        event.createdAt
+          ? new Date(
+              event.createdAt
+            )
+          : null;
+
+      if (
+        eventDate &&
+        (!project.lastVisit ||
+          eventDate.getTime() >
+            new Date(
+              project.lastVisit
+            ).getTime())
+      ) {
+        project.lastVisit =
+          eventDate;
+      }
+
+      /*
+       * Location.
+       */
+
+      const eventLatitude =
+        typeof event.latitude ===
+        "number"
+          ? event.latitude
+          : null;
+
+      const eventLongitude =
+        typeof event.longitude ===
+        "number"
+          ? event.longitude
+          : null;
+
+      const gpsLocation =
+        await getResolvedLocation(
+          eventLatitude,
+          eventLongitude
+        );
+
+      const country =
+        gpsLocation?.country ||
+        event.country ||
+        "Unknown";
+
+      const city =
+        gpsLocation?.city ||
+        event.city ||
+        "Unknown";
+
+      /*
+       * Summary arrays.
+       */
+
+      if (
+        country &&
+        !project.countries.includes(
+          country
+        )
+      ) {
+        project.countries.push(
+          country
+        );
+      }
+
+      if (
+        city &&
+        city !== "Unknown" &&
+        !project.cities.includes(
+          city
+        )
+      ) {
+        project.cities.push(
+          city
+        );
+      }
+
+      if (
+        event.referrer &&
+        !project.referrers.includes(
+          event.referrer
+        )
+      ) {
+        project.referrers.push(
+          event.referrer
+        );
+      }
+
+      if (
+        event.device &&
+        !project.devices.includes(
+          event.device
+        )
+      ) {
+        project.devices.push(
+          event.device
+        );
+      }
+
+      if (
+        event.browser &&
+        !project.browsers.includes(
+          event.browser
+        )
+      ) {
+        project.browsers.push(
+          event.browser
+        );
+      }
+
+      if (
+        event.os &&
+        !project.operatingSystems.includes(
+          event.os
+        )
+      ) {
+        project.operatingSystems.push(
+          event.os
+        );
+      }
+
+      /*
+       * Visitor ID.
+       */
+
+      if (!event.visitorId) {
+        continue;
+      }
+
+      const projectVisitors =
+        projectVisitorMaps.get(
+          slug
+        );
+
+      if (!projectVisitors) {
+        continue;
+      }
+
+      const existingVisitor =
+        projectVisitors.get(
+          event.visitorId
+        );
+
+      if (!existingVisitor) {
+        projectVisitors.set(
+          event.visitorId,
+          {
+            visitorId:
+              event.visitorId,
+
+            country,
+
+            region:
+              gpsLocation?.region ||
+              event.region ||
+              "",
+
+            city,
+
+            latitude:
+              eventLatitude,
+
+            longitude:
+              eventLongitude,
+
+            locationAccuracy:
+              typeof event.locationAccuracy ===
+              "number"
+                ? event.locationAccuracy
+                : null,
+
+            referrer:
+              event.referrer || "",
+
+            device:
+              event.device ||
+              "Unknown",
+
+            browser:
+              event.browser ||
+              "Unknown",
+
+            os:
+              event.os ||
+              "Unknown",
+
+            firstVisit:
+              eventDate,
+
+            lastVisit:
+              eventDate,
+
+            visits: 1,
+          }
+        );
+
+        continue;
+      }
+
+      /*
+       * Existing project visitor.
+       */
+
+      existingVisitor.visits += 1;
+
+      if (
+        eventDate &&
+        (!existingVisitor.firstVisit ||
+          eventDate.getTime() <
+            new Date(
+              existingVisitor.firstVisit
+            ).getTime())
+      ) {
+        existingVisitor.firstVisit =
+          eventDate;
+      }
+
+      if (
+        eventDate &&
+        (!existingVisitor.lastVisit ||
+          eventDate.getTime() >
+            new Date(
+              existingVisitor.lastVisit
+            ).getTime())
+      ) {
+        existingVisitor.lastVisit =
+          eventDate;
+      }
+
+      /*
+       * GPS gets priority.
+       */
+
+      if (
+        gpsLocation?.country
+      ) {
+        existingVisitor.country =
+          gpsLocation.country;
+      } else if (
+        (!existingVisitor.country ||
+          existingVisitor.country ===
+            "Unknown") &&
+        event.country
+      ) {
+        existingVisitor.country =
+          event.country;
+      }
+
+      if (
+        gpsLocation?.region
+      ) {
+        existingVisitor.region =
+          gpsLocation.region;
+      } else if (
+        !existingVisitor.region &&
+        event.region
+      ) {
+        existingVisitor.region =
+          event.region;
+      }
+
+      if (
+        gpsLocation?.city
+      ) {
+        existingVisitor.city =
+          gpsLocation.city;
+      } else if (
+        (!existingVisitor.city ||
+          existingVisitor.city ===
+            "Unknown") &&
+        event.city
+      ) {
+        existingVisitor.city =
+          event.city;
+      }
+
+      if (
+        eventLatitude !== null &&
+        eventLongitude !== null
+      ) {
+        existingVisitor.latitude =
+          eventLatitude;
+
+        existingVisitor.longitude =
+          eventLongitude;
+
+        existingVisitor.locationAccuracy =
+          typeof event.locationAccuracy ===
+          "number"
+            ? event.locationAccuracy
+            : null;
+      }
+
+      if (
+        event.referrer &&
+        !existingVisitor.referrer
+      ) {
+        existingVisitor.referrer =
+          event.referrer;
+      }
+
+      if (
+        (!existingVisitor.device ||
+          existingVisitor.device ===
+            "Unknown") &&
+        event.device
+      ) {
+        existingVisitor.device =
+          event.device;
+      }
+
+      if (
+        (!existingVisitor.browser ||
+          existingVisitor.browser ===
+            "Unknown") &&
+        event.browser
+      ) {
+        existingVisitor.browser =
+          event.browser;
+      }
+
+      if (
+        (!existingVisitor.os ||
+          existingVisitor.os ===
+            "Unknown") &&
+        event.os
+      ) {
+        existingVisitor.os =
+          event.os;
+      }
+    }
+
+    /*
+     * =======================================================
+     * FINALIZE PROJECT DETAILS
+     * =======================================================
+     */
+
+    for (const project of PROJECTS) {
+      const detail =
+        projectDetailsMap.get(
+          project.slug
+        );
+
+      const projectVisitors =
+        projectVisitorMaps.get(
+          project.slug
+        );
+
+      if (
+        !detail ||
+        !projectVisitors
+      ) {
+        continue;
+      }
+
+      detail.uniqueVisitors =
+        projectVisitors.size;
+
+      detail.visitors =
+        Array.from(
+          projectVisitors.values()
+        ).sort((a, b) => {
+          const aTime =
+            a.lastVisit
+              ? new Date(
+                  a.lastVisit
+                ).getTime()
+              : 0;
+
+          const bTime =
+            b.lastVisit
+              ? new Date(
+                  b.lastVisit
+                ).getTime()
+              : 0;
+
+          return bTime - aTime;
+        });
+    }
+
+    const projectDetails =
+      PROJECTS.map(
+        (project) =>
+          projectDetailsMap.get(
+            project.slug
+          )!
+      );
+
+    /*
+     * =======================================================
      * STANDARD OVERVIEW PERIODS
-     * =========================================================
+     * =======================================================
      */
 
     const startOfToday =
@@ -1202,9 +1945,9 @@ export async function GET(
     );
 
     /*
-     * =========================================================
+     * =======================================================
      * OVERVIEW RESET DATE
-     * =========================================================
+     * =======================================================
      */
 
     const overviewResetDate =
@@ -1290,9 +2033,9 @@ export async function GET(
     ]);
 
     /*
-     * =========================================================
+     * =======================================================
      * RESPONSE
-     * =========================================================
+     * =======================================================
      */
 
     return NextResponse.json({
@@ -1344,8 +2087,19 @@ export async function GET(
             : null,
       },
 
+      /*
+       * Existing project summary.
+       */
+
       projects:
         projectStats,
+
+      /*
+       * NEW:
+       * Full project-specific details.
+       */
+
+      projectDetails,
 
       recentActivity,
 

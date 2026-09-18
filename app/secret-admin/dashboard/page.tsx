@@ -1,7 +1,7 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import ExcludeMyVisits from "@/components/analytics/ExcludeMyVisits";
 import ClearAnalytics from "@/components/analytics/ClearAnalytics";
 
@@ -50,7 +50,10 @@ interface Visitor {
   lastVisit: string;
   pages?: string[];
   referrer?: string;
-  projectClicks?: number;
+
+  // Current stats API returns unique project names
+  projectClicks?: string[];
+
   latitude?: number | null;
   longitude?: number | null;
   locationAccuracy?: number | null;
@@ -216,6 +219,7 @@ export default function AnalyticsDashboard() {
       event.target.value;
 
     setPeriod(selectedPeriod);
+
     void loadAnalytics(
       selectedPeriod
     );
@@ -263,6 +267,7 @@ export default function AnalyticsDashboard() {
   return (
     <main className="min-h-screen bg-[#030308] px-6 py-10 text-white md:px-10 lg:px-14">
       <div className="mx-auto max-w-7xl">
+
         {/* Header */}
         <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
           <div>
@@ -280,6 +285,7 @@ export default function AnalyticsDashboard() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+
             {/* Time Filter */}
             <div className="relative">
               <select
@@ -446,6 +452,7 @@ export default function AnalyticsDashboard() {
                     }
                     className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl transition hover:border-[#E7B84B]/30 hover:bg-white/[0.045]"
                   >
+
                     {/* Visitor Header */}
                     <div className="flex items-start justify-between gap-4">
                       <div>
@@ -631,14 +638,17 @@ export default function AnalyticsDashboard() {
 
                       <div className="mt-2">
                         {visitor.projectClicks &&
-                        visitor.projectClicks >
+                        visitor.projectClicks.length >
                           0 ? (
                           <span className="rounded-full border border-[#E7B84B]/20 bg-[#E7B84B]/10 px-3 py-1 text-xs text-[#F5D98B]">
                             {
-                              visitor.projectClicks
+                              visitor
+                                .projectClicks
+                                .length
                             }{" "}
                             project{" "}
-                            {visitor.projectClicks ===
+                            {visitor.projectClicks
+                              .length ===
                             1
                               ? "click"
                               : "clicks"}
@@ -682,7 +692,7 @@ export default function AnalyticsDashboard() {
                     key={
                       project.projectSlug
                     }
-                    className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-[#E7B84B]/30"
+                    className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-[#E7B84B]/40 hover:bg-white/[0.045]"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
@@ -707,26 +717,36 @@ export default function AnalyticsDashboard() {
                       </span>
                     </div>
 
-                    <div className="mt-6 flex gap-8">
-                      <div>
-                        <p className="text-2xl font-semibold">
-                          {project.clicks.toLocaleString()}
-                        </p>
+                    <div className="mt-6 flex items-end justify-between gap-4">
+                      <div className="flex gap-8">
+                        <div>
+                          <p className="text-2xl font-semibold">
+                            {project.clicks.toLocaleString()}
+                          </p>
 
-                        <p className="mt-1 text-xs text-white/40">
-                          Total Clicks
-                        </p>
+                          <p className="mt-1 text-xs text-white/40">
+                            Total Clicks
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-2xl font-semibold">
+                            {project.uniqueVisitors.toLocaleString()}
+                          </p>
+
+                          <p className="mt-1 text-xs text-white/40">
+                            Unique Visitors
+                          </p>
+                        </div>
                       </div>
 
-                      <div>
-                        <p className="text-2xl font-semibold">
-                          {project.uniqueVisitors.toLocaleString()}
-                        </p>
-
-                        <p className="mt-1 text-xs text-white/40">
-                          Unique Visitors
-                        </p>
-                      </div>
+                      {/* Project Analytics Page */}
+                      <Link
+                        href={`/secret-admin/dashboard/projects/${project.projectSlug}`}
+                        className="shrink-0 rounded-xl border border-[#E7B84B]/30 bg-[#E7B84B]/10 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-[#F5D98B] transition hover:border-[#E7B84B]/70 hover:bg-[#E7B84B]/20 hover:text-white"
+                      >
+                        View Page
+                      </Link>
                     </div>
                   </div>
                 )
