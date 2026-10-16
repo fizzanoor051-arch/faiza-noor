@@ -28,26 +28,26 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
-  title: {
-    default:
-      "Faiza Noor | Full-Stack Web Engineer in Sialkot, Pakistan",
-    template: "%s | Faiza Noor",
-  },
+title: {
+  default:
+    "Faiza Noor M. Shabbir Hussain | Full-Stack Web Engineer in Sialkot",
+  template: "%s | Faiza Noor M. Shabbir Hussain",
+},
 
   description:
     "Explore Faiza Noor's official portfolio. A full-stack web engineer based in Sialkot District, Punjab, Pakistan, building modern web applications, AI-powered experiences, and scalable digital products with React, Next.js, TypeScript, Node.js, and MongoDB.",
 
   applicationName: "Faiza Noor Portfolio",
 
-  authors: [
-    {
-      name: "Faiza Noor",
-      url: SITE_URL,
-    },
-  ],
+authors: [
+  {
+    name: "Faiza Noor M. Shabbir Hussain",
+    url: SITE_URL,
+  },
+],
 
-  creator: "Faiza Noor",
-  publisher: "Faiza Noor",
+creator: "Faiza Noor M. Shabbir Hussain",
+publisher: "Faiza Noor M. Shabbir Hussain",
 
   keywords: [
     "Faiza Noor",
