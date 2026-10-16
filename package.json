@@ -9,22 +9,25 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.8.2",
     "chess.js": "^1.4.0",
     "clsx": "^2.1.1",
     "framer-motion": "^13.2.0",
-    "lucide-react": "^1.41.0",
+    "lucide-react": "^1.57.0",
     "mongodb": "^7.6.0",
     "next": "16.3.4",
     "openai": "^7.10.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "three": "^0.186.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.186.0",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
     "tailwindcss": "^4",

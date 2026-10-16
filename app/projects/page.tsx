@@ -1301,38 +1301,13 @@ export default function ProjectsPage() {
                 technologies and a strong focus on detail.
               </p>
 
-              <span className="projects-scroll-label">
-                SCROLL TO EXPLORE ↓
-              </span>
+             
             </div>
           </div>
 
-          <div className="projects-hero-bottom">
-            <div>
-              <strong>
-                {String(projects.length).padStart(2, "0")}
-              </strong>
-              <span>SELECTED BUILDS</span>
-            </div>
-
-            <div>
-              <strong>2026</strong>
-              <span>CURRENT COLLECTION</span>
-            </div>
-
-            <div>
-              <strong>∞</strong>
-              <span>MORE IN PROGRESS</span>
-            </div>
-          </div>
+      
         </div>
       </section>
-
-
-             
-
-            
-
       {/* =====================================================
           PROJECT ARCHIVE
           ===================================================== */}
@@ -2300,140 +2275,6 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* =====================================================
-          PROCESS
-          ===================================================== */}
-
-      <section className="projects-process">
-        <div className="projects-container">
-          <div className="projects-section-heading">
-            <div>
-              <div className="projects-eyebrow">
-                <span>06</span>
-                HOW I BUILD
-              </div>
-
-              <h2>
-                FROM
-                <br />
-                <em>IDEA → REALITY.</em>
-              </h2>
-            </div>
-          </div>
-
-          <div className="projects-process-grid">
-            <div className="projects-process-item">
-              <span>01</span>
-              <Code2 size={22} />
-
-              <h3>DISCOVER</h3>
-
-              <p>
-                Understand the idea, audience, goals and
-                technical requirements before writing the
-                first line of code.
-              </p>
-            </div>
-
-            <div className="projects-process-item">
-              <span>02</span>
-              <Layers3 size={22} />
-
-              <h3>STRUCTURE</h3>
-
-              <p>
-                Plan the architecture, components, pages and
-                interactions so the product has a solid
-                foundation.
-              </p>
-            </div>
-
-            <div className="projects-process-item">
-              <span>03</span>
-              <ExternalLink size={22} />
-
-              <h3>BUILD</h3>
-
-              <p>
-                Develop responsive interfaces and
-                functionality using modern web technologies.
-              </p>
-            </div>
-
-            <div className="projects-process-item">
-              <span>04</span>
-              <ArrowUpRight size={22} />
-
-              <h3>REFINE</h3>
-
-              <p>
-                Test, optimize and polish the experience
-                across devices before the final delivery.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================
-          CTA
-          ===================================================== */}
-
-      <section className="projects-cta">
-        <div className="projects-cta-glow" />
-
-        <div className="projects-container">
-          <div className="projects-eyebrow">
-            <span>07</span>
-            NEXT PROJECT
-          </div>
-
-          <h2>
-            YOUR IDEA
-            <br />
-            <em>COULD BE NEXT.</em>
-          </h2>
-
-          <p>
-            Have a website, application or digital product in
-            mind? Let's turn the idea into something people
-            remember.
-          </p>
-
-          <div className="projects-cta-actions">
-           <Link
-  href="/contact"
-  className="group relative inline-flex min-h-[46px] items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.02] hover:border-pink-300/70 hover:shadow-[0_0_32px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40"
->
-  {/* Liquid pink fill */}
-  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
-
-  {/* Liquid glow */}
-  <span className="absolute -bottom-8 left-1/2 h-16 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-lg opacity-0 transition-all duration-700 group-hover:bottom-[-4px] group-hover:opacity-100" />
-
-  {/* Content */}
-  <span className="relative z-10 flex items-center">
-    <span className="font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
-      START A PROJECT
-    </span>
-
-    <ArrowUpRight
-      size={15}
-      className="ml-2 text-white transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-  </span>
-</Link>
-
-            <Link
-              href="/services"
-              className="projects-secondary-button"
-            >
-              VIEW SERVICES
-              <ArrowUpRight size={17} />
-            </Link>
-          </div>
-        </div>
-      </section>
 
       {/* =====================================================
           PROJECT DETAILS MODAL — WEB

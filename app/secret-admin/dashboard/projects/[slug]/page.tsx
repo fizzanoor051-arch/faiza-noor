@@ -28,30 +28,12 @@ interface ProjectDetail {
   totalVisits: number;
   uniqueVisitors: number;
   lastVisit?: string | null;
-  countries: Array<{
-    name: string;
-    visits: number;
-  }>;
-  cities: Array<{
-    name: string;
-    visits: number;
-  }>;
-  referrers: Array<{
-    referrer: string;
-    visits: number;
-  }>;
-  devices: Array<{
-    device: string;
-    visits: number;
-  }>;
-  browsers: Array<{
-    browser: string;
-    visits: number;
-  }>;
-  operatingSystems: Array<{
-    os: string;
-    visits: number;
-  }>;
+  countries: Array<{ name: string; visits: number }>;
+  cities: Array<{ name: string; visits: number }>;
+  referrers: Array<{ referrer: string; visits: number }>;
+  devices: Array<{ device: string; visits: number }>;
+  browsers: Array<{ browser: string; visits: number }>;
+  operatingSystems: Array<{ os: string; visits: number }>;
   visitors: ProjectVisitor[];
 }
 
@@ -68,6 +50,9 @@ interface AnalyticsResponse {
   projects?: ProjectStat[];
   message?: string;
 }
+
+const HIDDEN_PROJECT_VISITORS_KEY =
+  "faiza_hidden_project_analytics_visitors";
 
 const timeFilters = [
   { value: "all", label: "All Time" },
@@ -92,63 +77,45 @@ const timeFilters = [
 ];
 
 const projectUrls: Record<string, string> = {
-  "nexaflow-ai":
-    "https://nexaflow-ai-by-faiza.vercel.app/",
-  luxora:
-    "https://luxora-zuq4.vercel.app/",
-  shopsphere:
-    "https://shopsphere-ecommerce-beta.vercel.app/",
-  medicare:
-    "https://classy-vacherin-7a04fc.netlify.app/",
+  "nexaflow-ai": "https://nexaflow-ai-by-faiza.vercel.app/",
+  luxora: "https://luxora-zuq4.vercel.app/",
+  shopsphere: "https://shopsphere-ecommerce-beta.vercel.app/",
+  medicare: "https://classy-vacherin-7a04fc.netlify.app/",
 };
 
 function formatDate(value?: string | null) {
-  if (!value) {
-    return "No visits yet";
-  }
+  if (!value) return "No visits yet";
 
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return "Unknown";
-  }
+  if (Number.isNaN(date.getTime())) return "Unknown";
 
   return date.toLocaleString();
 }
 
 function formatShortDate(value?: string | null) {
-  if (!value) {
-    return "—";
-  }
+  if (!value) return "—";
 
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return "—";
-  }
+  if (Number.isNaN(date.getTime())) return "—";
 
   return date.toLocaleDateString();
 }
 
 function shortVisitorId(value: string) {
-  if (!value) {
-    return "Unknown";
-  }
+  if (!value) return "Unknown";
 
-  if (value.length <= 18) {
-    return value;
-  }
+  if (value.length <= 18) return value;
 
   return `${value.slice(0, 8)}...${value.slice(-6)}`;
 }
 
-function safeArray<T>(value: T[] | undefined) {
+function safeArray<T>(value: T[] | undefined): T[] {
   return Array.isArray(value) ? value : [];
 }
 
-function createEmptyProject(
-  project: ProjectStat
-): ProjectDetail {
+function createEmptyProject(project: ProjectStat): ProjectDetail {
   return {
     projectSlug: project.projectSlug,
     projectName: project.projectName,
@@ -185,9 +152,7 @@ function StatCard({
       </p>
 
       {detail && (
-        <p className="mt-2 text-xs text-white/35">
-          {detail}
-        </p>
+        <p className="mt-2 text-xs text-white/35">{detail}</p>
       )}
 
       <div className="mt-5 h-px w-full bg-white/5 transition group-hover:bg-[#E7B84B]/20" />
@@ -201,16 +166,10 @@ function DistributionCard({
   valueLabel,
 }: {
   title: string;
-  items: Array<{
-    name: string;
-    visits: number;
-  }>;
+  items: Array<{ name: string; visits: number }>;
   valueLabel?: string;
 }) {
-  const total = items.reduce(
-    (sum, item) => sum + item.visits,
-    0
-  );
+  const total = items.reduce((sum, item) => sum + item.visits, 0);
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl">
@@ -219,9 +178,7 @@ function DistributionCard({
           Breakdown
         </p>
 
-        <h3 className="mt-2 text-lg font-semibold">
-          {title}
-        </h3>
+        <h3 className="mt-2 text-lg font-semibold">{title}</h3>
       </div>
 
       {items.length === 0 ? (
@@ -232,11 +189,7 @@ function DistributionCard({
         <div className="space-y-4">
           {items.slice(0, 8).map((item, index) => {
             const percentage =
-              total > 0
-                ? Math.round(
-                    (item.visits / total) * 100
-                  )
-                : 0;
+              total > 0 ? Math.round((item.visits / total) * 100) : 0;
 
             return (
               <div key={`${item.name}-${index}`}>
@@ -246,8 +199,7 @@ function DistributionCard({
                   </p>
 
                   <span className="shrink-0 text-xs text-[#F5D98B]">
-                    {item.visits}{" "}
-                    {valueLabel || "visits"}
+                    {item.visits} {valueLabel || "visits"}
                   </span>
                 </div>
 
@@ -278,163 +230,154 @@ function DistributionCard({
 export default function ProjectAnalyticsPage() {
   const params = useParams();
 
-  const slug =
-    typeof params.slug === "string"
-      ? params.slug
-      : "";
+  const slug = typeof params.slug === "string" ? params.slug : "";
 
-  const [period, setPeriod] =
-    useState("all");
+  const [period, setPeriod] = useState("all");
+  const [project, setProject] = useState<ProjectDetail | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const [project, setProject] =
-    useState<ProjectDetail | null>(null);
+  const [hiddenVisitorIds, setHiddenVisitorIds] = useState<string[]>([]);
+  const [hiddenVisitorsLoaded, setHiddenVisitorsLoaded] = useState(false);
 
-  const [loading, setLoading] =
-    useState(true);
+  // Load previously hidden visitor cards from this browser.
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(
+        HIDDEN_PROJECT_VISITORS_KEY
+      );
 
-  const [error, setError] =
-    useState("");
+      if (stored) {
+        const parsed: unknown = JSON.parse(stored);
 
-  const loadProjectAnalytics =
-    useCallback(async () => {
-      if (!slug) {
-        setError("Project slug is missing.");
-        setLoading(false);
+        if (
+          Array.isArray(parsed) &&
+          parsed.every((item) => typeof item === "string")
+        ) {
+          setHiddenVisitorIds(parsed);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load hidden project visitors:", error);
+    } finally {
+      setHiddenVisitorsLoaded(true);
+    }
+  }, []);
+
+  // Remove the card immediately without a confirmation popup.
+  const hideVisitor = useCallback((visitorKey: string) => {
+    setHiddenVisitorIds((current) => {
+      if (current.includes(visitorKey)) return current;
+
+      const updated = [...current, visitorKey];
+
+      try {
+        localStorage.setItem(
+          HIDDEN_PROJECT_VISITORS_KEY,
+          JSON.stringify(updated)
+        );
+      } catch (error) {
+        console.error("Failed to save hidden project visitors:", error);
+      }
+
+      return updated;
+    });
+  }, []);
+
+  const loadProjectAnalytics = useCallback(async () => {
+    if (!slug) {
+      setError("Project slug is missing.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+
+      const response = await fetch(
+        `/api/analyticsa/stats?period=${encodeURIComponent(period)}`,
+        {
+          method: "GET",
+          cache: "no-store",
+          credentials: "include",
+        }
+      );
+
+      const result = (await response.json()) as AnalyticsResponse;
+
+      if (!response.ok || !result.success) {
+        if (response.status === 401) {
+          window.location.href = "/secret-admin";
+          return;
+        }
+
+        throw new Error(
+          result.message || "Failed to load project analytics."
+        );
+      }
+
+      const details = Array.isArray(result.projectDetails)
+        ? result.projectDetails
+        : [];
+
+      const selectedProject = details.find(
+        (item) => item.projectSlug === slug
+      );
+
+      if (selectedProject) {
+        setProject(selectedProject);
         return;
       }
 
-      try {
-        setLoading(true);
-        setError("");
+      const projectStats = Array.isArray(result.projects)
+        ? result.projects
+        : [];
 
-        const response =
-          await fetch(
-            `/api/analyticsa/stats?period=${encodeURIComponent(
-              period
-            )}`,
-            {
-              method: "GET",
-              cache: "no-store",
-              credentials: "include",
-            }
-          );
+      const projectFromStats = projectStats.find(
+        (item) => item.projectSlug === slug
+      );
 
-        const result =
-          (await response.json()) as AnalyticsResponse;
-
-        if (
-          !response.ok ||
-          !result.success
-        ) {
-          if (response.status === 401) {
-            window.location.href =
-              "/secret-admin";
-            return;
-          }
-
-          throw new Error(
-            result.message ||
-              "Failed to load project analytics."
-          );
-        }
-
-        const details =
-          Array.isArray(
-            result.projectDetails
-          )
-            ? result.projectDetails
-            : [];
-
-        /*
-         * First use the complete project details.
-         */
-        const selectedProject =
-          details.find(
-            (item) =>
-              item.projectSlug === slug
-          );
-
-        if (selectedProject) {
-          setProject(selectedProject);
-          return;
-        }
-
-        /*
-         * If a project exists in the dashboard
-         * project list but does not yet have a
-         * projectDetails object, create an empty
-         * detail view from its real click stats.
-         *
-         * This allows old/existing project slugs
-         * such as hospital-live and shopsphere-live
-         * to open their analytics page instead of
-         * showing "Project not found".
-         */
-        const projectStats =
-          Array.isArray(result.projects)
-            ? result.projects
-            : [];
-
-        const projectFromStats =
-          projectStats.find(
-            (item) =>
-              item.projectSlug === slug
-          );
-
-        if (projectFromStats) {
-          setProject(
-            createEmptyProject(
-              projectFromStats
-            )
-          );
-          return;
-        }
-
-        setProject(null);
-        setError(
-          "Project not found in analytics."
-        );
-      } catch (error) {
-        console.error(
-          "Project analytics error:",
-          error
-        );
-
-        setProject(null);
-
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Failed to load project analytics."
-        );
-      } finally {
-        setLoading(false);
+      if (projectFromStats) {
+        setProject(createEmptyProject(projectFromStats));
+        return;
       }
-    }, [period, slug]);
+
+      setProject(null);
+      setError("Project not found in analytics.");
+    } catch (error) {
+      console.error("Project analytics error:", error);
+
+      setProject(null);
+
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load project analytics."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [period, slug]);
 
   useEffect(() => {
     void loadProjectAnalytics();
   }, [loadProjectAnalytics]);
 
-  const selectedPeriodLabel =
-    useMemo(() => {
-      return (
-        timeFilters.find(
-          (item) =>
-            item.value === period
-        )?.label || "All Time"
-      );
-    }, [period]);
+  const selectedPeriodLabel = useMemo(
+    () =>
+      timeFilters.find((item) => item.value === period)?.label ||
+      "All Time",
+    [period]
+  );
 
-  const projectUrl =
-    projectUrls[slug] || "#";
+  const projectUrl = projectUrls[slug] || "#";
 
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-[#030308] px-6 text-white">
         <div className="text-center">
           <div className="mx-auto mb-5 h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-[#E7B84B]" />
-
           <p className="text-sm text-white/50">
             Loading project analytics...
           </p>
@@ -456,8 +399,7 @@ export default function ProjectAnalyticsPage() {
           </h1>
 
           <p className="mt-3 text-sm text-white/40">
-            {error ||
-              "No project analytics were found."}
+            {error || "No project analytics were found."}
           </p>
 
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
@@ -469,9 +411,7 @@ export default function ProjectAnalyticsPage() {
             </Link>
 
             <button
-              onClick={() =>
-                void loadProjectAnalytics()
-              }
+              onClick={() => void loadProjectAnalytics()}
               className="rounded-xl bg-[#E7B84B] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#F5D98B]"
             >
               Try Again
@@ -482,44 +422,42 @@ export default function ProjectAnalyticsPage() {
     );
   }
 
-  const visitors =
-    safeArray(project.visitors);
+  const allVisitors = safeArray(project.visitors);
 
-  const countries =
-    safeArray(project.countries);
+  // Hide cards only; leave server-provided analytics totals untouched.
+  const visitors = hiddenVisitorsLoaded
+    ? allVisitors.filter(
+        (visitor) =>
+          !hiddenVisitorIds.includes(
+            `${slug}:${visitor.visitorId}`
+          )
+      )
+    : allVisitors;
 
-  const cities =
-    safeArray(project.cities);
+  const countries = safeArray(project.countries);
+  const cities = safeArray(project.cities);
+  const referrers = safeArray(project.referrers);
 
-  const referrers =
-    safeArray(project.referrers);
-
-  const devices = safeArray(
-    project.devices
-  ).map((item) => ({
+  const devices = safeArray(project.devices).map((item) => ({
     name: item.device || "Unknown",
     visits: item.visits,
   }));
 
-  const browsers = safeArray(
-    project.browsers
-  ).map((item) => ({
+  const browsers = safeArray(project.browsers).map((item) => ({
     name: item.browser || "Unknown",
     visits: item.visits,
   }));
 
-  const operatingSystems =
-    safeArray(
-      project.operatingSystems
-    ).map((item) => ({
+  const operatingSystems = safeArray(project.operatingSystems).map(
+    (item) => ({
       name: item.os || "Unknown",
       visits: item.visits,
-    }));
+    })
+  );
 
   return (
     <main className="min-h-screen bg-[#030308] px-5 py-8 text-white md:px-8 lg:px-12">
       <div className="mx-auto max-w-7xl">
-
         {/* Header */}
         <header className="mb-8">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -546,8 +484,8 @@ export default function ProjectAnalyticsPage() {
               </div>
 
               <p className="mt-2 max-w-2xl text-sm text-white/45">
-                Detailed visitor intelligence and
-                activity for this project only.
+                Detailed visitor intelligence and activity for this
+                project only.
               </p>
             </div>
 
@@ -555,28 +493,18 @@ export default function ProjectAnalyticsPage() {
               <div className="relative">
                 <select
                   value={period}
-                  onChange={(event) =>
-                    setPeriod(
-                      event.target.value
-                    )
-                  }
+                  onChange={(event) => setPeriod(event.target.value)}
                   className="w-full appearance-none rounded-xl border border-[#E7B84B]/20 bg-[#11130f] px-4 py-2.5 pr-10 text-sm text-white/80 outline-none transition hover:border-[#E7B84B]/40 focus:border-[#E7B84B]/60 sm:w-auto"
                 >
-                  {timeFilters.map(
-                    (filter) => (
-                      <option
-                        key={
-                          filter.value
-                        }
-                        value={
-                          filter.value
-                        }
-                        className="bg-[#11130f] text-white"
-                      >
-                        {filter.label}
-                      </option>
-                    )
-                  )}
+                  {timeFilters.map((filter) => (
+                    <option
+                      key={filter.value}
+                      value={filter.value}
+                      className="bg-[#11130f] text-white"
+                    >
+                      {filter.label}
+                    </option>
+                  ))}
                 </select>
 
                 <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#E7B84B]">
@@ -596,9 +524,7 @@ export default function ProjectAnalyticsPage() {
               )}
 
               <button
-                onClick={() =>
-                  void loadProjectAnalytics()
-                }
+                onClick={() => void loadProjectAnalytics()}
                 className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white/65 transition hover:border-[#E7B84B]/40 hover:text-white"
               >
                 Refresh
@@ -608,7 +534,6 @@ export default function ProjectAnalyticsPage() {
 
           <div className="mt-6 flex items-center gap-3">
             <span className="h-2 w-2 rounded-full bg-[#E7B84B]" />
-
             <p className="text-sm text-white/40">
               Showing{" "}
               <span className="text-[#F5D98B]">
@@ -618,7 +543,7 @@ export default function ProjectAnalyticsPage() {
           </div>
         </header>
 
-        {/* Overview */}
+        {/* Overview: values remain based on server analytics */}
         <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard
             label="Total Visits"
@@ -640,14 +565,10 @@ export default function ProjectAnalyticsPage() {
 
           <StatCard
             label="Last Visit"
-            value={formatShortDate(
-              project.lastVisit
-            )}
+            value={formatShortDate(project.lastVisit)}
             detail={
               project.lastVisit
-                ? formatDate(
-                    project.lastVisit
-                  )
+                ? formatDate(project.lastVisit)
                 : "No visit recorded"
             }
           />
@@ -655,29 +576,14 @@ export default function ProjectAnalyticsPage() {
 
         {/* Location + Traffic */}
         <section className="mt-8 grid gap-5 lg:grid-cols-2">
-          <DistributionCard
-            title="Countries"
-            items={countries}
-          />
-
-          <DistributionCard
-            title="Cities"
-            items={cities}
-          />
+          <DistributionCard title="Countries" items={countries} />
+          <DistributionCard title="Cities" items={cities} />
         </section>
 
         {/* Technology */}
         <section className="mt-5 grid gap-5 lg:grid-cols-3">
-          <DistributionCard
-            title="Devices"
-            items={devices}
-          />
-
-          <DistributionCard
-            title="Browsers"
-            items={browsers}
-          />
-
+          <DistributionCard title="Devices" items={devices} />
+          <DistributionCard title="Browsers" items={browsers} />
           <DistributionCard
             title="Operating Systems"
             items={operatingSystems}
@@ -691,13 +597,10 @@ export default function ProjectAnalyticsPage() {
               Traffic Sources
             </p>
 
-            <h2 className="mt-2 text-xl font-semibold">
-              Referrers
-            </h2>
+            <h2 className="mt-2 text-xl font-semibold">Referrers</h2>
 
             <p className="mt-2 text-sm text-white/40">
-              Where visitors came from before
-              reaching this project.
+              Where visitors came from before reaching this project.
             </p>
           </div>
 
@@ -708,23 +611,20 @@ export default function ProjectAnalyticsPage() {
               </div>
             ) : (
               <div className="divide-y divide-white/5">
-                {referrers.map(
-                  (item, index) => (
-                    <div
-                      key={`${item.referrer}-${index}`}
-                      className="flex flex-col gap-2 p-5 transition hover:bg-white/[0.025] sm:flex-row sm:items-center sm:justify-between"
-                    >
-                      <p className="truncate text-sm text-white/70">
-                        {item.referrer ||
-                          "Direct visit"}
-                      </p>
+                {referrers.map((item, index) => (
+                  <div
+                    key={`${item.referrer}-${index}`}
+                    className="flex flex-col gap-2 p-5 transition hover:bg-white/[0.025] sm:flex-row sm:items-center sm:justify-between"
+                  >
+                    <p className="truncate text-sm text-white/70">
+                      {item.referrer || "Direct visit"}
+                    </p>
 
-                      <span className="shrink-0 rounded-full border border-white/10 px-3 py-1 text-xs text-white/50">
-                        {item.visits} visits
-                      </span>
-                    </div>
-                  )
-                )}
+                    <span className="shrink-0 rounded-full border border-white/10 px-3 py-1 text-xs text-white/50">
+                      {item.visits} visits
+                    </span>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -743,15 +643,17 @@ export default function ProjectAnalyticsPage() {
               </h2>
 
               <p className="mt-2 text-sm text-white/40">
-                Detailed visitors recorded for{" "}
-                {project.projectName}.
+                Detailed visitors recorded for {project.projectName}.
+              </p>
+
+              <p className="mt-2 text-xs text-white/30">
+                Removing a card hides it from this browser. Saved analytics
+                records and summary totals remain unchanged.
               </p>
             </div>
 
             <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2">
-              <span className="text-xs text-white/40">
-                Visitors
-              </span>
+              <span className="text-xs text-white/40">Visible Visitors</span>
 
               <span className="ml-2 text-sm font-semibold text-[#F5D98B]">
                 {visitors.length}
@@ -762,201 +664,169 @@ export default function ProjectAnalyticsPage() {
           {visitors.length === 0 ? (
             <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-10 text-center">
               <p className="text-sm text-white/45">
-                No project visitors found for
-                this period.
+                No visible project visitors found for this period.
               </p>
 
               <p className="mt-2 text-xs text-white/25">
-                Once real visitors access this
-                project, their analytics will
-                appear here.
+                New recorded visitors will appear here. Previously removed
+                cards remain hidden in this browser.
               </p>
             </div>
           ) : (
             <div className="grid gap-5 lg:grid-cols-2">
-              {visitors.map(
-                (visitor, index) => (
-                  <article
-                    key={
-                      visitor.visitorId
-                    }
-                    className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl transition hover:border-[#E7B84B]/30 hover:bg-white/[0.045]"
-                  >
-                    {/* Visitor Header */}
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.2em] text-[#E7B84B]">
-                          Visitor #
-                          {index + 1}
-                        </p>
+              {visitors.map((visitor, index) => (
+                <article
+                  key={visitor.visitorId}
+                  className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl transition hover:border-[#E7B84B]/30 hover:bg-white/[0.045]"
+                >
+                  {/* Visitor Header */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.2em] text-[#E7B84B]">
+                        Visitor #{index + 1}
+                      </p>
 
-                        <p
-                          title={
-                            visitor.visitorId
-                          }
-                          className="mt-2 max-w-[240px] truncate font-mono text-xs text-white/30"
-                        >
-                          {
-                            shortVisitorId(
-                              visitor.visitorId
-                            )
-                          }
-                        </p>
-                      </div>
+                      <p
+                        title={visitor.visitorId}
+                        className="mt-2 max-w-[240px] truncate font-mono text-xs text-white/30"
+                      >
+                        {shortVisitorId(visitor.visitorId)}
+                      </p>
+                    </div>
 
+                    <div className="flex shrink-0 items-center gap-2">
                       <span className="rounded-full border border-emerald-400/20 bg-emerald-400/5 px-3 py-1 text-xs text-emerald-300">
                         Tracked
                       </span>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          hideVisitor(`${slug}:${visitor.visitorId}`)
+                        }
+                        aria-label={`Remove visitor ${shortVisitorId(
+                          visitor.visitorId
+                        )} from this dashboard`}
+                        title="Remove visitor card"
+                        className="rounded-lg border border-red-400/20 bg-red-400/[0.05] px-3 py-2 text-xs font-medium text-red-300 transition hover:border-red-400/50 hover:bg-red-400/10 hover:text-red-200 active:scale-95"
+                      >
+                        Remove
+                      </button>
                     </div>
+                  </div>
 
-                    {/* Location */}
-                    <div className="mt-6 rounded-xl border border-white/5 bg-black/20 p-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="text-xs uppercase tracking-wider text-white/30">
-                          Location
-                        </p>
-
-                        {typeof visitor.visits ===
-                          "number" && (
-                          <span className="rounded-full border border-[#E7B84B]/20 bg-[#E7B84B]/10 px-2.5 py-1 text-[10px] text-[#F5D98B]">
-                            {visitor.visits}{" "}
-                            {visitor.visits ===
-                            1
-                              ? "visit"
-                              : "visits"}
-                          </span>
-                        )}
-                      </div>
-
-                      <p className="mt-2 text-sm font-medium text-white/80">
-                        {visitor.country ||
-                          "Unknown"}
-
-                        {visitor.city &&
-                        visitor.city !==
-                          "Unknown"
-                          ? ` · ${visitor.city}`
-                          : ""}
+                  {/* Location */}
+                  <div className="mt-6 rounded-xl border border-white/5 bg-black/20 p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-xs uppercase tracking-wider text-white/30">
+                        Location
                       </p>
 
-                      {visitor.region && (
-                        <p className="mt-1 text-xs text-white/35">
-                          {
-                            visitor.region
-                          }
-                        </p>
+                      {typeof visitor.visits === "number" && (
+                        <span className="rounded-full border border-[#E7B84B]/20 bg-[#E7B84B]/10 px-2.5 py-1 text-[10px] text-[#F5D98B]">
+                          {visitor.visits}{" "}
+                          {visitor.visits === 1 ? "visit" : "visits"}
+                        </span>
                       )}
+                    </div>
 
-                      {typeof visitor.latitude ===
-                        "number" &&
-                        typeof visitor.longitude ===
-                          "number" && (
-                          <div className="mt-3 rounded-lg border border-white/5 bg-white/[0.02] p-3">
-                            <p className="text-[10px] uppercase tracking-wider text-white/25">
-                              GPS Coordinates
+                    <p className="mt-2 text-sm font-medium text-white/80">
+                      {visitor.country || "Unknown"}
+                      {visitor.city && visitor.city !== "Unknown"
+                        ? ` · ${visitor.city}`
+                        : ""}
+                    </p>
+
+                    {visitor.region && (
+                      <p className="mt-1 text-xs text-white/35">
+                        {visitor.region}
+                      </p>
+                    )}
+
+                    {typeof visitor.latitude === "number" &&
+                      typeof visitor.longitude === "number" && (
+                        <div className="mt-3 rounded-lg border border-white/5 bg-white/[0.02] p-3">
+                          <p className="text-[10px] uppercase tracking-wider text-white/25">
+                            GPS Coordinates
+                          </p>
+
+                          <p className="mt-1 font-mono text-xs text-white/55">
+                            {visitor.latitude.toFixed(5)},{" "}
+                            {visitor.longitude.toFixed(5)}
+                          </p>
+
+                          {typeof visitor.locationAccuracy === "number" && (
+                            <p className="mt-1 text-[10px] text-white/25">
+                              Accuracy ±
+                              {Math.round(visitor.locationAccuracy)}m
                             </p>
-
-                            <p className="mt-1 font-mono text-xs text-white/55">
-                              {visitor.latitude.toFixed(
-                                5
-                              )}
-                              ,{" "}
-                              {visitor.longitude.toFixed(
-                                5
-                              )}
-                            </p>
-
-                            {typeof visitor.locationAccuracy ===
-                              "number" && (
-                              <p className="mt-1 text-[10px] text-white/25">
-                                Accuracy ±
-                                {Math.round(
-                                  visitor.locationAccuracy
-                                )}
-                                m
-                              </p>
-                            )}
-                          </div>
-                        )}
-                    </div>
-
-                    {/* Device Information */}
-                    <div className="mt-4 grid grid-cols-3 gap-3">
-                      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
-                        <p className="text-[10px] uppercase tracking-wider text-white/30">
-                          Device
-                        </p>
-
-                        <p className="mt-2 truncate text-sm text-white/75">
-                          {visitor.device ||
-                            "Unknown"}
-                        </p>
-                      </div>
-
-                      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
-                        <p className="text-[10px] uppercase tracking-wider text-white/30">
-                          Browser
-                        </p>
-
-                        <p className="mt-2 truncate text-sm text-white/75">
-                          {visitor.browser ||
-                            "Unknown"}
-                        </p>
-                      </div>
-
-                      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
-                        <p className="text-[10px] uppercase tracking-wider text-white/30">
-                          OS
-                        </p>
-
-                        <p className="mt-2 truncate text-sm text-white/75">
-                          {visitor.os ||
-                            "Unknown"}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Visit Times */}
-                    <div className="mt-4 grid grid-cols-2 gap-3">
-                      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
-                        <p className="text-[10px] uppercase tracking-wider text-white/30">
-                          First Visit
-                        </p>
-
-                        <p className="mt-2 text-xs text-white/65">
-                          {formatDate(
-                            visitor.firstVisit
                           )}
-                        </p>
-                      </div>
+                        </div>
+                      )}
+                  </div>
 
-                      <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
-                        <p className="text-[10px] uppercase tracking-wider text-white/30">
-                          Last Visit
-                        </p>
-
-                        <p className="mt-2 text-xs text-white/65">
-                          {formatDate(
-                            visitor.lastVisit
-                          )}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Referrer */}
-                    <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-4">
+                  {/* Device Information */}
+                  <div className="mt-4 grid grid-cols-3 gap-3">
+                    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
                       <p className="text-[10px] uppercase tracking-wider text-white/30">
-                        Referrer
+                        Device
                       </p>
-
-                      <p className="mt-2 truncate text-sm text-white/60">
-                        {visitor.referrer ||
-                          "Direct visit"}
+                      <p className="mt-2 truncate text-sm text-white/75">
+                        {visitor.device || "Unknown"}
                       </p>
                     </div>
-                  </article>
-                )
-              )}
+
+                    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
+                      <p className="text-[10px] uppercase tracking-wider text-white/30">
+                        Browser
+                      </p>
+                      <p className="mt-2 truncate text-sm text-white/75">
+                        {visitor.browser || "Unknown"}
+                      </p>
+                    </div>
+
+                    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-3">
+                      <p className="text-[10px] uppercase tracking-wider text-white/30">
+                        OS
+                      </p>
+                      <p className="mt-2 truncate text-sm text-white/75">
+                        {visitor.os || "Unknown"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Visit Times */}
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
+                      <p className="text-[10px] uppercase tracking-wider text-white/30">
+                        First Visit
+                      </p>
+                      <p className="mt-2 text-xs text-white/65">
+                        {formatDate(visitor.firstVisit)}
+                      </p>
+                    </div>
+
+                    <div className="rounded-xl border border-white/5 bg-white/[0.02] p-4">
+                      <p className="text-[10px] uppercase tracking-wider text-white/30">
+                        Last Visit
+                      </p>
+                      <p className="mt-2 text-xs text-white/65">
+                        {formatDate(visitor.lastVisit)}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Referrer */}
+                  <div className="mt-4 rounded-xl border border-white/5 bg-white/[0.02] p-4">
+                    <p className="text-[10px] uppercase tracking-wider text-white/30">
+                      Referrer
+                    </p>
+                    <p className="mt-2 truncate text-sm text-white/60">
+                      {visitor.referrer || "Direct visit"}
+                    </p>
+                  </div>
+                </article>
+              ))}
             </div>
           )}
         </section>

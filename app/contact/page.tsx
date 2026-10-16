@@ -1,1253 +1,687 @@
 
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState, type FormEvent } from "react";
 import {
-  ArrowDown,
+  ArrowDownRight,
   ArrowUpRight,
   Check,
   Clock3,
+  Code2,
   Copy,
-  GitBranch,
-  Globe2,
-  Link,
+  Globe,
+  Heart,
+  BriefcaseBusiness,
   Mail,
   MapPin,
   MessageCircle,
   Send,
   Sparkles,
-  UserRound,
-  BriefcaseBusiness,
-  Phone,
-  Smile,
-  Paperclip,
 } from "lucide-react";
 import "./contact.css";
 
-/* =========================================================
-   CONTACT DETAILS
-   ========================================================= */
-
 const CONTACT = {
   name: "Faiza Noor",
-  role: "Full Stack Web Engineer",
+  role: "Full-Stack Web Engineer",
   email: "fizzanoor051@gmail.com",
-
-  // Pakistan WhatsApp number with country code.
   whatsappNumber: "+923019346310",
-
   linkedin: "https://www.linkedin.com/in/faiza-noor-b2711b42b/",
   github: "https://github.com/fizzanoor051-arch",
   indeed: "https://profile.indeed.com/",
-
   location: "Punjab, Pakistan",
-  timezone: "PKT (UTC +5)",
+  timezone: "PKT · UTC+5",
   availability: "Available for freelance projects",
-  responseTime: "Usually replies within 24 hours",
+  responseTime: "Usually within 24 hours",
 };
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
 
 const whatsappDigits = CONTACT.whatsappNumber.replace(/\D/g, "");
 
-const createWhatsAppLink = (message: string) => {
-  return `https://wa.me/${whatsappDigits}?text=${encodeURIComponent(
-    message
-  )}`;
-};
+const whatsappLink = (message: string) =>
+  `https://wa.me/${whatsappDigits}?text=${encodeURIComponent(message)}`;
 
-const defaultWhatsAppMessage =
-  "Hi Faiza! I would like to discuss a web development project with you.";
+const defaultMessage =
+  "Hi Faiza! I'd like to discuss a web development project.";
 
-const whatsappLink = createWhatsAppLink(defaultWhatsAppMessage);
+const services = [
+  "Full-Stack Development",
+  "React & Next.js",
+  "Business Websites",
+  "Custom Dashboards",
+  "E-commerce Solutions",
+  "API Integration",
+  "Responsive UI",
+  "Website Optimization",
+];
 
-const emailLink = `mailto:${CONTACT.email}`;
-
-const socialLinks = [
+const profiles = [
   {
     number: "01",
-    title: "LinkedIn",
-    label: "Professional Network",
+    name: "LinkedIn",
+    subtitle: "PROFESSIONAL NETWORK",
     description:
-      "Let's connect professionally and discuss opportunities, collaborations and projects.",
+      "Connect for professional opportunities, collaborations and meaningful conversations.",
     href: CONTACT.linkedin,
-    icon: Link,
-    accent: "linkedin",
+    icon: BriefcaseBusiness,
   },
   {
     number: "02",
-    title: "GitHub",
-    label: "Code & Projects",
+    name: "GitHub",
+    subtitle: "PROJECTS & CODE",
     description:
-      "Explore my development work, experiments, repositories and technical projects.",
+      "Explore my repositories, web applications and hands-on development work.",
     href: CONTACT.github,
-    icon: GitBranch,
-    accent: "github",
+    icon: Code2,
   },
   {
     number: "03",
-    title: "Indeed",
-    label: "Professional Profile",
+    name: "Indeed",
+    subtitle: "CAREER PROFILE",
     description:
-      "View my professional profile and discover my experience and career background.",
+      "Visit my profile for career-related opportunities and professional updates.",
     href: CONTACT.indeed,
-    icon: BriefcaseBusiness,
-    accent: "indeed",
+    icon: Globe,
   },
 ];
 
-const services = [
-  "Full Stack Web Development",
-  "React / Next.js Development",
-  "Modern Frontend Development",
-  "Responsive Website Development",
-  "UI / UX Implementation",
-  "Business Websites",
-  "E-commerce Development",
-  "Website Redesign & Optimization",
-];
-
-/* =========================================================
-   WHATSAPP CHAT TYPES
-   ========================================================= */
-
-type WhatsAppMessage = {
-  id: number;
-  sender: "faiza" | "visitor";
-  text: string;
-  time: string;
-};
-
-/* =========================================================
-   COMPONENT
-   ========================================================= */
-
 export default function ContactPage() {
-  const [copied, setCopied] = useState<
-    "email" | "whatsapp" | null
-  >(null);
+  const [copied, setCopied] = useState<"email" | "whatsapp" | null>(null);
+  const [formPrepared, setFormPrepared] = useState(false);
+  const [copyError, setCopyError] = useState(false);
 
-  const [sent, setSent] = useState(false);
-
-  /* =======================================================
-     WHATSAPP CHAT STATE
-     ======================================================= */
-
-  const [whatsappChatOpen, setWhatsappChatOpen] = useState(false);
-
+  // WhatsApp message-box state: hooks must stay inside the component.
+  const [whatsappName, setWhatsappName] = useState("");
   const [whatsappMessage, setWhatsappMessage] = useState("");
 
-  const [whatsappMessages, setWhatsappMessages] = useState<
-    WhatsAppMessage[]
-  >([
-    {
-      id: 1,
-      sender: "faiza",
-      text: "Hi! 👋 Welcome to my portfolio. How can I help you?",
-      time: "Now",
-    },
-    {
-      id: 2,
-      sender: "faiza",
-      text: "Have a project in mind? Feel free to send me a message.",
-      time: "Now",
-    },
-  ]);
-
-  /* =======================================================
-     COPY TO CLIPBOARD
-     ======================================================= */
-
-  const copyToClipboard = async (
+  const copyValue = async (
     value: string,
     type: "email" | "whatsapp"
   ) => {
     try {
       await navigator.clipboard.writeText(value);
-
       setCopied(type);
-
-      window.setTimeout(() => {
-        setCopied(null);
-      }, 2200);
+      setCopyError(false);
+      window.setTimeout(() => setCopied(null), 2200);
     } catch {
-      window.prompt(
-        type === "email"
-          ? "Copy email:"
-          : "Copy WhatsApp number:",
-        value
-      );
+      setCopyError(true);
+      window.prompt("Copy this value:", value);
     }
   };
 
-  /* =======================================================
-     NORMAL CONTACT FORM
-     ======================================================= */
+  const sendWhatsAppMessage = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const message = whatsappMessage.trim();
+    if (!message) return;
+
+    const fullMessage = [
+      "Hi Faiza!",
+      whatsappName.trim()
+        ? `My name is ${whatsappName.trim()}.`
+        : "",
+      "",
+      message,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    const url = whatsappLink(fullMessage);
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const formData = new FormData(form);
+    if (!form.reportValidity()) return;
 
-    const name = String(formData.get("name") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const subject = String(formData.get("subject") || "").trim();
-    const message = String(formData.get("message") || "").trim();
+    const data = new FormData(form);
+    const name = String(data.get("name") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    const subject = String(data.get("subject") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
 
-    if (!name || !email || !message) {
-      return;
-    }
+    if (!name || !email || !message) return;
 
-    const mailSubject =
-      subject || `Project Inquiry from ${name}`;
+    const mailSubject = subject || `Project enquiry from ${name}`;
 
     const body = [
-      `Hello Faiza,`,
-      ``,
+      "Hello Faiza,",
+      "",
       `Name: ${name}`,
       `Email: ${email}`,
-      ``,
-      `Project Details:`,
+      "",
+      "Project details:",
       message,
-      ``,
-      `Sent from your portfolio contact form.`,
+      "",
+      "Sent through your portfolio contact form.",
     ].join("\n");
 
-    window.location.href = `${emailLink}?subject=${encodeURIComponent(
-      mailSubject
-    )}&body=${encodeURIComponent(body)}`;
+    const mailto =
+      `mailto:${CONTACT.email}` +
+      `?subject=${encodeURIComponent(mailSubject)}` +
+      `&body=${encodeURIComponent(body)}`;
 
-    setSent(true);
-    form.reset();
-  };
-
-  /* =======================================================
-     REAL WHATSAPP SEND
-     ======================================================= */
-
-  const sendWhatsAppMessage = () => {
-    const text = whatsappMessage.trim();
-
-    if (!text) return;
-
-    const currentTime = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    /*
-      Show the visitor's message inside the portfolio preview
-      before opening real WhatsApp.
-    */
-
-    setWhatsappMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        sender: "visitor",
-        text,
-        time: currentTime,
-      },
-    ]);
-
-    /*
-      Clear input.
-    */
-
-    setWhatsappMessage("");
-
-    /*
-      IMPORTANT:
-      This opens REAL WhatsApp.
-
-      The visitor will then see your WhatsApp chat and can
-      actually send the message to your number.
-    */
-
-    const realWhatsAppLink = createWhatsAppLink(text);
-
-    window.open(
-      realWhatsAppLink,
-      "_blank",
-      "noopener,noreferrer"
-    );
-  };
-
-  /* =======================================================
-     OPEN REAL WHATSAPP WITH DEFAULT MESSAGE
-     ======================================================= */
-
-  const openWhatsApp = () => {
-    window.open(
-      whatsappLink,
-      "_blank",
-      "noopener,noreferrer"
-    );
-  };
-
-  /* =======================================================
-     OPEN EMBEDDED CHAT PREVIEW
-     ======================================================= */
-
-  const openWhatsAppChat = () => {
-    setWhatsappChatOpen(true);
-
-    window.setTimeout(() => {
-      document
-        .getElementById("embedded-whatsapp-chat")
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-    }, 100);
-  };
-
-  /* =======================================================
-     QUICK REPLY → REAL WHATSAPP
-     ======================================================= */
-
-  const sendQuickWhatsAppMessage = (text: string) => {
-    setWhatsappMessage(text);
-
-    const realWhatsAppLink = createWhatsAppLink(text);
-
-    window.open(
-      realWhatsAppLink,
-      "_blank",
-      "noopener,noreferrer"
-    );
+    setFormPrepared(true);
+    window.location.href = mailto;
   };
 
   return (
-    <main className="contact-page">
-      {/* =====================================================
-          ATMOSPHERE
-          ===================================================== */}
+    <main className="contact-page" id="top">
+      <div className="contact-atmosphere" aria-hidden="true">
+        <span className="contact-glow contact-glow-one" />
+        <span className="contact-glow contact-glow-two" />
+        <span className="contact-orbit" />
+        <span className="contact-orbit contact-orbit-two" />
+      </div>
 
-      <div className="contact-noise" />
-      <div className="contact-grid" />
-
-      <div className="contact-orb contact-orb-one" />
-      <div className="contact-orb contact-orb-two" />
-      <div className="contact-orb contact-orb-three" />
-
-      <div className="contact-scanline" />
-
-      {/* =====================================================
-          HERO
-          ===================================================== */}
-
-      <section className="contact-hero">
-        <div className="contact-hero-top">
-          <span className="contact-kicker">
-            <span className="contact-kicker-dot" />
-            OPEN FOR NEW CONNECTIONS
-          </span>
-
-          <span className="contact-index">
-            06 / CONTACT
-          </span>
+      {/* HERO */}
+      <section className="contact-hero contact-container">
+        <div className="contact-topline">
+         
+          <span className="contact-index">CONTACT / 06</span>
         </div>
 
-        <div className="contact-hero-content">
+        <div className="contact-hero-grid">
           <div className="contact-hero-copy">
-            <p className="contact-eyebrow">
-              HAVE AN IDEA?
-            </p>
+            <span className="contact-eyebrow">
+              HAVE A PROJECT IN MIND?
+            </span>
 
             <h1 className="contact-title">
-              LET&apos;S
-              <span>BUILD.</span>
+              Let&apos;s build
+              <span> something great.</span>
             </h1>
 
             <p className="contact-intro">
-              Great digital products start with a conversation.
-              Tell me what you&apos;re building, what you need,
-              or simply say hello.
+              From a first idea to a fully functional digital
+              product, I help turn your vision into thoughtful,
+              reliable web experiences.
             </p>
 
             <div className="contact-hero-actions">
               <a
-  href="#contact-form"
-  className="group relative inline-flex min-h-[46px] items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.02] hover:border-pink-300/70 hover:shadow-[0_0_32px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40"
->
-  {/* Liquid pink fill */}
-  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
+                href="#contact-form"
+                className="contact-button contact-button-primary"
+              >
+                Start a project
+                <ArrowDownRight size={17} />
+              </a>
 
-  {/* Liquid glow */}
-  <span className="absolute -bottom-8 left-1/2 h-16 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-lg opacity-0 transition-all duration-700 group-hover:bottom-[-4px] group-hover:opacity-100" />
-
-  {/* Content */}
-  <span className="relative z-10 flex items-center">
-    <span className="font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
-      START A PROJECT
-    </span>
-
-    <ArrowDown
-      size={15}
-      className="ml-2 text-white transition-all duration-500 group-hover:translate-y-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-  </span>
-</a>
-
-              {/* REAL WHATSAPP */}
-
-              <button
-  type="button"
-  onClick={openWhatsApp}
-  className="group relative inline-flex min-h-[46px] items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.02] hover:border-pink-300/70 hover:shadow-[0_0_32px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40"
->
-  {/* Liquid pink fill */}
-  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
-
-  {/* Liquid glow */}
-  <span className="absolute -bottom-8 left-1/2 h-16 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-lg opacity-0 transition-all duration-700 group-hover:bottom-[-4px] group-hover:opacity-100" />
-
-  {/* Content */}
-  <span className="relative z-10 flex items-center">
-    <MessageCircle
-      size={15}
-      className="text-white transition-all duration-500 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-
-    <span className="mx-2 font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
-      CHAT ON WHATSAPP
-    </span>
-
-    <ArrowUpRight
-      size={14}
-      className="text-white transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-  </span>
-</button>
-            </div>
-          </div>
-
-          <div className="contact-hero-side">
-            <div className="contact-status-card">
-              <div className="contact-status-top">
-                <span className="contact-status-dot" />
-                <span>STATUS</span>
-              </div>
-
-              <strong>
-                {CONTACT.availability}
-              </strong>
-
-              <p>
-                Currently open to selected freelance,
-                collaboration and web development
-                opportunities.
-              </p>
-            </div>
-
-            <div className="contact-scroll-mark">
-              <span>SCROLL TO CONNECT</span>
-              <ArrowDown size={15} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================
-          QUICK CONTACT STRIP
-          ===================================================== */}
-
-      <section className="contact-quick-section">
-        <div className="contact-section-heading">
-          <div>
-            <span className="contact-mini-label">
-              DIRECT CHANNELS
-            </span>
-
-            <h2>REACH ME DIRECTLY.</h2>
-          </div>
-
-          <p>
-            Choose whichever channel is most convenient.
-            No account or signup is required.
-          </p>
-        </div>
-
-        <div className="contact-quick-grid">
-          {/* EMAIL */}
-
-          <div className="contact-quick-card">
-            <div className="contact-quick-icon">
-              <Mail size={20} />
-            </div>
-
-            <div className="contact-quick-content">
-              <span>EMAIL</span>
-
-              <a href={emailLink}>
-                {CONTACT.email}
+              <a
+                href={whatsappLink(defaultMessage)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-button contact-button-secondary"
+              >
+                <MessageCircle size={17} />
+                Chat on WhatsApp
+                <ArrowUpRight size={15} />
               </a>
             </div>
 
+            <div className="contact-availability">
+              <span className="contact-status-dot" />
+              <span>{CONTACT.availability}</span>
+            </div>
+          </div>
+
+          <aside className="contact-feature-card">
+            <div className="contact-feature-top">
+              <span className="contact-feature-icon">
+                <Sparkles size={20} />
+              </span>
+              <span className="contact-feature-label">
+                A NOTE FROM MY DESK
+              </span>
+            </div>
+
+            <div className="contact-feature-art" aria-hidden="true">
+              <span className="contact-art-ring contact-art-ring-one" />
+              <span className="contact-art-ring contact-art-ring-two" />
+              <span className="contact-art-star">✦</span>
+              <span className="contact-art-sparkle">✧</span>
+              <span className="contact-art-monogram">
+                FN<span>.</span>
+              </span>
+            </div>
+
+            <h2>Good ideas start with a conversation.</h2>
+            <p>
+              You don&apos;t need a perfect brief. Share what you have
+              in mind, and we can figure out the next step together.
+            </p>
+
+            <div className="contact-feature-bottom">
+              <span>FAIZA NOOR</span>
+              <span>DESIGN · DEVELOP · DELIVER</span>
+            </div>
+          </aside>
+        </div>
+
+        <a href="#direct-contact" className="contact-scroll-link">
+          <span>EXPLORE CONTACT OPTIONS</span>
+          <ArrowDownRight size={15} />
+        </a>
+      </section>
+
+      {/* DIRECT CONTACT */}
+      <section
+        className="contact-section contact-container"
+        id="direct-contact"
+      >
+        <div className="contact-section-heading">
+          <div>
+            <span className="contact-overline">GET IN TOUCH</span>
+            <h2>
+              Choose your <span>connection.</span>
+            </h2>
+          </div>
+          <p>
+            Have a question, an opportunity or a project to discuss?
+            Reach me through whichever channel works best for you.
+          </p>
+        </div>
+
+        <div className="contact-direct-grid">
+          <article className="contact-direct-card">
+            <div className="contact-direct-icon">
+              <Mail size={21} />
+            </div>
+
+            <div className="contact-direct-copy">
+              <span className="contact-card-label">EMAIL ME</span>
+              <a
+                href={`mailto:${CONTACT.email}`}
+                className="contact-direct-value"
+              >
+                {CONTACT.email}
+              </a>
+              <p>Projects, enquiries and opportunities.</p>
+            </div>
+
             <button
               type="button"
               className="contact-copy-button"
-              onClick={() =>
-                copyToClipboard(
-                  CONTACT.email,
-                  "email"
-                )
-              }
+              onClick={() => copyValue(CONTACT.email, "email")}
               aria-label="Copy email address"
             >
               {copied === "email" ? (
-                <Check size={16} />
+                <Check size={17} />
               ) : (
-                <Copy size={16} />
+                <Copy size={17} />
               )}
             </button>
-          </div>
+          </article>
 
-          {/* WHATSAPP */}
-
-          <div className="contact-quick-card contact-quick-whatsapp">
-            <div className="contact-quick-icon">
-              <MessageCircle size={20} />
+          <article className="contact-direct-card contact-direct-card-whatsapp">
+            <div className="contact-direct-icon">
+              <MessageCircle size={21} />
             </div>
 
-            <div className="contact-quick-content">
-              <span>WHATSAPP</span>
-
-              <button
-                type="button"
-                className="contact-whatsapp-number-button"
-                onClick={openWhatsApp}
+            <div className="contact-direct-copy">
+              <span className="contact-card-label">WHATSAPP</span>
+              <a
+                href={whatsappLink(defaultMessage)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-direct-value"
               >
                 {CONTACT.whatsappNumber}
-              </button>
+              </a>
+              <p>Quick questions and project discussions.</p>
             </div>
 
             <button
               type="button"
               className="contact-copy-button"
               onClick={() =>
-                copyToClipboard(
-                  CONTACT.whatsappNumber,
-                  "whatsapp"
-                )
+                copyValue(CONTACT.whatsappNumber, "whatsapp")
               }
               aria-label="Copy WhatsApp number"
             >
               {copied === "whatsapp" ? (
-                <Check size={16} />
+                <Check size={17} />
               ) : (
-                <Copy size={16} />
+                <Copy size={17} />
               )}
             </button>
-          </div>
+          </article>
         </div>
 
-        <div className="contact-copy-feedback">
-          {copied === "email" && (
-            <>
-              <Check size={13} />
-              Email copied to clipboard
-            </>
-          )}
-
-          {copied === "whatsapp" && (
-            <>
-              <Check size={13} />
-              WhatsApp number copied
-            </>
-          )}
-        </div>
-      </section>
-
-      {/* =====================================================
-          WHATSAPP CHAT
-          ===================================================== */}
-
-      <section
-        className="contact-whatsapp-chat-section"
-        id="embedded-whatsapp-chat"
-      >
-        <div className="contact-whatsapp-chat-shell">
-          <div className="contact-whatsapp-chat-heading">
-            <div>
-              <span className="contact-mini-label">
-                DIRECT MESSAGE
-              </span>
-
-              <h2>
-                CHAT WITH
-                <span>FAIZA.</span>
-              </h2>
-
-              <p>
-                Type your message below and continue the
-                conversation directly on WhatsApp.
-              </p>
-            </div>
-
-            <div className="contact-whatsapp-live">
-              <span />
-              ONLINE
-            </div>
+        {/* DIRECT WHATSAPP MESSAGE BOX */}
+        <div className="tangled-whatsapp-panel">
+          <div className="tangled-whatsapp-visual" aria-hidden="true">
+            <span className="tangled-lantern">✦</span>
+            <span className="tangled-lantern tangled-lantern-two">✧</span>
+            <span className="tangled-lantern tangled-lantern-three">✦</span>
+            <span className="tangled-whatsapp-orbit" />
+            <MessageCircle size={34} strokeWidth={1.4} />
           </div>
 
-          <div
-            className={`contact-whatsapp-chat-window ${
-              whatsappChatOpen ? "is-open" : ""
-            }`}
-          >
-            {/* CHAT HEADER */}
+          <div className="tangled-whatsapp-content">
+            <span className="tangled-eyebrow">
+              <Sparkles size={13} />
+              A LITTLE MESSAGE, A NEW BEGINNING
+            </span>
 
-            <div className="contact-whatsapp-chat-header">
-              <div className="contact-whatsapp-profile">
-                <div className="contact-whatsapp-avatar">
-                  <MessageCircle size={22} />
-                </div>
+            <h3>
+              Send me a message,
+              <span> let&apos;s make it happen.</span>
+            </h3>
 
-                <div>
-                  <strong>Faiza Noor</strong>
-
-                  <span>
-                    <i />
-                    Online
-                  </span>
-                </div>
-              </div>
-
-              <div className="contact-whatsapp-header-actions">
-                <button
-                  type="button"
-                  aria-label="Call"
-                  onClick={() => {
-                    window.location.href = `tel:${CONTACT.whatsappNumber}`;
-                  }}
-                >
-                  <Phone size={17} />
-                </button>
-
-                <button
-                  type="button"
-                  aria-label="Close chat"
-                  onClick={() =>
-                    setWhatsappChatOpen(false)
-                  }
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-
-            {/* CHAT BODY */}
-
-            <div className="contact-whatsapp-chat-body">
-              <div className="contact-whatsapp-date">
-                TODAY
-              </div>
-
-              <div className="contact-whatsapp-welcome">
-                <div className="contact-whatsapp-welcome-icon">
-                  🔒
-                </div>
-
-                <p>
-                  Your message will continue in WhatsApp.
-                </p>
-              </div>
-
-              {whatsappMessages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`contact-whatsapp-message ${
-                    message.sender === "visitor"
-                      ? "visitor"
-                      : "faiza"
-                  }`}
-                >
-                  <p>{message.text}</p>
-
-                  <span>
-                    {message.time}
-
-                    {message.sender ===
-                      "visitor" && (
-                      <b>✓✓</b>
-                    )}
-                  </span>
-                </div>
-              ))}
-
-              <div className="contact-whatsapp-typing">
-                <span />
-                <span />
-                <span />
-              </div>
-            </div>
-
-            {/* QUICK REPLIES */}
-
-            <div className="contact-whatsapp-quick-replies">
-              {[
-                "I need a website",
-                "I have an e-commerce idea",
-                "Let's discuss a project",
-              ].map((text) => (
-                <button
-                  key={text}
-                  type="button"
-                  onClick={() =>
-                    sendQuickWhatsAppMessage(text)
-                  }
-                >
-                  {text}
-                </button>
-              ))}
-            </div>
-
-            {/* INPUT */}
+            <p>
+              Have an idea, a question or a project in mind?
+              Write directly here and continue the conversation on WhatsApp.
+            </p>
 
             <form
-              className="contact-whatsapp-input-area"
-              onSubmit={(event) => {
-                event.preventDefault();
-                sendWhatsAppMessage();
-              }}
+              className="tangled-whatsapp-form"
+              onSubmit={sendWhatsAppMessage}
             >
-              <button
-                type="button"
-                className="contact-whatsapp-attach"
-                aria-label="Attach"
-                onClick={openWhatsApp}
-              >
-                <Paperclip size={19} />
-              </button>
+              <label className="tangled-whatsapp-field">
+                <span>
+                  Your name <small>(optional)</small>
+                </span>
+                <input
+                  type="text"
+                  value={whatsappName}
+                  onChange={(event) => setWhatsappName(event.target.value)}
+                  placeholder="What should I call you?"
+                  autoComplete="name"
+                  maxLength={80}
+                />
+              </label>
 
-              <input
-                type="text"
-                value={whatsappMessage}
-                onChange={(event) =>
-                  setWhatsappMessage(
-                    event.target.value
-                  )
-                }
-                placeholder="Type a message..."
-                aria-label="WhatsApp message"
-                onFocus={() =>
-                  setWhatsappChatOpen(true)
-                }
-              />
-
-              <button
-                type="button"
-                className="contact-whatsapp-emoji"
-                aria-label="Emoji"
-                onClick={() =>
-                  setWhatsappMessage(
-                    (prev) => `${prev} 👋`
-                  )
-                }
-              >
-                <Smile size={19} />
-              </button>
+              <label className="tangled-whatsapp-field">
+                <span>
+                  Your message <b>*</b>
+                </span>
+                <textarea
+                  value={whatsappMessage}
+                  onChange={(event) =>
+                    setWhatsappMessage(event.target.value)
+                  }
+                  placeholder="Hi Faiza! I'd like to discuss a project..."
+                  rows={4}
+                  maxLength={2000}
+                  required
+                />
+                <small className="tangled-message-count">
+                  {whatsappMessage.length}/2000
+                </small>
+              </label>
 
               <button
                 type="submit"
-                className="contact-whatsapp-send"
-                aria-label="Send message"
+                className="tangled-whatsapp-submit"
               >
-                <Send size={18} />
+                <MessageCircle size={18} />
+                Send on WhatsApp
+                <ArrowUpRight size={17} />
               </button>
+
+              <span className="tangled-whatsapp-disclaimer">
+                WhatsApp opens with your message ready to send.
+                You must press Send in WhatsApp to deliver it.
+              </span>
             </form>
           </div>
         </div>
+
+        <p className="contact-copy-status" role="status" aria-live="polite">
+          {copied === "email" && "Email address copied."}
+          {copied === "whatsapp" && "WhatsApp number copied."}
+          {copyError && "If copying failed, use the copy prompt instead."}
+        </p>
       </section>
 
-      {/* =====================================================
-          SOCIAL / PROFESSIONAL NETWORKS
-          ===================================================== */}
-
-      <section className="contact-social-section">
+      {/* SOCIAL PROFILES */}
+      <section className="contact-section contact-container">
         <div className="contact-section-heading">
           <div>
-            <span className="contact-mini-label">
-              FIND ME ONLINE
-            </span>
-
-            <h2>LET&apos;S CONNECT.</h2>
+            <span className="contact-overline">AROUND THE WEB</span>
+            <h2>
+              Find me <span>online.</span>
+            </h2>
           </div>
-
           <p>
-            Explore my professional profiles, development
-            work and direct communication channels.
+            Explore my work, professional background and
+            development journey.
           </p>
         </div>
 
-        <div className="contact-social-grid">
-          {socialLinks.map((item) => {
-            const Icon = item.icon;
+        <div className="contact-profile-grid">
+          {profiles.map((profile) => {
+            const Icon = profile.icon;
 
             return (
-            
               <a
-  key={item.number}
-  href={item.href}
-  target="_blank"
-  rel="noopener noreferrer"
-  onClick={(event) => {
-    event.preventDefault();
-
-    window.open(
-      item.href,
-      "_blank",
-      "noopener,noreferrer"
-    );
-  }}
-  className={`contact-social-card ${item.accent}`}
->
-                <div className="contact-social-number">
-                  {item.number}
+                href={profile.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-profile-card"
+                key={profile.number}
+              >
+                <div className="contact-profile-top">
+                  <span>{profile.number} / 03</span>
+                  <ArrowUpRight size={18} />
                 </div>
 
-                <div className="contact-social-icon">
-                  <Icon
-                    size={22}
-                    strokeWidth={1.6}
-                  />
+                <div className="contact-profile-icon">
+                  <Icon size={22} strokeWidth={1.7} />
                 </div>
 
-                <div className="contact-social-body">
-                  <span>{item.label}</span>
+                <span className="contact-profile-subtitle">
+                  {profile.subtitle}
+                </span>
+                <h3>{profile.name}</h3>
+                <p>{profile.description}</p>
 
-                  <h3>{item.title}</h3>
-
-                  <p>
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="contact-social-arrow">
-                  <ArrowUpRight size={19} />
-                </div>
+                <span className="contact-profile-link">
+                  Visit profile <ArrowUpRight size={15} />
+                </span>
               </a>
             );
           })}
-
-          {/* WHATSAPP SOCIAL CARD */}
-
-          <button
-            type="button"
-            onClick={openWhatsApp}
-            className="contact-social-card whatsapp"
-          >
-            <div className="contact-social-number">
-              04
-            </div>
-
-            <div className="contact-social-icon">
-              <MessageCircle
-                size={22}
-                strokeWidth={1.6}
-              />
-            </div>
-
-            <div className="contact-social-body">
-              <span>DIRECT CONVERSATION</span>
-
-              <h3>WhatsApp</h3>
-
-              <p>
-                Start a direct conversation with me
-                instantly without leaving the
-                portfolio.
-              </p>
-            </div>
-
-            <div className="contact-social-arrow">
-              <ArrowUpRight size={19} />
-            </div>
-          </button>
         </div>
       </section>
 
-      {/* =====================================================
-          MAIN CONTACT / FORM
-          ===================================================== */}
-
+      {/* EMAIL CONTACT FORM */}
       <section
-        className="contact-form-section"
+        className="contact-form-section contact-container"
         id="contact-form"
       >
-        <div className="contact-form-intro">
-          <span className="contact-mini-label">
-            PROJECT INQUIRY
+        <div className="contact-form-copy">
+          <span className="contact-overline">
+            YOUR IDEA, YOUR NEXT STEP
           </span>
-
           <h2>
-            HAVE SOMETHING
-            <span>IN MIND?</span>
+            Let&apos;s talk about <span>your project.</span>
           </h2>
-
           <p>
-            Whether you have a complete project brief or
-            just the first idea, send it over. We can
-            figure out the next step together.
+            Tell me a little about what you want to build. Share
+            your goals, the problem you&apos;re solving or even a rough
+            starting point.
           </p>
 
-          <div className="contact-info-stack">
-            <div className="contact-info-row">
-              <div className="contact-info-icon">
+          <div className="contact-detail-list">
+            <div className="contact-detail-item">
+              <span className="contact-detail-icon">
                 <MapPin size={17} />
-              </div>
-
+              </span>
               <div>
                 <span>LOCATION</span>
-                <strong>
-                  {CONTACT.location}
-                </strong>
+                <strong>{CONTACT.location}</strong>
               </div>
             </div>
 
-            <div className="contact-info-row">
-              <div className="contact-info-icon">
+            <div className="contact-detail-item">
+              <span className="contact-detail-icon">
                 <Clock3 size={17} />
-              </div>
-
+              </span>
               <div>
-                <span>TIMEZONE</span>
-                <strong>
-                  {CONTACT.timezone}
-                </strong>
+                <span>TIME ZONE</span>
+                <strong>{CONTACT.timezone}</strong>
               </div>
             </div>
 
-            <div className="contact-info-row">
-              <div className="contact-info-icon">
-                <Globe2 size={17} />
-              </div>
-
+            <div className="contact-detail-item">
+              <span className="contact-detail-icon">
+                <Mail size={17} />
+              </span>
               <div>
-                <span>RESPONSE</span>
-                <strong>
-                  {CONTACT.responseTime}
-                </strong>
+                <span>RESPONSE TIME</span>
+                <strong>{CONTACT.responseTime}</strong>
               </div>
             </div>
           </div>
+
+          <div className="contact-form-note">
+            <Heart size={17} />
+            <p>
+              <strong>Every great build starts somewhere.</strong>
+              A simple message is all it takes to begin.
+            </p>
+          </div>
         </div>
 
-        <form
-          className="contact-form"
-          onSubmit={handleSubmit}
-        >
-          <div className="contact-form-header">
+        <form className="contact-form" onSubmit={handleSubmit}>
+          <div className="contact-form-heading">
             <div>
-              <span>01</span>
-              <p>YOUR DETAILS</p>
+              <span className="contact-overline">PROJECT ENQUIRY</span>
+              <h3>Send a message</h3>
             </div>
-
-            <UserRound size={18} />
+            <span className="contact-form-heading-icon">
+              <Send size={20} />
+            </span>
           </div>
 
           <div className="contact-fields-grid">
             <label className="contact-field">
               <span>
-                YOUR NAME <b>*</b>
+                Your name <b>*</b>
               </span>
-
               <input
                 type="text"
                 name="name"
-                placeholder="John Doe"
-                required
+                placeholder="Enter your name"
                 autoComplete="name"
+                required
               />
             </label>
 
             <label className="contact-field">
               <span>
-                EMAIL ADDRESS <b>*</b>
+                Email address <b>*</b>
               </span>
-
               <input
                 type="email"
                 name="email"
-                placeholder="fizza@example.com"
-                required
+                placeholder="you@example.com"
                 autoComplete="email"
+                required
               />
             </label>
           </div>
 
           <label className="contact-field">
-            <span>PROJECT / SUBJECT</span>
-
+            <span>What are you looking to build?</span>
             <input
               type="text"
               name="subject"
-              placeholder="Website, e-commerce, dashboard..."
+              placeholder="Website, application, dashboard..."
             />
           </label>
 
           <label className="contact-field">
             <span>
-              TELL ME ABOUT IT <b>*</b>
+              Tell me about your idea <b>*</b>
             </span>
-
             <textarea
               name="message"
-              placeholder="Tell me about your idea, goals, timeline, budget or anything else that might help..."
-              rows={7}
+              placeholder="Your goals, requirements, timeline or anything you'd like to share..."
+              rows={5}
               required
             />
           </label>
 
           <div className="contact-form-bottom">
             <p>
-              By clicking send, your default email client
-              will open with the project details prepared
-              for you.
+              This prepares an email in your default email app.
+              Review it there and press Send to contact me.
             </p>
 
-            <button
-              type="submit"
-              className="contact-submit-button"
-            >
-              {sent
-                ? "MESSAGE READY"
-                : "SEND INQUIRY"}
-
-              {sent ? (
+            <button type="submit" className="contact-submit-button">
+              {formPrepared ? "Prepare again" : "Prepare email"}
+              {formPrepared ? (
                 <Check size={17} />
               ) : (
-                <Send size={17} />
+                <ArrowUpRight size={17} />
               )}
             </button>
           </div>
         </form>
       </section>
 
-      {/* =====================================================
-          SERVICES
-          ===================================================== */}
-
-      <section className="contact-services-section">
+      {/* SERVICES */}
+      <section className="contact-services contact-container">
         <div className="contact-services-heading">
-          <span className="contact-mini-label">
-            WHAT I CAN BUILD
-          </span>
-
+          <span className="contact-overline">HOW I CAN HELP</span>
           <h2>
-            FROM CONCEPT
-            <span>TO CODE.</span>
+            From ideas to <span>real products.</span>
           </h2>
+          <p>
+            Thoughtful engineering for useful, accessible and
+            responsive digital experiences.
+          </p>
         </div>
 
         <div className="contact-services-list">
           {services.map((service, index) => (
-            <div
-              key={service}
-              className="contact-service-item"
-            >
-              <span>
-                {String(index + 1).padStart(2, "0")}
-              </span>
-
-              <p>{service}</p>
-
-              <ArrowUpRight size={16} />
+            <div className="contact-service-chip" key={service}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <span>{service}</span>
+              <Sparkles size={14} />
             </div>
           ))}
         </div>
       </section>
 
-      {/* =====================================================
-          BIG WHATSAPP CTA
-          ===================================================== */}
+      {/* FOOTER */}
+      <footer className="contact-footer contact-container">
+        <a
+          href="#top"
+          className="contact-footer-brand"
+          aria-label="Back to top"
+        >
+          FN<span>.</span>
+        </a>
 
-      <section className="contact-whatsapp-section">
-        <div className="contact-whatsapp-glow" />
-
-        <div className="contact-whatsapp-inner">
-          <div className="contact-whatsapp-symbol">
-            <MessageCircle
-              size={31}
-              strokeWidth={1.5}
-            />
-          </div>
-
-          <span className="contact-mini-label">
-            FASTEST WAY TO REACH ME
-          </span>
-
-          <h2>
-            LET&apos;S TALK
-            <span>ON WHATSAPP.</span>
-          </h2>
-
-          <p>
-            Skip the formalities. Send me a message
-            directly and let&apos;s talk about your idea.
-          </p>
-
-       <button
-  type="button"
-  onClick={openWhatsApp}
-className="group relative mt-4 inline-flex min-h-[46px] items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.02] hover:border-pink-300/70 hover:shadow-[0_0_32px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40"
->
-  {/* Liquid pink fill */}
-  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
-
-  {/* Liquid glow */}
-  <span className="absolute -bottom-8 left-1/2 h-16 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-lg opacity-0 transition-all duration-700 group-hover:bottom-[-4px] group-hover:opacity-100" />
-
-  {/* Content */}
-  <span className="relative z-10 flex items-center">
-    <span className="font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
-      OPEN DIRECT CHAT
-    </span>
-
-    <ArrowUpRight
-      size={15}
-      className="ml-2 text-white transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-  </span>
-</button>
-
-          <small>
-            {CONTACT.whatsappNumber}
-          </small>
+        <div className="contact-footer-name">
+          <strong>{CONTACT.name}</strong>
+          <span>{CONTACT.role}</span>
         </div>
-      </section>
 
-      {/* =====================================================
-          FINAL CTA
-          ===================================================== */}
-
-      <section className="contact-final-section">
-        <div className="contact-final-line" />
-
-        <span className="contact-final-label">
-          YOUR NEXT PROJECT
-        </span>
-
-        <h2>
-          COULD START
-          <span>RIGHT HERE.</span>
-        </h2>
-
-        <p>
-          Have the idea. I&apos;ll help turn it into a
-          digital experience that feels as good as it
-          works.
+        <p className="contact-footer-signoff">
+          Built with care <Heart size={13} /> and curiosity.
         </p>
 
-        <div className="contact-final-actions">
-         <a
-  href={emailLink}
-  className="group relative inline-flex min-h-[55px] items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-5 py-2.5 text-[16px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.02] hover:border-pink-300/70 hover:shadow-[0_0_32px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40"
->
-  {/* Liquid pink fill */}
-  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
-
-  {/* Liquid glow */}
-  <span className="absolute -bottom-8 left-1/2 h-16 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-lg opacity-0 transition-all duration-700 group-hover:bottom-[-4px] group-hover:opacity-100" />
-
-  {/* Content */}
-  <span className="relative z-10 flex items-center">
-    <Mail
-      size={15}
-      className="text-white transition-all duration-500 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-
-    <span className="mx-2 font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
-      EMAIL ME
-    </span>
-
-    <ArrowUpRight
-      size={14}
-      className="text-white transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-  </span>
-</a>
-
-          <button
-  type="button"
-  onClick={openWhatsApp}
-  className="group relative inline-flex min-h-[46px] items-center justify-center overflow-hidden rounded-full border border-violet-400/40 bg-violet-700 px-5 py-2.5 text-[15px] font-semibold uppercase tracking-[0.18em] text-white shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-500 hover:scale-[1.02] hover:border-pink-300/70 hover:shadow-[0_0_32px_rgba(236,72,153,0.55)] focus:outline-none focus:ring-2 focus:ring-pink-300/40"
->
-  {/* Liquid pink fill */}
-  <span className="absolute inset-x-0 bottom-0 h-full translate-y-[105%] bg-gradient-to-t from-pink-600 via-fuchsia-500 to-pink-300 transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
-
-  {/* Liquid glow */}
-  <span className="absolute -bottom-8 left-1/2 h-16 w-[130%] -translate-x-1/2 rounded-[50%] bg-pink-300/70 blur-lg opacity-0 transition-all duration-700 group-hover:bottom-[-4px] group-hover:opacity-100" />
-
-  {/* Content */}
-  <span className="relative z-10 flex items-center">
-    <MessageCircle
-      size={15}
-      className="text-white transition-all duration-500 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-
-    <span className="mx-2 font-medium text-white drop-shadow-[0_1px_3px_rgba(40,0,60,0.8)]">
-      WHATSAPP
-    </span>
-
-    <ArrowUpRight
-      size={14}
-      className="text-white transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-pink-100 group-hover:drop-shadow-[0_0_7px_rgba(251,113,133,0.95)]"
-    />
-  </span>
-</button>
-        </div>
-      </section>
-
-      {/* =====================================================
-          FLOATING WHATSAPP
-          ===================================================== */}
-
-      <button
-        type="button"
-        onClick={openWhatsApp}
-        className="contact-floating-whatsapp"
-        aria-label="Chat with Faiza on WhatsApp"
-      >
-        <MessageCircle size={21} />
-        <span>CHAT</span>
-      </button>
-
-      {/* =====================================================
-          FOOTER
-          ===================================================== */}
-
-      <footer className="contact-footer">
-        <div className="contact-footer-left">
-          <span className="contact-footer-logo">
-            FN<span>.</span>
-          </span>
-
-          <p>
-            {CONTACT.name} — {CONTACT.role}
-          </p>
-        </div>
-
-        <div className="contact-footer-center">
-          <Sparkles size={14} />
-          <span>
-            CRAFTING DIGITAL EXPERIENCES
-          </span>
-        </div>
-
-        <div className="contact-footer-right">
-          <span>
-            © {new Date().getFullYear()}
-          </span>
-
-          <span>ALL RIGHTS RESERVED</span>
-        </div>
+        <span className="contact-footer-copyright">
+          © {new Date().getFullYear()} FAIZA NOOR
+        </span>
       </footer>
+
+      {/* FIXED WHATSAPP CTA */}
+      <a
+        href={whatsappLink(defaultMessage)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="contact-floating-whatsapp"
+        aria-label="Start a WhatsApp conversation"
+      >
+        <MessageCircle size={19} />
+        <span>Let&apos;s talk</span>
+      </a>
     </main>
   );
 }

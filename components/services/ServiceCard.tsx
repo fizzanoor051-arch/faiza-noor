@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Service } from "./ServicesSection";
@@ -94,16 +95,15 @@ export default function ServiceCard({
                     active ? "bg-cyan-300/70" : "bg-white/20"
                   }`}
                 />
-
                 {item}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Stack */}
+        {/* Technology stack — fixed */}
         <div className="mt-7 flex flex-wrap gap-2">
-          {service.technologies.map((technology) => (
+          {service.stack.map((technology) => (
             <span
               key={technology}
               className="rounded-lg border border-white/7 bg-white/[0.02] px-2.5 py-1.5 font-mono text-[8px] text-white/25 transition-colors group-hover:text-white/40"
@@ -129,7 +129,6 @@ export default function ServiceCard({
                 active ? "bg-emerald-400" : "bg-white/20"
               }`}
             />
-
             {active ? "selected" : "available"}
           </span>
         </div>
