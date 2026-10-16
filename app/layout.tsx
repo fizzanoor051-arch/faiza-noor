@@ -9,11 +9,11 @@ import SmoothScroll from "@/components/effects/SmoothScroll";
 import PortfolioAI from "@/components/ai/PortfolioAI";
 import PortfolioIntro from "@/components/PortfolioIntro";
 import VisitorTracker from "@/components/analytics/VisitorTracker";
-
 import PortfolioChrome from "@/components/layout/PortfolioChrome";
-
 import ThemeProvider from "@/components/themes/ThemeProvider";
 import ThemeEngine from "@/components/themes/ThemeEngine";
+
+const SITE_URL = "https://faiza-noor10.vercel.app";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,58 +26,91 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+
   title: {
-    default: "Faiza Noor — Full Stack Web Engineer",
+    default:
+      "Faiza Noor | Full-Stack Web Engineer in Sialkot, Pakistan",
     template: "%s | Faiza Noor",
   },
 
   description:
-    "Faiza Noor is a Full Stack Web Engineer creating cinematic, scalable and high-performance digital experiences with React, Next.js, TypeScript and Node.js.",
+    "Explore Faiza Noor's official portfolio. A full-stack web engineer based in Sialkot District, Punjab, Pakistan, building modern web applications, AI-powered experiences, and scalable digital products with React, Next.js, TypeScript, Node.js, and MongoDB.",
 
-  keywords: [
-    "Faiza Noor",
-    "Full Stack Web Engineer",
-    "Full Stack Developer",
-    "Frontend Developer",
-    "React Developer",
-    "Next.js Developer",
-    "TypeScript Developer",
-    "Node.js Developer",
-    "Freelance Web Developer",
-    "Web Developer Pakistan",
-  ],
+  applicationName: "Faiza Noor Portfolio",
 
   authors: [
     {
       name: "Faiza Noor",
+      url: SITE_URL,
     },
   ],
 
   creator: "Faiza Noor",
+  publisher: "Faiza Noor",
 
-  metadataBase: new URL(
-    "https://github.com/fizzanoor051-arch"
-  ),
+  keywords: [
+    "Faiza Noor",
+    "Faiza Noor Full Stack Web Engineer",
+    "Faiza Noor Sialkot",
+    "Full Stack Web Engineer in Sialkot",
+    "Female Full Stack Web Engineer in Sialkot",
+    "Full Stack Web Engineer in District Sialkot",
+    "Female Web Engineer in Sialkot Pakistan",
+    "Youngest Female Full Stack Web Engineer in Sialkot",
+    "Youngest Female Full Stack Web Engineer in District Sialkot",
+    "Web Developer Sialkot",
+    "Full Stack Developer Pakistan",
+    "MERN Stack Developer Pakistan",
+    "Next.js Developer Pakistan",
+    "React Developer Sialkot",
+    "TypeScript Developer",
+    "Node.js Developer",
+    "AI Web Application Developer",
+    "Freelance Full Stack Web Engineer",
+    "Faiza Noor Portfolio",
+  ],
+
+  alternates: {
+    canonical: "/",
+  },
+
+  verification: {
+    google: "6Zvj85FXZJy9d9Oxilu-1Aiup7Ee7T-zDpv-a2_PrSM",
+  },
 
   openGraph: {
-    title: "Faiza Noor — Full Stack Web Engineer",
-    description:
-      "Engineering immersive, cinematic and high-performance digital experiences.",
     type: "website",
+    url: SITE_URL,
     siteName: "Faiza Noor Portfolio",
+    locale: "en_PK",
+    title:
+      "Faiza Noor | Full-Stack Web Engineer in Sialkot, Pakistan",
+    description:
+      "Visit Faiza Noor's official portfolio to explore full-stack web development, React, Next.js, TypeScript, Node.js, MongoDB, and AI-powered projects.",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Faiza Noor — Full Stack Web Engineer",
+    title:
+      "Faiza Noor | Full-Stack Web Engineer in Sialkot",
     description:
-      "Engineering immersive, cinematic and high-performance digital experiences.",
+      "Explore Faiza Noor's full-stack web engineering portfolio, technical skills, and AI-powered web projects.",
   },
 
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
+
+  category: "technology",
 };
 
 export default function RootLayout({
