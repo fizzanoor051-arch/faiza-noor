@@ -7,20 +7,18 @@ import {
   ArrowDownToLine,
   ArrowUpRight,
   BookOpen,
-  BriefcaseBusiness,
   Code2,
   GraduationCap,
   GitBranch,
-  Globe,
-  Mail,
   MapPin,
-  Sparkles,
   X,
   Cloud,
   Monitor,
 } from "lucide-react";
 
 const CV_FILE = "/files/Faiza-Noor-CV.pdf";
+
+const FULL_NAME = "Faiza Noor M. Shabbir Hussain";
 
 const technologies = [
   "HTML5",
@@ -70,7 +68,22 @@ export default function AboutClient() {
   }, [cvOpen]);
 
   return (
-    <main className="tangled-page min-h-screen overflow-hidden text-white">
+    <main
+      className="tangled-page min-h-screen overflow-hidden text-white"
+      itemScope
+      itemType="https://schema.org/Person"
+    >
+      <meta itemProp="name" content={FULL_NAME} />
+      <meta itemProp="jobTitle" content="Full-Stack Web Engineer" />
+      <meta
+        itemProp="url"
+        content="https://faiza-noor10.vercel.app/about"
+      />
+      <meta
+        itemProp="description"
+        content="Faiza Noor M. Shabbir Hussain is a female Full-Stack Web Engineer based in Sialkot District, Punjab, Pakistan, focused on modern web applications, React, Next.js, TypeScript, Node.js, databases, and AI-powered digital experiences."
+      />
+
       <style jsx global>{`
         html {
           scroll-behavior: smooth;
@@ -107,10 +120,14 @@ export default function AboutClient() {
               rgba(155, 112, 217, 0.2),
               transparent 35%
             ),
-            linear-gradient(135deg, #211638 0%, #171027 58%, #211437 100%);
+            linear-gradient(
+              135deg,
+              #211638 0%,
+              #171027 58%,
+              #211437 100%
+            );
         }
 
-        /* Subtle moving golden light behind the hero content */
         .tangled-hero::before {
           content: "";
           position: absolute;
@@ -355,7 +372,6 @@ export default function AboutClient() {
         }
       `}</style>
 
-
       {/* Hero */}
       <section className="tangled-hero">
         <div className="tangled-container grid min-h-[690px] items-center gap-12 pb-16 pt-32 lg:grid-cols-[1.2fr_0.8fr] lg:pb-20">
@@ -375,7 +391,7 @@ export default function AboutClient() {
             </h1>
 
             <h2 className="mt-7 max-w-2xl text-xl font-semibold leading-relaxed text-white sm:text-2xl">
-              Full-Stack Web Engineer{" "}
+              Female Full-Stack Web Engineer{" "}
               <span className="text-amber-200">
                 building thoughtful digital experiences.
               </span>
@@ -390,10 +406,18 @@ export default function AboutClient() {
               experiences.
             </p>
 
+            <p className="tangled-copy mt-4 max-w-2xl">
+              Faiza Noor M. Shabbir Hussain is a female Full-Stack Web Engineer
+              based in Sialkot District, Punjab, Pakistan. Her professional
+              interests include frontend and backend engineering, modern web
+              technologies, database integration, and AI-powered applications.
+            </p>
+
             <p className="mt-4 max-w-2xl text-sm leading-7 text-purple-100/75">
-              My long-term ambition is to be recognized among the youngest
-              female Full-Stack Web Engineers in District Sialkot through
-              consistent learning, technical growth, and meaningful work.
+              My long-term goal is to earn recognition among the youngest
+              female Full-Stack Web Engineers in Sialkot District through
+              continuous learning, practical projects, technical growth, and
+              meaningful contributions to web engineering.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3">
@@ -402,8 +426,10 @@ export default function AboutClient() {
                 type="button"
                 onClick={() => setCvOpen(true)}
               >
-                <ArrowDownToLine size={16} /> View My CV
+                <ArrowDownToLine size={16} />
+                View My CV
               </button>
+
               <Link
                 className="tangled-button tangled-button-secondary"
                 href="/projects"
@@ -417,19 +443,29 @@ export default function AboutClient() {
                 <MapPin size={14} className="text-amber-200" />
                 Sialkot District, Pakistan
               </span>
+
               <a
                 className="tangled-link inline-flex items-center gap-2"
                 href="https://github.com/fizzanoor051-arch"
                 target="_blank"
                 rel="noreferrer"
+                itemProp="sameAs"
               >
                 <GitBranch size={14} />
                 GitHub Profile <ArrowUpRight size={12} />
               </a>
+
+              <a
+                className="tangled-link inline-flex items-center gap-2"
+                href="https://www.linkedin.com/in/faiza-noor-b2711b42b/"
+                target="_blank"
+                rel="noreferrer"
+                itemProp="sameAs"
+              >
+                LinkedIn Profile <ArrowUpRight size={12} />
+              </a>
             </div>
           </div>
- 
-
         </div>
       </section>
 
@@ -438,6 +474,7 @@ export default function AboutClient() {
         <div className="tangled-container grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
           <div>
             <p className="tangled-label">My Journey</p>
+
             <h2 className="tangled-heading mt-5">
               Curious by nature.
               <span className="mt-2 block text-purple-300">
@@ -449,17 +486,20 @@ export default function AboutClient() {
           <div>
             <div className="tangled-copy space-y-5">
               <p>
-                I&apos;m a Full-Stack Web Engineer based in Sialkot District,
-                Punjab, Pakistan. I enjoy developing responsive web
-                experiences and learning how frontend interfaces, server-side
-                logic, APIs, and databases work together.
+                I&apos;m Faiza Noor M. Shabbir Hussain, a Full-Stack Web
+                Engineer based in Sialkot District, Punjab, Pakistan. I enjoy
+                developing responsive web experiences and learning how
+                frontend interfaces, server-side logic, APIs, and databases
+                work together.
               </p>
+
               <p>
                 My technical interests include React, Next.js, TypeScript,
                 Node.js, REST APIs, database integration, and AI-powered
                 features. I improve my skills through self-learning,
                 experimentation, and practical development.
               </p>
+
               <p>
                 I aspire to build a strong professional reputation as a female
                 web engineer from District Sialkot. My focus is on improving
@@ -471,9 +511,11 @@ export default function AboutClient() {
             <div className="mt-7 grid gap-4 sm:grid-cols-2">
               <article className="tangled-card p-5">
                 <BookOpen size={22} className="text-amber-200" />
+
                 <h3 className="mt-4 font-semibold text-white">
                   Continuous Learning
                 </h3>
+
                 <p className="mt-2 text-sm leading-6 text-purple-100/65">
                   Strengthening fundamentals and exploring technologies
                   through hands-on practice.
@@ -482,9 +524,11 @@ export default function AboutClient() {
 
               <article className="tangled-card p-5">
                 <Code2 size={22} className="text-purple-300" />
+
                 <h3 className="mt-4 font-semibold text-white">
                   Full-Stack Development
                 </h3>
+
                 <p className="mt-2 text-sm leading-6 text-purple-100/65">
                   Bringing frontend, backend, APIs, and data together in
                   practical applications.
@@ -495,16 +539,16 @@ export default function AboutClient() {
         </div>
       </section>
 
-
-
       {/* Education */}
       <section id="education" className="tangled-section scroll-mt-24">
         <div className="tangled-container">
           <div className="max-w-2xl">
             <p className="tangled-label">Education</p>
+
             <h2 className="tangled-heading mt-5">
               My academic foundation.
             </h2>
+
             <p className="tangled-copy mt-4">
               My academic background includes science studies, analytical
               learning, and a continuing interest in technology. I combine
@@ -522,12 +566,15 @@ export default function AboutClient() {
                 <p className="text-xs font-bold uppercase tracking-[0.15em] text-amber-200">
                   Intermediate Education
                 </p>
+
                 <h3 className="mt-2 text-2xl font-bold text-white">
                   F.Sc. Pre-Medical
                 </h3>
+
                 <p className="mt-2 text-base font-semibold text-purple-100">
                   Punjab Group of Colleges, Pasrur
                 </p>
+
                 <p className="mt-1 text-sm text-purple-100/55">
                   Pasrur, Punjab, Pakistan
                 </p>
@@ -544,19 +591,22 @@ export default function AboutClient() {
               </div>
             </div>
           </article>
-
-         
         </div>
       </section>
 
       {/* Professional Development */}
-      <section id="training" className="tangled-section scroll-mt-24 border-y border-white/10 bg-white/[0.025]">
+      <section
+        id="training"
+        className="tangled-section scroll-mt-24 border-y border-white/10 bg-white/[0.025]"
+      >
         <div className="tangled-container">
           <div className="max-w-2xl">
             <p className="tangled-label">Professional Development</p>
+
             <h2 className="tangled-heading mt-5">
-              Training, practice & continuous learning.
+              Training, practice &amp; continuous learning.
             </h2>
+
             <p className="tangled-copy mt-4">
               Alongside formal education, I am developing practical skills
               through technical training, independent study, and preparation
@@ -569,15 +619,19 @@ export default function AboutClient() {
               <div className="tangled-icon">
                 <Monitor size={27} />
               </div>
+
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.12em] text-amber-200">
                 2026
               </p>
+
               <h3 className="mt-2 text-xl font-bold text-white">
                 MS Office Training
               </h3>
+
               <p className="mt-2 font-medium text-purple-100">
                 IT Center, Narowal
               </p>
+
               <p className="mt-3 text-sm leading-7 text-purple-100/70">
                 Developing practical productivity skills with Microsoft
                 Office tools, including Word document formatting, Excel
@@ -590,21 +644,26 @@ export default function AboutClient() {
               <div className="tangled-icon">
                 <Code2 size={27} />
               </div>
+
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.12em] text-amber-200">
                 Web Development
               </p>
+
               <h3 className="mt-2 text-xl font-bold text-white">
                 Full-Stack Web Development
               </h3>
+
               <p className="mt-2 font-medium text-purple-100">
-                NAVTTC, self-learning & W3Schools
+                NAVTTC, self-learning &amp; W3Schools
               </p>
+
               <p className="mt-3 text-sm leading-7 text-purple-100/70">
                 Building knowledge of frontend and backend development,
                 JavaScript, React, Next.js, APIs, databases, and modern web
                 application workflows through training resources and
                 practical projects.
               </p>
+
               <a
                 href="https://www.w3schools.com/"
                 target="_blank"
@@ -620,13 +679,16 @@ export default function AboutClient() {
                 <div className="tangled-icon">
                   <Cloud size={27} />
                 </div>
+
                 <div className="flex-1">
                   <span className="inline-flex rounded-full border border-amber-200/25 bg-amber-100/[0.07] px-3 py-1 text-xs font-semibold text-amber-200">
                     Currently Preparing
                   </span>
+
                   <h3 className="mt-3 text-xl font-bold text-white">
                     Microsoft Azure Certification Preparation
                   </h3>
+
                   <p className="mt-3 text-sm leading-7 text-purple-100/70">
                     Currently preparing for a Microsoft Azure exam to expand
                     my understanding of cloud computing and Microsoft Azure
@@ -658,8 +720,9 @@ export default function AboutClient() {
                   id="cv-modal-title"
                   className="text-sm font-semibold text-white"
                 >
-                  Faiza Noor — CV
+                  {FULL_NAME} — CV
                 </h2>
+
                 <p className="mt-1 text-xs text-purple-100/60">
                   Curriculum Vitae
                 </p>
@@ -674,6 +737,7 @@ export default function AboutClient() {
                   <ArrowDownToLine size={14} />
                   <span className="hidden sm:inline">Download CV</span>
                 </a>
+
                 <button
                   type="button"
                   onClick={() => setCvOpen(false)}
@@ -687,7 +751,7 @@ export default function AboutClient() {
 
             <div className="min-h-0 flex-1 bg-white">
               <iframe
-                title="Faiza Noor CV preview"
+                title={`${FULL_NAME} CV preview`}
                 src={CV_FILE}
                 className="h-full w-full border-0"
               />
