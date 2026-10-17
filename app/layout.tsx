@@ -35,7 +35,9 @@ title: {
 },
 
   description:
-    "Explore Faiza Noor's official portfolio. A full-stack web engineer based in Sialkot District, Punjab, Pakistan, building modern web applications, AI-powered experiences, and scalable digital products with React, Next.js, TypeScript, Node.js, and MongoDB.",
+    
+    "Official portfolio of Faiza Noor M. Shabbir Hussain, a Full-Stack Web Engineer based in Sialkot District, Punjab, Pakistan. Explore her web development projects, React, Next.js, TypeScript, Node.js, MongoDB, and AI-powered applications.",
+
 
   applicationName: "Faiza Noor Portfolio",
 
@@ -85,7 +87,7 @@ publisher: "Faiza Noor M. Shabbir Hussain",
     siteName: "Faiza Noor Portfolio",
     locale: "en_PK",
     title:
-      "Faiza Noor | Full-Stack Web Engineer in Sialkot, Pakistan",
+       "Faiza Noor M. Shabbir Hussain | Full-Stack Web Engineer in Sialkot",
     description:
       "Visit Faiza Noor's official portfolio to explore full-stack web development, React, Next.js, TypeScript, Node.js, MongoDB, and AI-powered projects.",
   },
@@ -93,7 +95,7 @@ publisher: "Faiza Noor M. Shabbir Hussain",
   twitter: {
     card: "summary_large_image",
     title:
-      "Faiza Noor | Full-Stack Web Engineer in Sialkot",
+      "Faiza Noor M. Shabbir Hussain | Full-Stack Web Engineer in Sialkot",
     description:
       "Explore Faiza Noor's full-stack web engineering portfolio, technical skills, and AI-powered web projects.",
   },
