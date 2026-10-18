@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 title: {
   default:
-    "Faiza Noor M. Shabbir Hussain | Full-Stack Web Engineer in Sialkot",
+    "Faiza Noor M. Shabbir Hussain | Youngest Female Full-Stack Web Engineer in Sialkot",
   template: "%s | Faiza Noor M. Shabbir Hussain",
 },
 
@@ -87,7 +87,7 @@ publisher: "Faiza Noor M. Shabbir Hussain",
     siteName: "Faiza Noor Portfolio",
     locale: "en_PK",
     title:
-       "Faiza Noor M. Shabbir Hussain | Full-Stack Web Engineer in Sialkot",
+       "Faiza Noor M. Shabbir Hussain | Youngest Female Full-Stack Web Engineer in Sialkot",
     description:
       "Visit Faiza Noor's official portfolio to explore full-stack web development, React, Next.js, TypeScript, Node.js, MongoDB, and AI-powered projects.",
   },
@@ -95,7 +95,7 @@ publisher: "Faiza Noor M. Shabbir Hussain",
   twitter: {
     card: "summary_large_image",
     title:
-      "Faiza Noor M. Shabbir Hussain | Full-Stack Web Engineer in Sialkot",
+      "Faiza Noor M. Shabbir Hussain | Youngest Female Full-Stack Web Engineer in Sialkot",
     description:
       "Explore Faiza Noor's full-stack web engineering portfolio, technical skills, and AI-powered web projects.",
   },

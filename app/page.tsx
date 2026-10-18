@@ -4,7 +4,7 @@ import { Hero } from "@/components/hero/Hero";
 
 import TechUniverse from "@/components/skills/TechUniverse";
 
-
+import PersonSchema from "@/components/seo/PersonSchema";
 import ServicesSection from "@/components/services/ServicesSection";
 
 
@@ -25,7 +25,10 @@ export default function HomePage() {
         <Hero />
       </section>
 
-    
+    <>
+  <PersonSchema />
+  {/* Tumhara existing homepage content */}
+</>
 
       <section
         id="skills"
