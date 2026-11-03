@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 title: {
   default:
-    "Faiza Noor M. Shabbir Hussain | Youngest Female Full-Stack Web Engineer in Sialkot",
+    "Faiza Noor M.Shabbir Hussain | Full-Stack Web Engineer",
   template: "%s | Faiza Noor M. Shabbir Hussain",
 },
 
