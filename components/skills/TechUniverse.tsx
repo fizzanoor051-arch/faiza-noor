@@ -3,7 +3,24 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
-type SkillItem = { name: string; level: number };
+export type Skill = {
+  id: string;
+  name: string;
+  category: string;
+  level: number;
+  description: string;
+  technologies: string[];
+  position: {
+    x: number;
+    y: number;
+  };
+};
+
+type SkillItem = {
+  name: string;
+  level: number;
+};
+
 type Category = {
   name: string;
   icon: string;
@@ -108,6 +125,76 @@ const categories: Category[] = [
 const N = categories.length;
 const STEP = 360 / N;
 
+const skillDescriptions: Record<string, string> = {
+  "React.js": "Building reusable, interactive user interfaces with component-based architecture.",
+  "Next.js": "Developing performant full-stack React applications with modern routing and rendering.",
+  JavaScript: "Creating interactive and dynamic functionality for web applications.",
+  TypeScript: "Writing more reliable JavaScript applications with static typing.",
+  HTML5: "Structuring accessible and semantic web pages.",
+  CSS3: "Creating polished layouts, animations and responsive interfaces.",
+  "Tailwind CSS": "Building consistent interfaces with utility-first styling.",
+  "Responsive UI": "Designing interfaces that adapt across desktop, tablet and mobile screens.",
+  "Framer Motion": "Creating smooth animations and interactive transitions.",
+  Accessibility: "Making interfaces easier to navigate and use.",
+  "Node.js": "Building server-side applications and backend functionality.",
+  "Express.js": "Creating APIs and backend routes with Express.",
+  "REST APIs": "Designing and integrating RESTful services.",
+  Authentication: "Implementing secure user sign-in and identity verification.",
+  Authorization: "Managing permissions and access control.",
+  "CRUD Systems": "Building create, read, update and delete workflows.",
+  "Server Actions": "Handling server-side operations in modern Next.js applications.",
+  Middleware: "Processing requests through reusable backend logic.",
+  MongoDB: "Working with flexible document-based databases.",
+  Mongoose: "Managing MongoDB models, schemas and queries.",
+  PostgreSQL: "Working with relational data and SQL queries.",
+  "Prisma ORM": "Managing database access with a modern type-safe ORM.",
+  "Data Modeling": "Structuring data for maintainable application workflows.",
+  Git: "Tracking code changes and managing development history.",
+  GitHub: "Collaborating on code and managing repositories.",
+  Docker: "Packaging applications into consistent environments.",
+  "CI/CD": "Automating testing and deployment workflows.",
+  Vercel: "Deploying and hosting modern web applications.",
+  "Environment Setup": "Configuring development and production environments.",
+  Jest: "Writing automated tests for JavaScript applications.",
+  Vitest: "Testing modern frontend and TypeScript projects.",
+  Playwright: "Testing browser workflows and user interactions.",
+  Debugging: "Identifying and resolving application issues.",
+  Performance: "Improving application speed and responsiveness.",
+  "AI Integration": "Adding AI-powered functionality to web applications.",
+  "OpenAI APIs": "Connecting applications to OpenAI models and services.",
+  "API Integration": "Connecting external services and application data.",
+  Webhooks: "Handling event-driven communication between services.",
+  "Project Architecture": "Organizing application code for maintainability and growth.",
+  "Form Validation": "Validating user input and handling form errors.",
+  "Security Basics": "Applying foundational application security practices.",
+  "Technical SEO": "Improving technical structure for search engine discovery.",
+};
+
+function buildSkills(category: Category): Skill[] {
+  const centerX = 50;
+  const centerY = 50;
+  const radius = 34;
+
+  return category.skills.map((item, index) => {
+    const angle = (index / category.skills.length) * Math.PI * 2 - Math.PI / 2;
+
+    return {
+      id: `${category.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${index + 1}`,
+      name: item.name,
+      category: category.name,
+      level: item.level,
+      description:
+        skillDescriptions[item.name] ??
+        `Using ${item.name} to build reliable and maintainable web applications.`,
+      technologies: [item.name],
+      position: {
+        x: centerX + Math.cos(angle) * radius,
+        y: centerY + Math.sin(angle) * radius,
+      },
+    };
+  });
+}
+
 function SkillOrbField({ skills }: { skills: SkillItem[] }) {
   const fieldRef = useRef<HTMLDivElement>(null);
 
@@ -211,6 +298,7 @@ export default function SkillsUniverse() {
 
   const { cur, rot } = state;
   const active = categories[cur];
+  const activeSkills = buildSkills(active);
 
   const go = (i: number) => {
     setState((s) => {
