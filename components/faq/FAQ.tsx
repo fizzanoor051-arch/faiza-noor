@@ -60,7 +60,7 @@ const fireflies = [
 ];
 
 export default function FAQ() {
-  const [activeId, setActiveId] = useState<string | null>("01");
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   return (
     <section

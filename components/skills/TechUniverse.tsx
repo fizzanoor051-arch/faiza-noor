@@ -1,1284 +1,811 @@
+
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 
-/**
- * Shared skill shape used by TechNode and SkillDetails.
- * These fields are for components that need constellation positioning
- * and technology details.
- */
-export type Skill = {
-  id: string;
+type SkillItem = { name: string; level: number };
+type Category = {
   name: string;
   icon: string;
-  category: string;
-  level: number;
-  description: string;
-  technologies: string[];
-  position: {
-    x: number;
-    y: number;
+  benefit: string;
+  skills: SkillItem[];
+};
+
+const categories: Category[] = [
+  {
+    name: "Frontend",
+    icon: "⚛️",
+    benefit: "Fast, beautiful, mobile-friendly interfaces your visitors enjoy using.",
+    skills: [
+      { name: "React.js", level: 95 },
+      { name: "Next.js", level: 92 },
+      { name: "JavaScript", level: 95 },
+      { name: "TypeScript", level: 90 },
+      { name: "HTML5", level: 95 },
+      { name: "CSS3", level: 95 },
+      { name: "Tailwind CSS", level: 93 },
+      { name: "Responsive UI", level: 92 },
+      { name: "Framer Motion", level: 82 },
+      { name: "Accessibility", level: 80 },
+    ],
+  },
+  {
+    name: "Backend",
+    icon: "🚂",
+    benefit: "Reliable server logic, secure logins and clean APIs behind the scenes.",
+    skills: [
+      { name: "Node.js", level: 84 },
+      { name: "Express.js", level: 84 },
+      { name: "REST APIs", level: 88 },
+      { name: "Authentication", level: 82 },
+      { name: "Authorization", level: 80 },
+      { name: "CRUD Systems", level: 88 },
+      { name: "Server Actions", level: 80 },
+      { name: "Middleware", level: 80 },
+    ],
+  },
+  {
+    name: "Database",
+    icon: "🍃",
+    benefit: "Your data stored safely, structured well and quick to fetch.",
+    skills: [
+      { name: "MongoDB", level: 85 },
+      { name: "Mongoose", level: 82 },
+      { name: "PostgreSQL", level: 80 },
+      { name: "Prisma ORM", level: 78 },
+      { name: "Data Modeling", level: 80 },
+    ],
+  },
+  {
+    name: "DevOps",
+    icon: "🐳",
+    benefit: "Smooth deployments and safe teamwork so updates go live without drama.",
+    skills: [
+      { name: "Git", level: 88 },
+      { name: "GitHub", level: 88 },
+      { name: "Docker", level: 78 },
+      { name: "CI/CD", level: 75 },
+      { name: "Vercel", level: 88 },
+      { name: "Environment Setup", level: 82 },
+    ],
+  },
+  {
+    name: "Testing",
+    icon: "🧪",
+    benefit: "Bugs caught early, so your product stays stable and fast.",
+    skills: [
+      { name: "Jest", level: 75 },
+      { name: "Vitest", level: 75 },
+      { name: "Playwright", level: 70 },
+      { name: "Debugging", level: 85 },
+      { name: "Performance", level: 82 },
+    ],
+  },
+  {
+    name: "AI & APIs",
+    icon: "🤖",
+    benefit: "Smart features and third-party tools connected into your product.",
+    skills: [
+      { name: "AI Integration", level: 82 },
+      { name: "OpenAI APIs", level: 80 },
+      { name: "API Integration", level: 85 },
+      { name: "Webhooks", level: 75 },
+    ],
+  },
+  {
+    name: "Engineering",
+    icon: "🏗️",
+    benefit: "Solid planning, secure forms and SEO so the project scales and gets found.",
+    skills: [
+      { name: "Project Architecture", level: 82 },
+      { name: "Form Validation", level: 88 },
+      { name: "Security Basics", level: 78 },
+      { name: "Technical SEO", level: 80 },
+    ],
+  },
+];
+
+const N = categories.length;
+const STEP = 360 / N;
+
+function SkillOrbField({ skills }: { skills: SkillItem[] }) {
+  const fieldRef = useRef<HTMLDivElement>(null);
+
+  const repelOrbs = (clientX: number, clientY: number) => {
+    const field = fieldRef.current;
+    if (!field) return;
+
+    field.querySelectorAll<HTMLElement>("[data-skill-orb]").forEach((orb) => {
+      const rect = orb.getBoundingClientRect();
+      const dx = rect.left + rect.width / 2 - clientX;
+      const dy = rect.top + rect.height / 2 - clientY;
+      const distance = Math.hypot(dx, dy);
+      const range = 155;
+
+      if (distance < range) {
+        const force = (range - distance) * 0.85;
+        const angleX = distance === 0 ? 1 : dx / distance;
+        const angleY = distance === 0 ? 0 : dy / distance;
+
+        orb.style.setProperty("--push-x", `${angleX * force}px`);
+        orb.style.setProperty("--push-y", `${angleY * force}px`);
+        orb.style.setProperty("--orb-scale", "1.12");
+      } else {
+        orb.style.setProperty("--push-x", "0px");
+        orb.style.setProperty("--push-y", "0px");
+        orb.style.setProperty("--orb-scale", "1");
+      }
+    });
   };
-};
 
-/**
- * Shape used by the existing golden animated TechUniverse UI.
- * Keeping this separate avoids forcing extra fields onto every skill.
- */
-type UniverseSkill = {
-  name: string;
-  icon: string;
-  category: string;
-  level: number;
-  description: string;
-};
+  const resetOrbs = () => {
+    fieldRef.current?.querySelectorAll<HTMLElement>("[data-skill-orb]").forEach((orb) => {
+      orb.style.setProperty("--push-x", "0px");
+      orb.style.setProperty("--push-y", "0px");
+      orb.style.setProperty("--orb-scale", "1");
+    });
+  };
 
-const skills: UniverseSkill[] = [
-  // FRONTEND
-  { name: "React.js", icon: "⚛️", category: "Frontend", level: 95, description: "Reusable components, hooks, state management and interactive interfaces." },
-  { name: "Next.js", icon: "▲", category: "Frontend", level: 92, description: "App Router, server rendering, layouts and full-stack React applications." },
-  { name: "JavaScript", icon: "🟨", category: "Frontend", level: 95, description: "Modern JavaScript, asynchronous programming, DOM and web APIs." },
-  { name: "TypeScript", icon: "🔷", category: "Frontend", level: 90, description: "Type-safe applications, interfaces, generics and maintainable code." },
-  { name: "HTML5", icon: "🌐", category: "Frontend", level: 95, description: "Semantic markup and accessible web page structure." },
-  { name: "CSS3", icon: "🎨", category: "Frontend", level: 95, description: "Modern layouts, animations, transitions and responsive styling." },
-  { name: "Tailwind CSS", icon: "💨", category: "Frontend", level: 93, description: "Utility-first styling and consistent responsive design systems." },
-  { name: "Responsive UI", icon: "📱", category: "Frontend", level: 92, description: "Interfaces that adapt to phones, tablets and desktop screens." },
-  { name: "Framer Motion", icon: "✨", category: "Frontend", level: 82, description: "Fluid page transitions, micro-interactions and animated interfaces." },
-  { name: "Accessibility", icon: "♿", category: "Frontend", level: 80, description: "Accessible navigation, semantic elements and keyboard interactions." },
+  const getSymbol = (name: string) => {
+    const symbols: Record<string, string> = {
+      "React.js": "⚛",
+      "Next.js": "N",
+      JavaScript: "JS",
+      TypeScript: "TS",
+      HTML5: "5",
+      CSS3: "3",
+      "Node.js": "⬡",
+      MongoDB: "◉",
+      GitHub: "⌘",
+      Docker: "▤",
+      "OpenAI APIs": "✳",
+    };
 
-  // BACKEND
-  { name: "Node.js", icon: "🟢", category: "Backend", level: 84, description: "Server-side JavaScript, modules and asynchronous services." },
-  { name: "Express.js", icon: "🚂", category: "Backend", level: 84, description: "REST endpoints, middleware, routes and controller architecture." },
-  { name: "REST APIs", icon: "🔌", category: "Backend", level: 88, description: "API design, HTTP methods, status codes and resource handling." },
-  { name: "Authentication", icon: "🔐", category: "Backend", level: 82, description: "Login flows, sessions, JWT and protected routes." },
-  { name: "Authorization", icon: "🛡️", category: "Backend", level: 80, description: "Role-based access control and permission checks." },
-  { name: "CRUD Systems", icon: "⚙️", category: "Backend", level: 88, description: "Create, read, update and delete workflows with validation." },
-  { name: "Server Actions", icon: "🧩", category: "Backend", level: 80, description: "Server-side mutations and form handling in modern Next.js." },
-  { name: "Middleware", icon: "🔀", category: "Backend", level: 80, description: "Request processing, validation and reusable server logic." },
-
-  // DATABASE
-  { name: "MongoDB", icon: "🍃", category: "Database", level: 85, description: "Document models, collections, queries and schema design." },
-  { name: "Mongoose", icon: "📚", category: "Database", level: 82, description: "MongoDB schemas, models, validation and relationships." },
-  { name: "PostgreSQL", icon: "🐘", category: "Database", level: 80, description: "Relational data, SQL queries and structured data models." },
-  { name: "Prisma ORM", icon: "🔷", category: "Database", level: 78, description: "Typed database access, schema management and migrations." },
-  { name: "Data Modeling", icon: "🗃️", category: "Database", level: 80, description: "Structuring data and designing maintainable database schemas." },
-
-  // DEVOPS
-  { name: "Git", icon: "🌿", category: "DevOps", level: 88, description: "Version control, branches, commits and merge workflows." },
-  { name: "GitHub", icon: "🐙", category: "DevOps", level: 88, description: "Repositories, collaboration, pull requests and source management." },
-  { name: "Docker", icon: "🐳", category: "DevOps", level: 78, description: "Container fundamentals, Dockerfiles and repeatable environments." },
-  { name: "CI/CD", icon: "🔄", category: "DevOps", level: 75, description: "Automated checks and deployment pipeline fundamentals." },
-  { name: "Vercel", icon: "▲", category: "DevOps", level: 88, description: "Deployments, environment variables and production hosting." },
-  { name: "Environment Setup", icon: "🔧", category: "DevOps", level: 82, description: "Configuration, environment variables and development tooling." },
-
-  // TESTING
-  { name: "Jest", icon: "🧪", category: "Testing", level: 75, description: "Unit tests and JavaScript testing fundamentals." },
-  { name: "Vitest", icon: "⚗️", category: "Testing", level: 75, description: "Fast unit testing for modern JavaScript projects." },
-  { name: "Playwright", icon: "🎭", category: "Testing", level: 70, description: "Browser automation and end-to-end testing fundamentals." },
-  { name: "Debugging", icon: "🔍", category: "Testing", level: 85, description: "Tracing issues, inspecting requests and resolving application bugs." },
-  { name: "Performance", icon: "⚡", category: "Testing", level: 82, description: "Rendering efficiency, loading performance and frontend optimization." },
-
-  // AI & APIS
-  { name: "AI Integration", icon: "🤖", category: "AI & APIs", level: 82, description: "Adding AI-powered features to web applications." },
-  { name: "OpenAI APIs", icon: "🧠", category: "AI & APIs", level: 80, description: "Connecting language-model APIs to application workflows." },
-  { name: "API Integration", icon: "🔗", category: "AI & APIs", level: 85, description: "Integrating external services and handling API responses." },
-  { name: "Webhooks", icon: "🪝", category: "AI & APIs", level: 75, description: "Connecting application events with external services." },
-
-  // ENGINEERING
-  { name: "Project Architecture", icon: "🏗️", category: "Engineering", level: 82, description: "Organizing reusable modules and scalable application structure." },
-  { name: "Form Validation", icon: "✅", category: "Engineering", level: 88, description: "Validating input and improving form reliability." },
-  { name: "Security Basics", icon: "🔒", category: "Engineering", level: 78, description: "Safer input handling, access control and configuration practices." },
-  { name: "Technical SEO", icon: "🔎", category: "Engineering", level: 80, description: "Metadata, semantic markup and search-friendly page structure." },
-];
-
-const categories = [
-  "All",
-  "Frontend",
-  "Backend",
-  "Database",
-  "DevOps",
-  "Testing",
-  "AI & APIs",
-  "Engineering",
-];
-
-const lanterns = [
-  { left: "5%", delay: "-8s", duration: "19s", size: 13 },
-  { left: "17%", delay: "-2s", duration: "23s", size: 10 },
-  { left: "31%", delay: "-13s", duration: "21s", size: 15 },
-  { left: "46%", delay: "-5s", duration: "25s", size: 11 },
-  { left: "60%", delay: "-16s", duration: "22s", size: 14 },
-  { left: "74%", delay: "-10s", duration: "20s", size: 10 },
-  { left: "88%", delay: "-4s", duration: "24s", size: 14 },
-  { left: "96%", delay: "-14s", duration: "21s", size: 9 },
-];
-
-const fireflies = [
-  { left: "8%", top: "23%", delay: "0s" },
-  { left: "19%", top: "65%", delay: "2s" },
-  { left: "29%", top: "35%", delay: "4s" },
-  { left: "41%", top: "78%", delay: "1s" },
-  { left: "53%", top: "17%", delay: "3s" },
-  { left: "65%", top: "54%", delay: "5s" },
-  { left: "76%", top: "29%", delay: "2.5s" },
-  { left: "91%", top: "68%", delay: "1.5s" },
-  { left: "84%", top: "12%", delay: "4.5s" },
-  { left: "36%", top: "12%", delay: "3.5s" },
-  { left: "13%", top: "86%", delay: "5.5s" },
-  { left: "69%", top: "85%", delay: "0.8s" },
-];
-
-// NEW: automatic golden light streaks
-const goldStreaks = [
-  { top: "12%", delay: "-2s", duration: "13s", width: "35%" },
-  { top: "28%", delay: "-8s", duration: "17s", width: "27%" },
-  { top: "43%", delay: "-5s", duration: "15s", width: "42%" },
-  { top: "61%", delay: "-11s", duration: "19s", width: "30%" },
-  { top: "77%", delay: "-4s", duration: "16s", width: "38%" },
-  { top: "91%", delay: "-14s", duration: "20s", width: "25%" },
-];
-
-// NEW: golden particles distributed across the background
-const goldDust = Array.from({ length: 24 }, (_, index) => ({
-  left: `${(index * 41 + 9) % 100}%`,
-  top: `${(index * 29 + 13) % 100}%`,
-  delay: `${-((index * 1.3) % 12)}s`,
-  duration: `${5 + (index % 7)}s`,
-  size: index % 4 === 0 ? 4 : index % 3 === 0 ? 3 : 2,
-}));
-
-export default function TechUniverse() {
-  const [category, setCategory] = useState("All");
-  const [selectedName, setSelectedName] = useState("React.js");
-
-  const visible = skills.filter(
-    (skill) => category === "All" || skill.category === category,
-  );
-
-  const selected =
-    visible.find((skill) => skill.name === selectedName) ?? visible[0];
+    return symbols[name] || name.slice(0, 2).toUpperCase();
+  };
 
   return (
-    <section id="stack" className="magic-world">
-      <div className="magic-world__backdrop" aria-hidden="true">
-        <div className="services-nebula services-nebula-one" />
-        <div className="services-nebula services-nebula-two" />
-        <div className="services-nebula services-nebula-three" />
+    <div
+      ref={fieldRef}
+      className="sk3d-orb-field"
+      onPointerMove={(e) => repelOrbs(e.clientX, e.clientY)}
+      onPointerLeave={resetOrbs}
+      aria-label="Interactive floating technology skills"
+    >
+      <div className="sk3d-orbit sk3d-orbit--one" />
+      <div className="sk3d-orbit sk3d-orbit--two" />
 
-        <div className="services-orbit services-orbit-one" />
-        <div className="services-orbit services-orbit-two" />
-        <div className="services-orbit services-orbit-three" />
-
-        <div className="services-star-field" />
-
-        {Array.from({ length: 32 }, (_, index) => (
-          <span
-            key={`star-${index}`}
-            className="services-star"
-            style={{
-              left: `${(index * 37 + 11) % 100}%`,
-              top: `${(index * 53 + 7) % 100}%`,
-              animationDelay: `${(index % 8) * -0.7}s`,
-              animationDuration: `${3 + (index % 5)}s`,
-            }}
-          />
-        ))}
-
-        {fireflies.map((fly, index) => (
-          <span
-            key={`firefly-${index}`}
-            className="services-firefly"
-            style={{
-              left: fly.left,
-              top: fly.top,
-              animationDelay: fly.delay,
-            }}
-          />
-        ))}
-
-        {lanterns.map((lantern, index) => (
+      {skills.map((skill, index) => (
+        <div
+          key={skill.name}
+          className="sk3d-orb-wrap"
+          style={{
+            animationDelay: `${(index % 7) * -0.43}s`,
+            "--orb-size": `${76 + ((index * 17) % 35)}px`,
+          } as CSSProperties}
+        >
           <div
-            key={`lantern-${index}`}
-            className="services-lantern-path"
-            style={{
-              left: lantern.left,
-              animationDelay: lantern.delay,
-              animationDuration: lantern.duration,
-            }}
+            className={`sk3d-orb sk3d-orb--${index % 5}`}
+            data-skill-orb
+            title={skill.name}
+            style={{ animationDelay: `${(index % 6) * -0.31}s` } as CSSProperties}
           >
-            <div
-              className="services-lantern"
-              style={{
-                width: lantern.size,
-                height: lantern.size * 1.45,
-                animationDelay: `${index * -0.6}s`,
-              }}
-            >
-              <span className="services-lantern-light" />
-            </div>
+            <span className="sk3d-orb__symbol">{getSymbol(skill.name)}</span>
+            <span className="sk3d-orb__name">{skill.name}</span>
           </div>
-        ))}
-
-        {/* NEW: flowing golden light trails */}
-        <div className="magic-gold-motion">
-          {goldStreaks.map((streak, index) => (
-            <span
-              key={`gold-streak-${index}`}
-              className={`magic-gold-streak magic-gold-streak--${index % 3}`}
-              style={
-                {
-                  top: streak.top,
-                  width: streak.width,
-                  animationDelay: streak.delay,
-                  animationDuration: streak.duration,
-                  "--gold-index": index,
-                } as CSSProperties
-              }
-            />
-          ))}
-
-          {/* NEW: floating golden dust */}
-          {goldDust.map((particle, index) => (
-            <span
-              key={`gold-dust-${index}`}
-              className="magic-gold-dust"
-              style={
-                {
-                  left: particle.left,
-                  top: particle.top,
-                  width: particle.size,
-                  height: particle.size,
-                  animationDelay: particle.delay,
-                  animationDuration: particle.duration,
-                } as CSSProperties
-              }
-            />
-          ))}
-
-          {/* NEW: slowly sweeping ambient gold glow */}
-          <div className="magic-gold-ambient magic-gold-ambient--one" />
-          <div className="magic-gold-ambient magic-gold-ambient--two" />
         </div>
+      ))}
 
-        <div className="services-mist services-mist-one" />
-        <div className="services-mist services-mist-two" />
-        <div className="services-horizon" />
-      </div>
+      <p className="sk3d-orb-hint">
+        Move your cursor near a skill orb to see it react
+      </p>
+    </div>
+  );
+}
 
-      <div className="magic-world__content">
-        <header className="magic-heading">
-          <span className="magic-eyebrow">
-            <span className="magic-star">✳</span>
-            THE CRAFT BEHIND THE CODE
-          </span>
+export default function SkillsUniverse() {
+  const [state, setState] = useState({ cur: 0, rot: 0 });
+  const [radius, setRadius] = useState(300);
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const startX = useRef<number | null>(null);
 
-          <h2>
-            My skills,
-            <br />
-            <span>my universe.</span>
-          </h2>
+  const { cur, rot } = state;
+  const active = categories[cur];
 
-          <p>
-            From beautiful interfaces to powerful backend systems, every skill
-            has a place in the bigger picture.
-          </p>
-        </header>
+  const go = (i: number) => {
+    setState((s) => {
+      let d = (((i - s.cur) % N) + N) % N;
+      if (d > N / 2) d -= N;
 
-        <div className="magic-categories" aria-label="Skill categories">
-          {categories.map((item) => (
-            <button
-              type="button"
-              key={item}
-              onClick={() => setCategory(item)}
-              className={
-                category === item ? "magic-filter active" : "magic-filter"
-              }
-              aria-pressed={category === item}
-            >
-              {item}
-              {item === "All" && (
-                <span className="filter-count">{skills.length}</span>
-              )}
-            </button>
-          ))}
-        </div>
+      return {
+        cur: ((i % N) + N) % N,
+        rot: s.rot + d * STEP,
+      };
+    });
+  };
 
-        <div className="magic-layout">
-          <div className="magic-field">
-            <div className="magic-field__top">
-              <span>✦ SKILL CONSTELLATION</span>
-              <span>{visible.length} SKILLS</span>
-            </div>
+  useEffect(() => {
+    const update = () => {
+      const w = sceneRef.current?.clientWidth ?? 900;
+      setRadius(Math.min(390, Math.max(245, w / 2.25)));
+    };
 
-            <div className="magic-orbital-glow" aria-hidden="true" />
-            <div
-              className="magic-orbital-glow magic-orbital-glow--two"
-              aria-hidden="true"
-            />
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
-            <div className="magic-orbs">
-              {visible.map((skill, index) => (
-                <button
-                  type="button"
-                  key={skill.name}
-                  onClick={() => setSelectedName(skill.name)}
-                  className={`magic-skill ${
-                    selected.name === skill.name ? "magic-skill--selected" : ""
-                  }`}
-                  style={
-                    {
-                      "--index": index,
-                      "--float-duration": `${4.2 + (index % 5) * 0.65}s`,
-                    } as CSSProperties
-                  }
-                  aria-pressed={selected.name === skill.name}
-                  aria-label={`${skill.name}, ${skill.level}% self-assessed proficiency`}
-                >
-                  <span className="magic-skill__icon">{skill.icon}</span>
-                  <span className="magic-skill__name">{skill.name}</span>
-                  <span className="magic-skill__level">{skill.level}%</span>
-                  <span className="magic-skill__shine" aria-hidden="true" />
-                </button>
-              ))}
-            </div>
+  useEffect(() => {
+    const timer = window.setTimeout(() => go(cur + 1), 2000);
+    return () => window.clearTimeout(timer);
+  }, [cur, rot]);
 
-            <div className="magic-field__bottom">
-              <span className="magic-bottom-star">✧</span>
-              Select any floating skill to explore it
-            </div>
-          </div>
+  return (
+    <section id="stack" className="sk3d">
+      <div className="sk3d-wrap">
+        <div className="sk3d-eyebrow">✳ THE CRAFT BEHIND THE CODE ✳</div>
 
-          <aside className="magic-profile" aria-live="polite">
-            <span className="magic-profile__eyebrow">SKILL SPOTLIGHT</span>
+        <h2 className="sk3d-title">
+          My Skills, <span>My Universe.</span>
+        </h2>
 
-            <div className="magic-profile__icon" key={selected.name}>
-              {selected.icon}
-            </div>
+        <p className="sk3d-sub">
+          Explore my technical universe — a collection of skills working
+          together to build beautiful, powerful digital experiences.
+        </p>
 
-            <span className="magic-profile__category">
-              {selected.category}
-            </span>
-
-            <h3 key={`title-${selected.name}`}>{selected.name}</h3>
-
-            <p className="magic-profile__description">
-              {selected.description}
-            </p>
-
-            <div className="magic-profile__rule" />
-
-            <div className="magic-profile__meter">
-              <div>
-                <span>SELF-ASSESSED PROFICIENCY</span>
-                <strong>{selected.level}%</strong>
-              </div>
-
-              <div
-                className="magic-meter"
-                role="progressbar"
-                aria-label={`${selected.name} self-assessed proficiency`}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuenow={selected.level}
+        <div
+          ref={sceneRef}
+          className="sk3d-scene"
+          onPointerDown={(e) => {
+            startX.current = e.clientX;
+          }}
+          onPointerUp={(e) => {
+            if (
+              startX.current !== null &&
+              Math.abs(e.clientX - startX.current) > 50
+            ) {
+              go(cur + (e.clientX < startX.current ? 1 : -1));
+            }
+            startX.current = null;
+          }}
+          onPointerCancel={() => {
+            startX.current = null;
+          }}
+        >
+          <div
+            className="sk3d-ring"
+            style={{ transform: `translateZ(-${radius}px) rotateY(${-rot}deg)` }}
+          >
+            {categories.map((category, index) => (
+              <button
+                type="button"
+                key={category.name}
+                className={`sk3d-panel ${index === cur ? "on" : ""}`}
+                style={{
+                  transform: `rotateY(${index * STEP}deg) translateZ(${radius}px)`,
+                }}
+                onClick={() => go(index)}
+                aria-pressed={index === cur}
               >
-                <span
-                  key={`${selected.name}-${selected.level}`}
-                  style={{ width: `${selected.level}%` }}
-                />
-              </div>
-            </div>
-
-            <p className="magic-profile__note">
-              Skills grow through building, testing and shipping real projects.
-            </p>
-          </aside>
+                <span className="sk3d-panel__icon">{category.icon}</span>
+                <b>{category.name}</b>
+                <small>{category.skills.length} technologies</small>
+                <span className="sk3d-panel__action">Explore <i>→</i></span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        <footer className="magic-footer">
-          <p>One connected skill set. Countless ways to build.</p>
-          <a href="#projects">
-            EXPLORE PROJECTS <span>↗</span>
-          </a>
-        </footer>
+        <div className="sk3d-nav">
+          <button type="button" onClick={() => go(cur - 1)} aria-label="Previous category">
+            ←
+          </button>
+          <span>{String(cur + 1).padStart(2, "0")} / {String(N).padStart(2, "0")}</span>
+          <button type="button" onClick={() => go(cur + 1)} aria-label="Next category">
+            →
+          </button>
+        </div>
+
+        <p className="sk3d-hint">
+          Drag, swipe or select a glowing card to explore
+        </p>
+
+        <div className="sk3d-info" aria-live="polite">
+          <div>
+            <span className="sk3d-info__eyebrow">EXPLORE THE CATEGORY</span>
+            <h3>{active.icon} {active.name}</h3>
+            <p>{active.benefit}</p>
+          </div>
+          <span className="sk3d-info__count">{active.skills.length} skills</span>
+        </div>
+
+        <SkillOrbField key={active.name} skills={active.skills} />
+
+        <p className="sk3d-foot">
+          One connected skill set. Countless ways to build.
+          <br />
+          Every skill is part of the bigger picture.
+        </p>
       </div>
 
       <style jsx global>{`
-        .magic-world {
+        .sk3d {
+          --sk-bg: #070817;
+          --sk-text: #f4f5ff;
+          --sk-muted: #aab2d8;
+          --sk-violet: #a78bfa;
+          --sk-cyan: #52e5ff;
+          --sk-pink: #ff6bd6;
           position: relative;
           isolation: isolate;
           overflow: hidden;
-          padding: 100px 24px 42px;
-          color: #fff7e9;
-          background: #080510;
-        }
-
-        .magic-world__backdrop {
-          position: absolute;
-          z-index: -1;
-          inset: 0;
-          overflow: hidden;
-          background: #080510;
-          pointer-events: none;
-        }
-
-        .magic-world__content {
-          position: relative;
-          z-index: 1;
-          width: 100%;
-          max-width: 1180px;
-          margin: auto;
-        }
-
-        /* =========================================
-           NEW GOLDEN MOTION BACKGROUND
-           Existing background colors stay unchanged.
-        ========================================= */
-
-        .magic-gold-motion {
-          position: absolute;
-          z-index: 5;
-          inset: 0;
-          overflow: hidden;
-          pointer-events: none;
-          opacity: 0.9;
-          mix-blend-mode: screen;
-        }
-
-        .magic-gold-streak {
-          position: absolute;
-          left: -45%;
-          display: block;
-          height: 1px;
-          border-radius: 50%;
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255, 196, 89, 0.02) 12%,
-            rgba(255, 213, 128, 0.3) 43%,
-            rgba(255, 235, 183, 0.95) 50%,
-            rgba(255, 192, 72, 0.24) 60%,
-            transparent 100%
-          );
-          box-shadow:
-            0 0 5px rgba(255, 194, 79, 0.28),
-            0 0 14px rgba(255, 189, 64, 0.13);
-          transform: rotate(-19deg);
-          transform-origin: center;
-          animation-name: magic-gold-streak-travel;
-          animation-timing-function: linear;
-          animation-iteration-count: infinite;
-          will-change: transform, left, opacity;
-        }
-
-        .magic-gold-streak::after {
-          position: absolute;
-          top: -2px;
-          right: 22%;
-          width: 4px;
-          height: 4px;
-          border-radius: 50%;
-          background: #ffe9b0;
-          box-shadow:
-            0 0 6px 2px rgba(255, 207, 111, 0.7),
-            0 0 17px 5px rgba(255, 180, 55, 0.25);
-          content: "";
-        }
-
-        .magic-gold-streak--0 {
-          height: 1px;
-        }
-
-        .magic-gold-streak--1 {
-          height: 2px;
-          opacity: 0.55;
-          filter: blur(0.3px);
-        }
-
-        .magic-gold-streak--2 {
-          height: 1px;
-          opacity: 0.72;
-          transform: rotate(-12deg);
-        }
-
-        @keyframes magic-gold-streak-travel {
-          0% {
-            left: -48%;
-            opacity: 0;
-            translate: 0 18px;
-          }
-          12% {
-            opacity: 0.75;
-          }
-          50% {
-            opacity: 1;
-          }
-          85% {
-            opacity: 0.5;
-          }
-          100% {
-            left: 115%;
-            opacity: 0;
-            translate: 0 -18px;
-          }
-        }
-
-        .magic-gold-dust {
-          position: absolute;
-          display: block;
-          border-radius: 50%;
-          background: #ffd77d;
-          box-shadow:
-            0 0 5px 1px rgba(255, 204, 102, 0.55),
-            0 0 13px 2px rgba(255, 185, 64, 0.2);
-          opacity: 0;
-          animation-name: magic-gold-particle-drift;
-          animation-timing-function: ease-in-out;
-          animation-iteration-count: infinite;
-          will-change: transform, opacity;
-        }
-
-        @keyframes magic-gold-particle-drift {
-          0% {
-            opacity: 0;
-            transform: translate3d(0, 20px, 0) scale(0.5);
-          }
-          25% {
-            opacity: 0.7;
-          }
-          50% {
-            opacity: 0.95;
-            transform: translate3d(18px, -16px, 0) scale(1.15);
-          }
-          75% {
-            opacity: 0.55;
-          }
-          100% {
-            opacity: 0;
-            transform: translate3d(-12px, -36px, 0) scale(0.6);
-          }
-        }
-
-        .magic-gold-ambient {
-          position: absolute;
-          width: 45%;
-          height: 35%;
-          border-radius: 50%;
-          background: radial-gradient(
-            ellipse,
-            rgba(255, 184, 61, 0.075) 0%,
-            rgba(255, 198, 100, 0.035) 35%,
-            transparent 72%
-          );
-          filter: blur(25px);
-          animation: magic-gold-ambient-drift 18s ease-in-out infinite alternate;
-          will-change: transform;
-        }
-
-        .magic-gold-ambient--one {
-          top: 8%;
-          left: -12%;
-        }
-
-        .magic-gold-ambient--two {
-          right: -12%;
-          bottom: 5%;
-          animation-delay: -9s;
-          animation-duration: 22s;
-        }
-
-        @keyframes magic-gold-ambient-drift {
-          0% {
-            transform: translate3d(0, 0, 0) scale(0.9);
-            opacity: 0.5;
-          }
-          50% {
-            transform: translate3d(28px, -18px, 0) scale(1.12);
-            opacity: 1;
-          }
-          100% {
-            transform: translate3d(-12px, 20px, 0) scale(1);
-            opacity: 0.65;
-          }
-        }
-
-        /* =========================================
-           ORIGINAL TECH UNIVERSE STYLING
-        ========================================= */
-
-        .magic-heading {
-          max-width: 650px;
-          margin-bottom: 35px;
-        }
-
-        .magic-eyebrow,
-        .magic-field__top,
-        .magic-field__bottom,
-        .magic-profile__eyebrow,
-        .magic-profile__category,
-        .magic-profile__meter > div:first-child,
-        .magic-footer a {
-          font-family: var(--font-mono, monospace);
-          font-size: 9px;
-          letter-spacing: 0.16em;
-        }
-
-        .magic-eyebrow {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          color: #e8cb91;
-        }
-
-        .magic-star {
-          font-size: 16px;
-          animation: magic-star-spin 18s linear infinite;
-        }
-
-        .magic-heading h2 {
-          margin: 24px 0 17px;
-          font-size: clamp(45px, 6.5vw, 80px);
-          font-weight: 500;
-          line-height: 0.98;
-          letter-spacing: -0.065em;
-        }
-
-        .magic-heading h2 span {
-          background: linear-gradient(
-            100deg,
-            #e5c9ff 0%,
-            #e9b9fa 40%,
-            #ffe7ad 100%
-          );
-          background-size: 200% auto;
-          background-clip: text;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-family: Georgia, serif;
-          font-weight: 400;
-          font-style: italic;
-          animation: services-gradient-shift 8s ease-in-out infinite alternate;
-        }
-
-        .magic-heading p {
-          max-width: 440px;
-          color: rgba(255, 247, 233, 0.72);
-          font-size: 14px;
-          line-height: 1.9;
-        }
-
-        .magic-categories {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          margin-bottom: 18px;
-        }
-
-        .magic-filter {
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          padding: 9px 12px;
-          border: 1px solid rgba(234, 203, 145, 0.22);
-          border-radius: 6px;
-          background: rgba(8, 5, 16, 0.72);
-          color: rgba(255, 247, 233, 0.78);
-          font-size: 11px;
-          cursor: pointer;
-          transition:
-            border-color 0.25s ease,
-            background 0.25s ease,
-            color 0.25s ease,
-            transform 0.25s ease;
-        }
-
-        .magic-filter:hover,
-        .magic-filter.active {
-          border-color: rgba(234, 203, 145, 0.7);
-          background: rgba(234, 203, 145, 0.12);
-          color: #ffe5ad;
-        }
-
-        .magic-filter:hover {
-          transform: translateY(-2px);
-        }
-
-        .magic-filter:focus-visible,
-        .magic-skill:focus-visible,
-        .magic-footer a:focus-visible {
-          outline: 2px solid #ffe5ad;
-          outline-offset: 4px;
-        }
-
-        .filter-count {
-          color: #eacb91;
-          font-family: monospace;
-          font-size: 9px;
-        }
-
-        .magic-layout {
-          display: grid;
-          grid-template-columns: minmax(0, 1.65fr) minmax(245px, 0.7fr);
-          align-items: stretch;
-          gap: 20px;
-        }
-
-        .magic-field {
-          position: relative;
-          min-width: 0;
-          min-height: 650px;
-          overflow: hidden;
-          border: 1px solid rgba(219, 190, 255, 0.15);
+          color: var(--sk-text);
           background:
-            radial-gradient(
-              ellipse at 50% 45%,
-              rgba(147, 103, 143, 0.12),
-              transparent 55%
-            ),
-            rgba(16, 11, 27, 0.72);
-          box-shadow:
-            inset 0 0 80px rgba(125, 87, 157, 0.055),
-            0 15px 50px rgba(0, 0, 0, 0.12);
-          backdrop-filter: blur(8px);
+            radial-gradient(ellipse at 12% 18%, rgba(105,75,255,.24), transparent 38%),
+            radial-gradient(ellipse at 88% 25%, rgba(0,215,255,.19), transparent 36%),
+            radial-gradient(ellipse at 52% 90%, rgba(255,65,190,.15), transparent 42%),
+            #070817;
         }
 
-        .magic-field__top {
-          position: absolute;
-          z-index: 4;
-          top: 20px;
-          right: 20px;
-          left: 20px;
-          display: flex;
-          justify-content: space-between;
-          gap: 12px;
-          color: rgba(255, 232, 195, 0.66);
-          font-size: 8px;
-        }
-
-        .magic-orbital-glow {
-          position: absolute;
-          top: 45%;
-          left: 50%;
-          width: 250px;
-          height: 250px;
-          border: 1px solid rgba(234, 203, 145, 0.17);
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-          animation: magic-orbit 34s linear infinite;
-          pointer-events: none;
-        }
-
-        .magic-orbital-glow::before,
-        .magic-orbital-glow::after {
-          position: absolute;
-          top: 10%;
-          left: 14%;
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background: #ffe4a9;
-          box-shadow: 0 0 15px 3px rgba(255, 207, 120, 0.35);
+        .sk3d::before {
           content: "";
-        }
-
-        .magic-orbital-glow::after {
-          top: auto;
-          right: 8%;
-          bottom: 22%;
-          left: auto;
-          width: 3px;
-          height: 3px;
-        }
-
-        .magic-orbital-glow--two {
-          width: 430px;
-          height: 430px;
-          border-style: dashed;
-          border-color: rgba(195, 158, 210, 0.14);
-          animation-duration: 58s;
-          animation-direction: reverse;
-        }
-
-        .magic-orbs {
           position: absolute;
           inset: 0;
+          z-index: -1;
+          pointer-events: none;
+          background-image:
+            radial-gradient(1px 1px at 12% 20%, #ffffffaa 50%, transparent 100%),
+            radial-gradient(1px 1px at 76% 15%, #52e5ff99 50%, transparent 100%),
+            radial-gradient(2px 2px at 86% 72%, #ff6bd699 50%, transparent 100%),
+            radial-gradient(1px 1px at 30% 82%, #a78bfa99 50%, transparent 100%);
+          background-size: 240px 220px, 310px 270px, 390px 330px, 280px 250px;
+          animation: sk3d-stars 18s linear infinite;
         }
 
-        .magic-skill {
-          position: absolute;
-          top: calc(68px + (var(--index) * 47px) % 490px);
-          left: calc(7% + (var(--index) * 37%) % 84%);
+        .sk3d-wrap {
+          position: relative;
+          max-width: 1240px;
+          margin: auto;
+          padding: 76px 24px 72px;
+          text-align: center;
+        }
+
+        .sk3d-eyebrow {
+          color: var(--sk-cyan);
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: .34em;
+          text-shadow: 0 0 18px rgba(82,229,255,.6);
+        }
+
+        .sk3d-title {
+          margin: 14px 0 10px;
+          color: #fff;
+          font-size: clamp(38px, 6vw, 72px);
+          font-weight: 800;
+          letter-spacing: -.045em;
+          line-height: 1.05;
+        }
+
+        .sk3d-title span {
+          background: linear-gradient(100deg, #b9a2ff 5%, #55e8ff 52%, #ff83d9 95%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          filter: drop-shadow(0 0 18px rgba(82,229,255,.2));
+        }
+
+        .sk3d-sub {
+          max-width: 760px;
+          margin: 0 auto;
+          color: var(--sk-muted);
+          font-size: clamp(14px, 1.6vw, 18px);
+          line-height: 1.7;
+        }
+
+        .sk3d-scene {
           display: flex;
-          width: 112px;
-          min-height: 112px;
+          height: 390px;
+          margin: 30px 0 0;
+          align-items: center;
+          justify-content: center;
+          perspective: 1400px;
+          touch-action: pan-y;
+          cursor: grab;
+        }
+
+        .sk3d-scene:active { cursor: grabbing; }
+
+        .sk3d-ring {
+          position: relative;
+          width: 205px;
+          height: 270px;
+          transform-style: preserve-3d;
+          transition: transform 1s cubic-bezier(.2,.8,.2,1);
+        }
+
+        .sk3d-panel {
+          position: absolute;
+          inset: 0;
+          display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 5px;
-          padding: 12px 6px;
-          overflow: hidden;
-          border: 1px solid rgba(234, 203, 145, 0.35);
-          border-radius: 50%;
-          background: radial-gradient(
-            circle at 35% 25%,
-            rgba(48, 31, 60, 0.97),
-            rgba(8, 5, 16, 0.98) 75%
-          );
-          box-shadow:
-            0 10px 25px rgba(0, 0, 0, 0.24),
-            inset 0 0 18px rgba(255, 230, 183, 0.045);
-          color: #fff6e6;
-          opacity: 0;
+          gap: 13px;
+          padding: 22px 16px;
+          border: 1px solid rgba(145,154,255,.5);
+          border-radius: 25px;
+          background:
+            radial-gradient(circle at 18% 0%, rgba(132,91,255,.24), transparent 55%),
+            radial-gradient(circle at 100% 100%, rgba(0,220,255,.14), transparent 48%),
+            linear-gradient(155deg, rgba(23,25,58,.98), rgba(8,11,28,.97));
+          box-shadow: inset 0 0 28px rgba(117,125,255,.07), 0 18px 55px rgba(0,0,0,.5);
+          color: var(--sk-text);
+          font: inherit;
           cursor: pointer;
-          animation:
-            magic-orb-appear 0.6s ease forwards,
-            magic-orb-float var(--float-duration) ease-in-out infinite;
-          animation-delay: calc(var(--index) * 45ms), calc(var(--index) * -0.5s);
-          transition:
-            border-color 0.25s,
-            box-shadow 0.25s,
-            background 0.25s;
+          backface-visibility: hidden;
+          transition: border-color .35s, box-shadow .35s, background .35s;
         }
 
-        .magic-skill:nth-child(3n) {
-          border-radius: 43% 57% 51% 49% / 50% 44% 56% 50%;
-        }
-
-        .magic-skill:nth-child(3n + 1) {
-          border-radius: 48% 52% 43% 57% / 43% 55% 45% 57%;
-        }
-
-        .magic-skill__icon {
-          font-size: 22px;
-          line-height: 1.2;
-          filter: drop-shadow(0 0 7px rgba(255, 219, 153, 0.17));
-        }
-
-        .magic-skill__name {
-          max-width: 100%;
-          padding: 0 4px;
-          font-size: 10px;
-          font-weight: 500;
-          text-align: center;
-          overflow-wrap: anywhere;
-        }
-
-        .magic-skill__level {
-          color: #f2d49c;
-          font-family: monospace;
-          font-size: 10px;
-        }
-
-        .magic-skill__shine {
-          position: absolute;
-          top: -65%;
-          left: -100%;
-          width: 45%;
-          height: 230%;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 242, 210, 0.16),
-            transparent
-          );
-          transform: rotate(25deg);
-          animation: magic-shimmer 7s ease-in-out infinite;
-          animation-delay: calc(var(--index) * -0.3s);
-          pointer-events: none;
-        }
-
-        .magic-skill:hover,
-        .magic-skill--selected {
-          z-index: 5;
-          border-color: rgba(255, 226, 166, 0.98);
-          background: radial-gradient(circle at 35% 25%, #75546e, #2c2139 78%);
-          box-shadow:
-            0 0 0 4px rgba(234, 203, 145, 0.07),
-            0 0 35px rgba(242, 199, 121, 0.2);
-        }
-
-        .magic-skill--selected .magic-skill__icon {
-          filter: drop-shadow(0 0 8px rgba(255, 219, 153, 0.48));
-        }
-
-        .magic-field__bottom {
-          position: absolute;
-          right: 18px;
-          bottom: 17px;
-          left: 18px;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: rgba(255, 238, 207, 0.65);
-          font-size: 8px;
-        }
-
-        .magic-bottom-star {
-          color: #f2d49c;
-          font-size: 14px;
-        }
-
-        .magic-profile {
-          position: relative;
-          display: flex;
-          min-width: 0;
-          flex-direction: column;
-          overflow: hidden;
-          padding: 29px 23px;
-          border: 1px solid rgba(219, 190, 255, 0.15);
-          background: rgba(16, 11, 27, 0.85);
-          box-shadow:
-            0 25px 100px rgba(0, 0, 0, 0.18),
-            inset 0 1px 0 rgba(255, 255, 255, 0.025);
-          backdrop-filter: blur(20px);
-          transition:
-            border-color 500ms ease,
-            box-shadow 500ms ease;
-        }
-
-        .magic-profile::before {
-          position: absolute;
-          top: -90px;
-          right: -80px;
-          width: 240px;
-          height: 240px;
-          border-radius: 50%;
-          background: rgba(168, 85, 247, 0.1);
-          filter: blur(65px);
-          animation: services-glow-breathe 8s ease-in-out infinite alternate;
-          content: "";
-          pointer-events: none;
-        }
-
-        .magic-profile:hover {
-          border-color: rgba(216, 180, 254, 0.25);
-          box-shadow:
-            0 30px 100px rgba(60, 24, 91, 0.13),
-            inset 0 1px 0 rgba(255, 255, 255, 0.04);
-        }
-
-        .magic-profile__eyebrow {
-          color: #eacb91;
-          font-size: 8px;
-        }
-
-        .magic-profile__icon {
+        .sk3d-panel__icon {
           display: grid;
-          width: 58px;
-          height: 58px;
-          margin-top: 30px;
+          width: 76px;
+          height: 76px;
           place-items: center;
-          border: 1px solid rgba(219, 190, 255, 0.15);
-          border-radius: 16px;
-          background: linear-gradient(
-            135deg,
-            rgba(192, 132, 252, 0.12),
-            rgba(253, 230, 138, 0.06)
-          );
-          box-shadow: 0 0 28px rgba(234, 203, 145, 0.07);
-          font-size: 27px;
-          animation: magic-icon-enter 0.4s ease both;
+          border: 1px solid rgba(82,229,255,.62);
+          border-radius: 23px;
+          background: radial-gradient(circle, rgba(112,91,255,.3), rgba(40,211,255,.05) 70%);
+          color: #67eaff;
+          font-size: 42px;
+          filter: drop-shadow(0 0 13px rgba(82,229,255,.58));
         }
 
-        .magic-profile__category {
-          margin-top: 23px;
-          color: rgba(255, 238, 207, 0.63);
-          font-size: 8px;
-          text-transform: uppercase;
-        }
+        .sk3d-panel b { font-size: clamp(19px, 2vw, 25px); }
+        .sk3d-panel small { color: var(--sk-muted); font-size: 12px; }
 
-        .magic-profile h3 {
+        .sk3d-panel__action {
           margin-top: 8px;
-          font-size: clamp(26px, 3vw, 36px);
-          font-weight: 500;
-          letter-spacing: -0.05em;
-          overflow-wrap: anywhere;
-        }
-
-        .magic-profile__description {
-          margin-top: 14px;
-          color: rgba(255, 247, 233, 0.76);
+          padding: 8px 17px;
+          border: 1px solid rgba(82,229,255,.55);
+          border-radius: 30px;
+          color: #8ceeff;
           font-size: 12px;
-          line-height: 1.9;
+          font-weight: 700;
         }
 
-        .magic-profile__rule {
-          height: 1px;
-          margin: 25px 0;
-          background: linear-gradient(
-            90deg,
-            rgba(234, 203, 145, 0.48),
-            transparent
-          );
+        .sk3d-panel__action i { margin-left: 5px; font-style: normal; }
+
+        .sk3d-panel.on {
+          border-color: #8cecff;
+          background:
+            radial-gradient(circle at 15% 0%, rgba(140,94,255,.36), transparent 60%),
+            radial-gradient(circle at 100% 100%, rgba(0,220,255,.2), transparent 55%),
+            linear-gradient(155deg, rgba(31,29,75,.99), rgba(8,16,37,.98));
+          box-shadow:
+            inset 0 0 35px rgba(119,119,255,.12),
+            0 0 24px rgba(82,229,255,.32),
+            0 0 70px rgba(146,91,255,.22);
         }
 
-        .magic-profile__meter {
-          margin-top: auto;
-          padding-top: 30px;
+        .sk3d-panel:focus-visible,
+        .sk3d-nav button:focus-visible {
+          outline: 2px solid var(--sk-cyan);
+          outline-offset: 4px;
         }
 
-        .magic-profile__meter > div:first-child {
+        .sk3d-nav {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          gap: 8px;
-          color: rgba(255, 238, 207, 0.65);
-          font-size: 8px;
+          justify-content: center;
+          gap: 22px;
+          margin-top: -4px;
         }
 
-        .magic-profile__meter strong {
-          color: #f2d49c;
-          font-size: 14px;
-          font-weight: 500;
+        .sk3d-nav button {
+          display: grid;
+          width: 48px;
+          height: 48px;
+          place-items: center;
+          border: 1px solid rgba(82,229,255,.62);
+          border-radius: 50%;
+          background: rgba(14,19,47,.92);
+          color: #8ceeff;
+          font-size: 24px;
+          cursor: pointer;
+          box-shadow: 0 0 18px rgba(82,229,255,.15);
+          transition: transform .25s, box-shadow .25s, background .25s;
         }
 
-        .magic-meter {
-          height: 3px;
-          margin-top: 12px;
-          overflow: hidden;
-          background: rgba(255, 255, 255, 0.12);
+        .sk3d-nav button:hover {
+          transform: scale(1.1);
+          background: rgba(62,48,125,.78);
+          box-shadow: 0 0 25px rgba(82,229,255,.32);
         }
 
-        .magic-meter span {
-          display: block;
-          height: 100%;
-          background: linear-gradient(90deg, #c084fc, #f6dca5);
-          box-shadow: 0 0 10px rgba(246, 220, 165, 0.28);
-          animation: magic-meter-grow 0.55s ease both;
+        .sk3d-nav span {
+          color: var(--sk-cyan);
+          font-size: 12px;
+          font-variant-numeric: tabular-nums;
+          letter-spacing: .16em;
         }
 
-        .magic-profile__note {
-          margin-top: 22px;
-          color: rgba(255, 247, 233, 0.55);
-          font-size: 10px;
-          line-height: 1.8;
+        .sk3d-hint {
+          margin: 14px 0 34px;
+          color: var(--sk-muted);
+          font-size: 12px;
         }
 
-        .magic-footer {
+        .sk3d-info {
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 18px;
-          margin-top: 26px;
-          padding-top: 20px;
-          border-top: 1px solid rgba(219, 190, 255, 0.15);
+          max-width: 1000px;
+          margin: 0 auto 20px;
+          padding: 22px 26px;
+          border: 1px solid rgba(135,147,255,.36);
+          border-radius: 20px;
+          background: linear-gradient(110deg, rgba(34,27,75,.88), rgba(10,23,48,.86));
+          box-shadow: inset 0 0 30px rgba(119,119,255,.06), 0 15px 40px rgba(0,0,0,.2);
+          text-align: left;
         }
 
-        .magic-footer p {
-          color: rgba(255, 247, 233, 0.68);
-          font-size: 11px;
-          line-height: 1.8;
+        .sk3d-info__eyebrow {
+          color: var(--sk-cyan);
+          font-size: 9px;
+          font-weight: 800;
+          letter-spacing: .22em;
         }
 
-        .magic-footer a {
-          display: inline-flex;
+        .sk3d-info h3 {
+          margin: 5px 0;
+          color: #f2f0ff;
+          font-size: 26px;
+        }
+
+        .sk3d-info p {
+          margin: 0;
+          color: var(--sk-muted);
+          line-height: 1.6;
+        }
+
+        .sk3d-info__count {
+          flex: 0 0 auto;
+          padding: 9px 14px;
+          border: 1px solid rgba(82,229,255,.55);
+          border-radius: 30px;
+          color: #8ceeff;
+          font-size: 12px;
+        }
+
+        .sk3d-orb-field {
+          position: relative;
+          display: flex;
+          min-height: 360px;
+          flex-wrap: wrap;
           align-items: center;
-          gap: 12px;
-          color: #f2d49c;
-          font-size: 8px;
-          text-decoration: none;
+          justify-content: center;
+          gap: 22px 25px;
+          max-width: 1080px;
+          margin: 0 auto;
+          padding: 46px 24px 58px;
+          perspective: 900px;
+          isolation: isolate;
+        }
+
+        .sk3d-orbit {
+          position: absolute;
+          z-index: -1;
+          top: 50%;
+          left: 50%;
+          width: min(92%, 850px);
+          height: 180px;
+          border: 1px solid rgba(82,229,255,.32);
+          border-radius: 50%;
+          transform: translate(-50%,-50%) rotate(-8deg);
+          box-shadow: 0 0 24px rgba(82,229,255,.1), inset 0 0 20px rgba(146,91,255,.08);
+          pointer-events: none;
+        }
+
+        .sk3d-orbit--two {
+          width: min(78%, 690px);
+          height: 245px;
+          transform: translate(-50%,-50%) rotate(12deg);
+          border-color: rgba(255,107,214,.25);
+        }
+
+        .sk3d-orb-wrap {
+          display: grid;
+          width: var(--orb-size, 90px);
+          height: calc(var(--orb-size, 90px) + 23px);
+          flex: 0 0 auto;
+          place-items: center;
+          animation: sk3d-float 4.8s ease-in-out infinite;
+          will-change: transform;
+        }
+
+        .sk3d-orb {
+          --push-x: 0px;
+          --push-y: 0px;
+          --orb-scale: 1;
+          --orb-edge: rgba(110,225,255,.95);
+          --orb-light: rgba(82,229,255,.42);
+          --orb-shadow: rgba(146,91,255,.34);
+          --orb-base: rgba(35,57,115,.97);
+          --orb-glow: rgba(82,229,255,.4);
+          --orb-halo: rgba(146,91,255,.24);
+          position: relative;
+          display: flex;
+          width: var(--orb-size, 90px);
+          height: var(--orb-size, 90px);
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+          border: 1px solid var(--orb-edge);
+          border-radius: 50%;
+          background:
+            radial-gradient(circle at 30% 22%, rgba(255,255,255,.78), transparent 12%),
+            radial-gradient(circle at 34% 30%, var(--orb-light), transparent 43%),
+            radial-gradient(circle at 72% 78%, var(--orb-shadow), transparent 55%),
+            linear-gradient(145deg, var(--orb-base), rgba(8,11,29,.99) 72%);
+          box-shadow:
+            inset -8px -10px 22px rgba(0,0,0,.55),
+            inset 5px 5px 14px rgba(220,244,255,.2),
+            0 0 18px var(--orb-glow),
+            0 0 42px var(--orb-halo);
+          color: #f4f5ff;
+          transform: translate3d(var(--push-x),var(--push-y),0) scale(var(--orb-scale));
+          transition: transform .32s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+          animation: sk3d-orb-pulse 5s ease-in-out infinite;
+          will-change: transform;
+          user-select: none;
+        }
+
+        .sk3d-orb::after {
+          content: "";
+          position: absolute;
+          inset: 7px;
+          border: 1px solid rgba(225,240,255,.22);
+          border-radius: inherit;
+          pointer-events: none;
+        }
+
+        .sk3d-orb--1 {
+          --orb-edge: rgba(255,112,218,.98);
+          --orb-light: rgba(255,91,209,.48);
+          --orb-shadow: rgba(127,73,255,.4);
+          --orb-base: rgba(93,30,112,.97);
+          --orb-glow: rgba(255,91,209,.42);
+          --orb-halo: rgba(127,73,255,.26);
+        }
+
+        .sk3d-orb--2 {
+          --orb-edge: rgba(126,255,197,.98);
+          --orb-light: rgba(67,255,186,.42);
+          --orb-shadow: rgba(0,172,177,.38);
+          --orb-base: rgba(17,91,87,.97);
+          --orb-glow: rgba(67,255,186,.38);
+          --orb-halo: rgba(0,172,177,.24);
+        }
+
+        .sk3d-orb--3 {
+          --orb-edge: rgba(255,195,105,.98);
+          --orb-light: rgba(255,174,74,.5);
+          --orb-shadow: rgba(255,83,132,.35);
+          --orb-base: rgba(116,53,35,.97);
+          --orb-glow: rgba(255,157,74,.4);
+          --orb-halo: rgba(255,83,132,.22);
+        }
+
+        .sk3d-orb--4 {
+          --orb-edge: rgba(174,151,255,.98);
+          --orb-light: rgba(151,117,255,.5);
+          --orb-shadow: rgba(53,174,255,.38);
+          --orb-base: rgba(51,39,125,.97);
+          --orb-glow: rgba(151,117,255,.42);
+          --orb-halo: rgba(53,174,255,.25);
+        }
+
+        .sk3d-orb__symbol {
+          color: #e7faff;
+          font-size: clamp(19px,2.3vw,28px);
+          font-weight: 900;
+          line-height: 1;
+          text-shadow: 0 0 13px var(--orb-glow);
+        }
+
+        .sk3d-orb__name {
+          max-width: 88%;
+          overflow: hidden;
+          color: #fff;
+          font-size: 10px;
+          font-weight: 700;
+          text-align: center;
+          text-overflow: ellipsis;
           white-space: nowrap;
+          text-shadow: 0 1px 5px #000;
         }
 
-        .magic-footer a span {
-          font-size: 17px;
-          transition: transform 0.2s;
+        .sk3d-orb:hover {
+          box-shadow:
+            inset -8px -10px 22px rgba(0,0,0,.5),
+            0 0 25px var(--orb-glow),
+            0 0 55px var(--orb-halo);
         }
 
-        .magic-footer a:hover span {
-          transform: translate(3px, -3px);
+        .sk3d-orb-hint {
+          position: absolute;
+          right: 0;
+          bottom: 8px;
+          left: 0;
+          margin: 0;
+          color: #aebbe8;
+          font-size: 11px;
+          letter-spacing: .04em;
+          pointer-events: none;
         }
 
-        @keyframes magic-orb-float {
-          0%, 100% {
-            translate: 0 0;
-          }
-          50% {
-            translate: 0 -9px;
-          }
+        .sk3d-foot {
+          margin: 28px 0 0;
+          color: #aebbe8;
+          font-size: 13px;
+          line-height: 1.8;
+          text-align: center;
         }
 
-        @keyframes magic-orb-appear {
-          from {
-            opacity: 0;
-            scale: 0.72;
-          }
-          to {
-            opacity: 1;
-            scale: 1;
-          }
+        @keyframes sk3d-float {
+          0%,100% { transform: translateY(0) rotate(-3deg); }
+          50% { transform: translateY(-15px) rotate(4deg); }
         }
 
-        @keyframes magic-orbit {
-          to {
-            rotate: 360deg;
-          }
+        @keyframes sk3d-orb-pulse {
+          0%,100% { filter: brightness(.96); }
+          50% { filter: brightness(1.15); }
         }
 
-        @keyframes magic-shimmer {
-          0%, 20% {
-            left: -100%;
-          }
-          55%, 100% {
-            left: 160%;
-          }
+        @keyframes sk3d-stars {
+          from { background-position: 0 0,0 0,0 0,0 0; }
+          to { background-position: 240px 220px,-310px 270px,390px -330px,-280px 250px; }
         }
 
-        @keyframes magic-icon-enter {
-          from {
-            opacity: 0;
-            scale: 0.7;
-            rotate: -12deg;
-          }
-          to {
-            opacity: 1;
-            scale: 1;
-            rotate: 0deg;
-          }
+        @media (max-width: 700px) {
+          .sk3d-wrap { padding: 58px 16px 52px; }
+          .sk3d-scene { height: 320px; }
+          .sk3d-ring { width: 165px; height: 225px; }
+          .sk3d-panel { gap: 10px; padding: 16px 10px; border-radius: 19px; }
+          .sk3d-panel__icon { width: 58px; height: 58px; border-radius: 18px; font-size: 32px; }
+          .sk3d-panel b { font-size: 18px; }
+          .sk3d-panel small { font-size: 10px; }
+          .sk3d-panel__action { padding: 6px 12px; font-size: 10px; }
+          .sk3d-info { align-items: flex-start; padding: 18px; }
+          .sk3d-info h3 { font-size: 22px; }
+          .sk3d-info p { font-size: 13px; }
+          .sk3d-orb-field { min-height: 330px; gap: 15px; padding: 36px 8px 54px; }
+          .sk3d-orb-wrap { --orb-size: 72px !important; }
+          .sk3d-orbit { height: 130px; }
+          .sk3d-orbit--two { height: 190px; }
         }
 
-        @keyframes magic-meter-grow {
-          from {
-            width: 0;
-          }
-        }
-
-        @keyframes magic-star-spin {
-          to {
-            rotate: 360deg;
-          }
-        }
-
-        @media (min-width: 761px) {
-          .magic-orbs {
-            display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
-            align-content: center;
-            justify-items: center;
-            gap: 12px;
-            padding: 78px 20px 58px;
-          }
-
-          .magic-skill {
-            position: relative;
-            top: auto;
-            left: auto;
-            width: clamp(84px, 8.4vw, 108px);
-            min-height: 108px;
-          }
-        }
-
-        @media (max-width: 760px) {
-          .magic-world {
-            padding: 76px 17px 35px;
-          }
-
-          .magic-layout {
-            grid-template-columns: minmax(0, 1fr);
-            gap: 15px;
-          }
-
-          .magic-field {
-            min-height: 620px;
-          }
-
-          .magic-orbs {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            align-content: center;
-            justify-items: center;
-            gap: 14px 5px;
-            padding: 65px 12px 48px;
-          }
-
-          .magic-skill {
-            position: relative;
-            top: auto;
-            left: auto;
-            width: clamp(84px, 24vw, 110px);
-            min-height: 98px;
-          }
-
-          .magic-orbital-glow {
-            width: 190px;
-            height: 190px;
-          }
-
-          .magic-orbital-glow--two {
-            width: 320px;
-            height: 320px;
-          }
-
-          .magic-profile {
-            min-height: 300px;
-            padding: 24px;
-          }
-
-          .magic-profile__icon {
-            margin-top: 20px;
-          }
-
-          .magic-profile__meter {
-            margin-top: 26px;
-            padding-top: 0;
-          }
-
-          .magic-gold-motion {
-            opacity: 0.7;
-          }
-
-          .magic-gold-streak {
-            height: 1px;
-          }
-        }
-
-        @media (max-width: 390px) {
-          .magic-world {
-            padding-right: 12px;
-            padding-left: 12px;
-          }
-
-          .magic-field {
-            min-height: 600px;
-          }
-
-          .magic-orbs {
-            gap: 12px 2px;
-            padding-right: 6px;
-            padding-left: 6px;
-          }
-
-          .magic-skill {
-            width: 83px;
-            min-height: 91px;
-            padding: 7px 4px;
-          }
-
-          .magic-skill__icon {
-            font-size: 19px;
-          }
-
-          .magic-skill__name {
-            font-size: 9px;
-          }
-
-          .magic-skill__level {
-            font-size: 9px;
-          }
-
-          .magic-footer {
-            align-items: flex-start;
-            flex-direction: column;
-          }
+        @media (max-width: 420px) {
+          .sk3d-scene { height: 285px; }
+          .sk3d-ring { width: 145px; height: 205px; }
+          .sk3d-nav { gap: 14px; }
+          .sk3d-nav button { width: 42px; height: 42px; }
+          .sk3d-info { flex-direction: column; }
+          .sk3d-info__count { align-self: flex-start; }
+          .sk3d-orb-field { gap: 12px; }
+          .sk3d-orb-wrap { --orb-size: 64px !important; }
+          .sk3d-orb__name { font-size: 9px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .magic-world *,
-          .magic-world *::before,
-          .magic-world *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-            scroll-behavior: auto !important;
+          .sk3d *,
+          .sk3d *::before,
+          .sk3d *::after {
+            animation: none !important;
+            transition: none !important;
           }
         }
       `}</style>
