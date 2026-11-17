@@ -3,6 +3,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+
+import TangledPortal from "@/components/tangled/TangledPortal";
 import {
   ArrowDownToLine,
   ArrowUpRight,
@@ -51,6 +53,87 @@ export default function AboutClient() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // 3D scroll-reveal + pointer tilt for cards
+  useEffect(() => {
+    const root = document.querySelector<HTMLElement>(".tangled-page");
+    if (!root) return;
+
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    const targets = Array.from(
+      root.querySelectorAll<HTMLElement>(
+        ".tangled-card, .tangled-chip, .tangled-heading",
+      ),
+    );
+
+    if (reduce) {
+      targets.forEach((el) => el.classList.add("tg-in", "tg-done"));
+      return;
+    }
+
+    const timers: number[] = [];
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          el.classList.add("tg-in");
+          timers.push(
+            window.setTimeout(() => el.classList.add("tg-done"), 1400),
+          );
+          io.unobserve(el);
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
+    );
+
+    targets.forEach((el, i) => {
+      const siblingIndex = el.parentElement
+        ? Array.from(el.parentElement.children).indexOf(el)
+        : i;
+      el.style.setProperty("--rd", `${Math.min(siblingIndex, 6) * 90}ms`);
+      el.classList.add("tg-reveal");
+      io.observe(el);
+    });
+
+    const onMove = (event: PointerEvent) => {
+      const card = (event.target as HTMLElement).closest<HTMLElement>(
+        ".tangled-page .tangled-card.tg-done",
+      );
+      if (!card) return;
+      const b = card.getBoundingClientRect();
+      const x = (event.clientX - b.left) / b.width - 0.5;
+      const y = (event.clientY - b.top) / b.height - 0.5;
+      card.style.setProperty("--ry", `${(x * 12).toFixed(2)}deg`);
+      card.style.setProperty("--rx", `${(-y * 10).toFixed(2)}deg`);
+      card.style.setProperty("--gx", `${((x + 0.5) * 100).toFixed(1)}%`);
+      card.style.setProperty("--gy", `${((y + 0.5) * 100).toFixed(1)}%`);
+    };
+
+    const onOut = (event: PointerEvent) => {
+      const card = (event.target as HTMLElement).closest<HTMLElement>(
+        ".tangled-page .tangled-card",
+      );
+      if (!card) return;
+      if (card.contains(event.relatedTarget as Node | null)) return;
+      card.style.setProperty("--ry", "0deg");
+      card.style.setProperty("--rx", "0deg");
+    };
+
+    document.addEventListener("pointermove", onMove, { passive: true });
+    document.addEventListener("pointerout", onOut, { passive: true });
+
+    return () => {
+      io.disconnect();
+      timers.forEach((id) => window.clearTimeout(id));
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerout", onOut);
+    };
+  }, []);
+
   useEffect(() => {
     if (!cvOpen) return;
 
@@ -69,7 +152,7 @@ export default function AboutClient() {
 
   return (
     <main
-      className="tangled-page min-h-screen overflow-hidden text-white"
+      className="tangled-page relative min-h-screen overflow-clip text-white"
       itemScope
       itemType="https://schema.org/Person"
     >
@@ -370,7 +453,285 @@ export default function AboutClient() {
             transition-duration: 0.01ms !important;
           }
         }
-      `}</style>
+      
+.tangled-page > section {
+  position: relative;
+  z-index: 1;
+}
+
+.tangled-page .tangled-hero {
+  background: linear-gradient(135deg, #211638 0%, #171027 58%, #211437 100%);
+}
+
+.tangled-page .tangled-hero::before,
+.tangled-page .tangled-hero::after {
+  display: none;
+  animation: none;
+}
+
+/* ---------- Tangled typography ---------- */
+.tangled-page .tangled-title {
+  font-family: var(--tg-script);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.95;
+  font-size: clamp(64px, 9vw, 112px);
+  padding: 0 0.08em 0.08em;
+  background: linear-gradient(
+    105deg,
+    #fff6dc 5%,
+    #ffd98a 38%,
+    #ffb445 62%,
+    #fff1c4 95%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 22px rgba(255, 175, 70, 0.35))
+    drop-shadow(0 6px 14px rgba(20, 6, 40, 0.7));
+}
+
+.tangled-page .tangled-title > span {
+  margin-top: 14px;
+  font-family: var(--tg-serif);
+  font-size: clamp(15px, 2.1vw, 22px);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #efe3ff;
+  filter: none;
+}
+
+.tangled-page .tangled-label {
+  font-family: var(--tg-serif);
+  letter-spacing: 0.3em;
+  color: #ffe3a8;
+}
+
+.tangled-page .tangled-heading {
+  font-family: var(--tg-serif);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.22;
+  text-shadow: 0 4px 28px rgba(14, 4, 34, 0.8);
+}
+
+.tangled-page .tangled-heading > span {
+  font-family: var(--tg-script);
+  font-weight: 400;
+  font-size: 1.5em;
+  line-height: 1;
+  color: #ffd37a;
+  text-shadow: 0 0 22px rgba(255, 175, 70, 0.4);
+}
+
+.tangled-page .tangled-copy {
+  text-shadow: 0 2px 12px rgba(14, 4, 34, 0.7);
+}
+
+/* ---------- 3D glass cards ---------- */
+.tangled-page .tangled-card {
+  --rx: 0deg;
+  --ry: 0deg;
+  --ty: 0px;
+  --gx: 50%;
+  --gy: 0%;
+  border: 1px solid rgba(255, 211, 122, 0.26);
+  background:
+    radial-gradient(
+      320px 220px at var(--gx) var(--gy),
+      rgba(255, 211, 122, 0.16),
+      transparent 70%
+    ),
+    linear-gradient(
+      150deg,
+      rgba(62, 33, 108, 0.66),
+      rgba(26, 12, 50, 0.78)
+    );
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 22px 50px rgba(8, 2, 22, 0.5),
+    inset 0 1px 0 rgba(255, 241, 201, 0.16);
+  transform: perspective(900px) translateY(var(--ty)) rotateX(var(--rx))
+    rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition:
+    transform 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) var(--rd, 0ms),
+    opacity 0.8s ease var(--rd, 0ms),
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.tangled-page .tangled-card:hover {
+  --ty: -8px;
+  border-color: #ffd37a;
+  box-shadow:
+    0 34px 70px rgba(8, 2, 22, 0.62),
+    0 0 44px rgba(255, 190, 90, 0.24),
+    inset 0 1px 0 rgba(255, 241, 201, 0.25);
+}
+
+.tangled-page .tangled-card.tg-done {
+  transition:
+    transform 0.16s ease-out,
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.tangled-page .tangled-card > * {
+  transform: translateZ(26px);
+}
+
+.tangled-page .tangled-icon {
+  border-color: rgba(255, 211, 122, 0.5);
+  background: radial-gradient(
+    circle at 30% 25%,
+    rgba(255, 233, 170, 0.32),
+    rgba(255, 170, 70, 0.1)
+  );
+  box-shadow:
+    0 0 24px rgba(255, 190, 90, 0.28),
+    inset 0 1px 0 rgba(255, 241, 201, 0.4);
+  transform: translateZ(44px);
+}
+
+.tangled-page .tangled-chip {
+  border-color: rgba(255, 211, 122, 0.24);
+  background: rgba(36, 18, 69, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.tangled-page .tangled-chip:hover {
+  border-color: #ffd37a;
+  background: rgba(255, 211, 122, 0.12);
+  box-shadow: 0 0 22px rgba(255, 190, 90, 0.22);
+}
+
+.tangled-page .tangled-button {
+  box-shadow:
+    0 10px 26px rgba(237, 189, 118, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* ---------- About animations: storybook pages, pop-in chips, wipe headings ---------- */
+.tangled-page .tg-reveal:not(.tg-in) {
+  opacity: 0;
+}
+
+/* cards open like book pages, alternating left / right */
+.tangled-page .tangled-card.tg-reveal.tg-in {
+  animation: tg-page-left 1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--rd, 0ms);
+}
+
+.tangled-page .tangled-card.tg-reveal.tg-in:nth-child(even) {
+  animation-name: tg-page-right;
+}
+
+.tangled-page .tangled-card.tg-reveal.tg-in.tg-done {
+  animation: none;
+}
+
+@keyframes tg-page-left {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) translateX(-80px) rotateY(34deg)
+      scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(900px) translateY(0) rotateX(0deg) rotateY(0deg);
+  }
+}
+
+@keyframes tg-page-right {
+  from {
+    opacity: 0;
+    transform: perspective(1000px) translateX(80px) rotateY(-34deg)
+      scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(900px) translateY(0) rotateX(0deg) rotateY(0deg);
+  }
+}
+
+/* chips pop in with a little bounce */
+.tangled-page .tangled-chip.tg-reveal.tg-in {
+  animation: tg-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: var(--rd, 0ms);
+}
+
+.tangled-page .tangled-chip.tg-reveal.tg-in.tg-done {
+  animation: none;
+}
+
+@keyframes tg-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.55) translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* headings are wiped in from the left, then a golden line draws itself */
+.tangled-page .tangled-heading.tg-reveal.tg-in {
+  animation: tg-wipe 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.tangled-page .tangled-heading.tg-reveal.tg-in.tg-done {
+  animation: none;
+}
+
+@keyframes tg-wipe {
+  from {
+    opacity: 0;
+    clip-path: inset(-30% 100% -30% -10%);
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(-30% -10% -30% -10%);
+    transform: translateX(0);
+  }
+}
+
+.tangled-page .tangled-heading::after {
+  content: "";
+  display: block;
+  width: 150px;
+  height: 3px;
+  margin-top: 18px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #ffd37a, rgba(255, 211, 122, 0));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.6s;
+}
+
+.tangled-page .tangled-heading.tg-in::after {
+  transform: scaleX(1);
+}
+
+@media (hover: none) {
+  .tangled-page .tangled-card:hover {
+    --ty: 0px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tangled-page .tg-reveal:not(.tg-in) {
+    opacity: 1;
+  }
+
+  .tangled-page .tg-reveal.tg-in {
+    animation: none !important;
+  }
+}
+`}</style>
 
       {/* Hero */}
       <section className="tangled-hero">
@@ -465,6 +826,13 @@ export default function AboutClient() {
                 LinkedIn Profile <ArrowUpRight size={12} />
               </a>
             </div>
+          </div>
+
+          <div className="relative z-10 pb-12 pt-4 lg:pb-6 lg:pt-0">
+            <TangledPortal
+              name="Faiza Noor"
+              role="Full-Stack Web Engineer"
+            />
           </div>
         </div>
       </section>

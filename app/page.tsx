@@ -1,5 +1,3 @@
-import PortfolioIntro from "@/components/PortfolioIntro";
-
 import { Hero } from "@/components/hero/Hero";
 
 import TechUniverse from "@/components/skills/TechUniverse";
@@ -14,9 +12,6 @@ import FAQ from "@/components/faq/FAQ";
 export default function HomePage() {
   return (
     <>
-      {/* Premium Portfolio Intro */}
-      <PortfolioIntro />
-
       <section
         id="home"
         className="home-section home-hero-section"

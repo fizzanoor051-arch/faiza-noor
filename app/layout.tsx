@@ -12,6 +12,7 @@ import VisitorTracker from "@/components/analytics/VisitorTracker";
 import PortfolioChrome from "@/components/layout/PortfolioChrome";
 import ThemeProvider from "@/components/themes/ThemeProvider";
 import ThemeEngine from "@/components/themes/ThemeEngine";
+import { cinzelDecorative, greatVibes } from "@/lib/tangled-fonts";
 
 const SITE_URL = "https://faiza-noor10.vercel.app";
 
@@ -123,7 +124,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${cinzelDecorative.variable} ${greatVibes.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-[#05050a] text-white">

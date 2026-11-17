@@ -145,7 +145,7 @@ const projects: Project[] = [
     images: [
       "/images/projects/shopsphere/1.png",
       "/images/projects/shopsphere/2.png",
-      "/images/projects/shopsphere/3.png",
+   
     ],
     description:
       "A modern e-commerce experience built around product discovery, clean navigation and reusable React components.",
@@ -223,8 +223,8 @@ const projects: Project[] = [
     ],
     tags: ["React.js", "JavaScript", "CSS", "Healthcare UI"],
     colors: ["#25a9a0", "#4c8cff"],
-    live: "https://classy-vacherin-7a04fc.netlify.app/",
-    code: "https://github.com/fizzanoor051-arch/hospital-react-project",
+    live: "https://noor-hospital-theta.vercel.app/",
+    code: "https://github.com/fizzanoor051-arch/NOOR-hospital",
   },
   {
     title: "FAIZA NOOR",
@@ -277,8 +277,8 @@ const projects: Project[] = [
     year: "2026",
     number: "06",
     emoji: "✦",
-    image: "/images/projects/ember-oak/1.png",
-    images: ["/images/projects/ember-oak/1.png"],
+    image: "/images/projects/2.png",
+    images: ["/images/projects/2.png"],
     description:
       "A modern restaurant website featuring an elegant dining experience, rich visuals and a polished interface for exploring the restaurant.",
     overview:
@@ -316,8 +316,8 @@ const projects: Project[] = [
     year: "2026",
     number: "07",
     emoji: "✧",
-    image: "/images/projects/lumiere-skin/1.png",
-    images: ["/images/projects/lumiere-skin/1.png"],
+    image: "/images/projects/3.png",
+    images: ["/images/projects/3.png"],
     description:
       "A skincare e-commerce experience with elegant product presentation, a clean storefront and a refined shopping interface.",
     overview:
@@ -779,7 +779,7 @@ export default function ProjectsShowcase() {
 
     const timer = window.setInterval(() => {
       setCur((current) => (current + 1) % total);
-    }, 3000);
+    }, 4500);
 
     return () => window.clearInterval(timer);
   }, [mode, paused, total, selectedProject]);
@@ -890,36 +890,108 @@ export default function ProjectsShowcase() {
         {mode === "cover" && (
           <>
             <div
-              className="pj3d-cover"
+              className="pj3d-stage"
               onMouseEnter={() => setPaused(true)}
               onMouseLeave={() => setPaused(false)}
             >
-              {projects.map((project, i) => {
-                const d = i - cur;
-                const a = Math.abs(d);
+              <button
+                type="button"
+                className="pj3d-arrow pj3d-arrow-prev"
+                onClick={prev}
+                aria-label="Previous project"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M15 5l-7 7 7 7" />
+                </svg>
+              </button>
 
-                return (
-                  <ProjectCard
-                    key={project.title}
-                    project={project}
-                    className={d === 0 ? "act" : ""}
-                    style={{
-                      transform: `translateX(calc(-50% + ${d * 76}%)) translateZ(${
-                        -a * 130
-                      }px) rotateY(${-d * 28}deg)`,
-                      zIndex: 10 - a,
-                      opacity: a > 2 ? 0 : 1 - a * 0.25,
-                      pointerEvents: a > 2 ? "none" : "auto",
-                    }}
-                    onClick={(e) => {
-                      if ((e.target as HTMLElement).closest("a")) return;
-                      setCur(i);
-                      openProject(project);
-                    }}
-                  />
-                );
-              })}
+              <div className="pj3d-cover">
+                {projects.map((project, i) => {
+                  const d = i - cur;
+                  const a = Math.abs(d);
+
+                  return (
+                    <ProjectCard
+                      key={project.title}
+                      project={project}
+                      className={d === 0 ? "act" : ""}
+                      style={{
+                        transform: `translateX(calc(-50% + ${d * 68}%)) translateZ(${
+                          -a * 70
+                        }px) rotateY(${-d * 16}deg) scale(${
+                          d === 0 ? 1.03 : 1 - a * 0.05
+                        })`,
+                        zIndex: 10 - a,
+                        opacity: a > 2 ? 0 : 1 - a * 0.18,
+                        filter: d === 0 ? "none" : "brightness(0.62)",
+                        pointerEvents: a > 2 ? "none" : "auto",
+                        ["--i" as string]: i,
+                      } as CSSProperties}
+                      onClick={(e) => {
+                        if ((e.target as HTMLElement).closest("a")) return;
+                        if (d !== 0) {
+                          setCur(i);
+                          return;
+                        }
+                        openProject(project);
+                      }}
+                    />
+                  );
+                })}
+              </div>
+
+              <button
+                type="button"
+                className="pj3d-arrow pj3d-arrow-next"
+                onClick={next}
+                aria-label="Next project"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="26"
+                  height="26"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
+
+            <div className="pj3d-dots-nav" role="tablist" aria-label="Choose project">
+              {projects.map((project, i) => (
+                <button
+                  type="button"
+                  key={project.title}
+                  role="tab"
+                  aria-selected={i === cur}
+                  aria-label={`Show ${project.title}`}
+                  className={i === cur ? "on" : ""}
+                  onClick={() => setCur(i)}
+                />
+              ))}
+            </div>
+
+            <span className="pj3d-progress" aria-hidden="true">
+              <i
+                key={`${cur}-${paused}-${selectedProject ? 1 : 0}`}
+                className={paused || selectedProject ? "paused" : ""}
+              />
+            </span>
 
             <div className="pj3d-ctrl">
               <button type="button" onClick={prev} aria-label="Previous project">
@@ -1032,13 +1104,13 @@ export default function ProjectsShowcase() {
 
       <style jsx global>{`
         .pj3d {
-          --pj-bg: #07080f;
-          --pj-solid: #121423;
-          --pj-tx: #eef0ff;
-          --pj-mut: #9aa0c3;
-          --pj-bd: rgba(255, 255, 255, 0.12);
-          --pj-a: #7c5cff;
-          --pj-b: #22d3ee;
+          --pj-bg: #150a2a;
+          --pj-solid: #241245;
+          --pj-tx: #fff6e4;
+          --pj-mut: #d3c2ee;
+          --pj-bd: rgba(255, 211, 122, 0.22);
+          --pj-a: #b48cff;
+          --pj-b: #ffd37a;
           position: relative;
           overflow: hidden;
           background: var(--pj-bg);
@@ -1053,12 +1125,12 @@ export default function ProjectsShowcase() {
           background:
             radial-gradient(
               600px 400px at 15% 5%,
-              rgba(124, 92, 255, 0.2),
+              rgba(180, 140, 255, 0.24),
               transparent
             ),
             radial-gradient(
               600px 400px at 90% 70%,
-              rgba(34, 211, 238, 0.15),
+              rgba(255, 211, 122, 0.15),
               transparent
             );
           pointer-events: none;
@@ -1120,7 +1192,7 @@ export default function ProjectsShowcase() {
         .pj3d-tabs button.on {
           border-color: var(--pj-a);
           color: var(--pj-tx);
-          box-shadow: 0 0 24px rgba(124, 92, 255, 0.35);
+          box-shadow: 0 0 24px rgba(180, 140, 255, 0.35);
         }
 
         .pj3d-paperow-feature:focus-visible,
@@ -1144,11 +1216,11 @@ export default function ProjectsShowcase() {
           margin: 28px 0 30px;
           padding: 0;
           overflow: hidden;
-          border: 1px solid rgba(34, 211, 238, 0.28);
+          border: 1px solid rgba(255, 211, 122, 0.28);
           border-radius: 24px;
           background:
-            radial-gradient(500px 280px at 0% 0%, rgba(22, 184, 166, 0.14), transparent),
-            linear-gradient(120deg, #111b2a, #111323 68%);
+            radial-gradient(500px 280px at 0% 0%, rgba(255, 170, 70, 0.14), transparent),
+            linear-gradient(120deg, #2b1450, #1b0d33 68%);
           color: var(--pj-tx);
           text-align: left;
           cursor: pointer;
@@ -1158,8 +1230,8 @@ export default function ProjectsShowcase() {
 
         .pj3d-paperow-feature:hover {
           transform: translateY(-5px);
-          border-color: rgba(34, 211, 238, 0.65);
-          box-shadow: 0 28px 75px rgba(22, 184, 166, 0.12);
+          border-color: rgba(255, 211, 122, 0.65);
+          box-shadow: 0 28px 75px rgba(255, 170, 70, 0.12);
         }
 
         .pj3d-paperow-visual {
@@ -1169,8 +1241,8 @@ export default function ProjectsShowcase() {
           place-items: center;
           overflow: hidden;
           background:
-            radial-gradient(circle at 48% 48%, rgba(34, 211, 238, 0.15), transparent 43%),
-            linear-gradient(135deg, rgba(22, 184, 166, 0.13), rgba(100, 120, 245, 0.12));
+            radial-gradient(circle at 48% 48%, rgba(255, 211, 122, 0.15), transparent 43%),
+            linear-gradient(135deg, rgba(255, 170, 70, 0.13), rgba(200, 150, 255, 0.12));
         }
 
         .pj3d-paperow-screenshot {
@@ -1197,7 +1269,7 @@ export default function ProjectsShowcase() {
           align-items: center;
           gap: 10px;
           margin-bottom: 17px;
-          color: #7ce8df;
+          color: #ffe3a8;
           font-size: 10px;
           font-weight: 800;
           letter-spacing: .16em;
@@ -1205,10 +1277,10 @@ export default function ProjectsShowcase() {
 
         .pj3d-paperow-meta b {
           padding: 6px 9px;
-          border: 1px solid rgba(45, 212, 191, .3);
+          border: 1px solid rgba(255, 190, 90, .3);
           border-radius: 999px;
-          background: rgba(45, 212, 191, .09);
-          color: #79eadb;
+          background: rgba(255, 190, 90, .09);
+          color: #ffe3a8;
           letter-spacing: .08em;
         }
 
@@ -1219,7 +1291,7 @@ export default function ProjectsShowcase() {
 
         .pj3d-paperow-kind {
           margin-top: 8px;
-          color: #8d9dbb;
+          color: #d9c6f2;
           font-size: 10px;
           font-weight: 700;
           letter-spacing: .14em;
@@ -1244,7 +1316,7 @@ export default function ProjectsShowcase() {
           padding: 6px 9px;
           border: 1px solid var(--pj-bd);
           border-radius: 999px;
-          color: #c5d2e8;
+          color: #ffe9bd;
           font-size: 10px;
           font-style: normal;
         }
@@ -1254,7 +1326,7 @@ export default function ProjectsShowcase() {
           align-items: center;
           gap: 12px;
           margin-top: 22px;
-          color: #8eece2;
+          color: #ffe3a8;
           font-size: 12px;
           font-weight: 700;
         }
@@ -1409,7 +1481,7 @@ export default function ProjectsShowcase() {
         .pj3d-details-hint {
           display: block;
           margin-top: 14px;
-          color: #a99aff;
+          color: #e2cfff;
           font-size: 11px;
           letter-spacing: 0.03em;
         }
@@ -1440,7 +1512,7 @@ export default function ProjectsShowcase() {
         .pj3d-cover .pj3d-card.act {
           border-color: var(--pj-a);
           box-shadow:
-            0 0 40px rgba(124, 92, 255, 0.3),
+            0 0 40px rgba(180, 140, 255, 0.3),
             0 25px 60px rgba(0, 0, 0, 0.3);
         }
 
@@ -1473,7 +1545,7 @@ export default function ProjectsShowcase() {
 
         .pj3d-ctrl button:hover {
           border-color: var(--pj-b);
-          background: rgba(34, 211, 238, 0.1);
+          background: rgba(255, 211, 122, 0.1);
           transform: scale(1.06);
         }
 
@@ -1588,7 +1660,7 @@ export default function ProjectsShowcase() {
           justify-content: center;
           padding: 24px;
           overflow-y: auto;
-          background: rgba(3, 4, 12, 0.86);
+          background: rgba(14, 6, 30, 0.88);
           backdrop-filter: blur(14px);
           animation: pj3d-modal-fade 0.25s ease both;
         }
@@ -1603,10 +1675,10 @@ export default function ProjectsShowcase() {
           background:
             radial-gradient(
               500px 260px at 0% 0%,
-              rgba(124, 92, 255, 0.14),
+              rgba(180, 140, 255, 0.14),
               transparent
             ),
-            #10121f;
+            #1b0d33;
           box-shadow: 0 30px 100px #0009;
           scrollbar-width: thin;
           scrollbar-color: #6252a5 #111;
@@ -1625,7 +1697,7 @@ export default function ProjectsShowcase() {
           place-items: center;
           border: 1px solid var(--pj-bd);
           border-radius: 50%;
-          background: #171a2b;
+          background: #281350;
           color: #fff;
           font-size: 25px;
           cursor: pointer;
@@ -1669,7 +1741,7 @@ export default function ProjectsShowcase() {
           overflow: hidden;
           border: 1px solid var(--pj-bd);
           border-radius: 15px;
-          background: #090b15;
+          background: #150a2a;
         }
 
         .pj3d-gallery-main img {
@@ -1692,7 +1764,7 @@ export default function ProjectsShowcase() {
           overflow: hidden;
           border: 1px solid var(--pj-bd);
           border-radius: 9px;
-          background: #090b15;
+          background: #150a2a;
           opacity: 0.65;
           cursor: pointer;
         }
@@ -1757,7 +1829,7 @@ export default function ProjectsShowcase() {
           border: 1px solid var(--pj-bd);
           border-radius: 11px;
           background: rgba(255, 255, 255, 0.025);
-          color: #d6d9ec;
+          color: #f1e6ff;
           font-size: 12px;
           line-height: 1.6;
         }
@@ -1782,7 +1854,7 @@ export default function ProjectsShowcase() {
           padding: 12px 18px;
           border: 1px solid transparent;
           border-radius: 9px;
-          background: linear-gradient(100deg, #7657ed, #258dca);
+          background: linear-gradient(100deg, #b48cff, #258dca);
           color: white;
           font-size: 12px;
           font-weight: 700;
@@ -1792,12 +1864,12 @@ export default function ProjectsShowcase() {
 
         .pj3d-modal-actions a:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px #7657ed44;
+          box-shadow: 0 8px 25px #b48cff44;
         }
 
         .pj3d-modal-actions a.secondary {
           border-color: var(--pj-bd);
-          background: #191c2d;
+          background: #2a1550;
           color: var(--pj-tx);
         }
 
@@ -1867,7 +1939,7 @@ export default function ProjectsShowcase() {
 
         .pj3d-office-card:hover {
           transform: translateY(-5px);
-          border-color: rgba(34, 211, 238, 0.45);
+          border-color: rgba(255, 211, 122, 0.45);
           background: rgba(255, 255, 255, 0.055);
           box-shadow: 0 16px 38px rgba(0, 0, 0, 0.2);
         }
@@ -1930,7 +2002,7 @@ export default function ProjectsShowcase() {
           display: flex;
           align-items: flex-start;
           gap: 9px;
-          color: #c8cce0;
+          color: #e6d8f8;
           font-size: 11px;
           line-height: 1.5;
         }
@@ -1947,9 +2019,9 @@ export default function ProjectsShowcase() {
           gap: 13px;
           margin-top: 23px;
           padding: 18px 20px;
-          border: 1px solid rgba(124, 92, 255, 0.22);
+          border: 1px solid rgba(180, 140, 255, 0.22);
           border-radius: 13px;
-          background: rgba(124, 92, 255, 0.055);
+          background: rgba(180, 140, 255, 0.055);
         }
 
         .pj3d-office-note > span {
@@ -2232,6 +2304,427 @@ export default function ProjectsShowcase() {
           .pj3d *::after {
             animation: none !important;
             transition: none !important;
+          }
+        }
+      
+        /* =====================================================
+           TANGLED WORLD THEME  (gold + twilight purple, 3D)
+           ===================================================== */
+
+        .pj3d {
+          overflow: clip;
+        }
+
+        .pj3d::before {
+          display: none;
+        }
+
+        .pj3d {
+          background: #150a2a;
+        }
+
+        .pj3d-wrap {
+          z-index: 1;
+          perspective: 1800px;
+        }
+
+        .pj3d-eyebrow {
+          font-family: var(--tg-serif);
+          letter-spacing: 0.34em;
+          text-shadow: 0 0 18px rgba(255, 190, 90, 0.6);
+        }
+
+        .pj3d-title {
+          font-family: var(--tg-serif);
+          font-weight: 700;
+          letter-spacing: 0.01em;
+          text-shadow: 0 4px 34px rgba(14, 4, 34, 0.8);
+        }
+
+        .pj3d-title span,
+        .pj3d-office-heading h3 span {
+          font-family: var(--tg-script);
+          font-weight: 400;
+          font-size: 1.45em;
+          line-height: 0.9;
+          padding: 0 0.06em;
+          background: linear-gradient(
+            100deg,
+            #fff3cf 0%,
+            #ffd37a 40%,
+            #ffb445 70%,
+            #fff1c4 100%
+          );
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          filter: drop-shadow(0 0 16px rgba(255, 175, 70, 0.4));
+        }
+
+        .pj3d-sub {
+          text-shadow: 0 2px 14px rgba(14, 4, 34, 0.9);
+        }
+
+        /* tabs */
+        .pj3d-tabs button {
+          background: rgba(36, 18, 69, 0.7);
+          border-color: rgba(255, 211, 122, 0.28);
+          color: #e6d8f8;
+          backdrop-filter: blur(6px);
+        }
+
+        .pj3d-tabs button:hover {
+          border-color: #ffd37a;
+          transform: translateY(-2px);
+        }
+
+        .pj3d-tabs button.on {
+          border-color: #ffd37a;
+          background: linear-gradient(110deg, #ffe6b1, #f0b25c);
+          color: #2a1535;
+          font-weight: 700;
+          box-shadow:
+            0 0 28px rgba(255, 190, 90, 0.45),
+            0 8px 18px rgba(8, 2, 22, 0.4);
+        }
+
+        /* cards */
+        .pj3d-card {
+          position: relative;
+          border: 1px solid rgba(255, 211, 122, 0.3);
+          background:
+            linear-gradient(
+              160deg,
+              rgba(58, 30, 102, 0.94),
+              rgba(24, 11, 46, 0.96)
+            );
+          box-shadow:
+            0 24px 56px rgba(8, 2, 22, 0.6),
+            inset 0 1px 0 rgba(255, 241, 201, 0.16);
+        }
+
+        .pj3d-card:hover {
+          border-color: #ffd37a;
+          box-shadow:
+            0 0 46px rgba(255, 190, 90, 0.28),
+            0 28px 64px rgba(8, 2, 22, 0.65),
+            inset 0 1px 0 rgba(255, 241, 201, 0.22);
+        }
+
+        .pj3d-shot::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          pointer-events: none;
+          background: linear-gradient(
+            180deg,
+            rgba(255, 190, 90, 0.1),
+            transparent 40%,
+            rgba(24, 11, 46, 0.55) 100%
+          );
+        }
+
+        .pj3d-dots {
+          z-index: 2;
+        }
+
+        .pj3d-body {
+          position: relative;
+          z-index: 2;
+        }
+
+        .pj3d-body h3 {
+          font-family: var(--tg-serif);
+          font-size: 18px;
+          letter-spacing: 0.02em;
+          color: #fff1c9;
+        }
+
+        .pj3d-body > small {
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        .pj3d-tags span {
+          border-color: rgba(255, 211, 122, 0.32);
+          background: rgba(255, 211, 122, 0.06);
+          color: #ffe9bd;
+        }
+
+        .pj3d-cover .pj3d-card.act {
+          border-color: #ffd37a;
+          box-shadow:
+            0 0 60px rgba(255, 190, 90, 0.35),
+            0 34px 80px rgba(8, 2, 22, 0.7),
+            inset 0 1px 0 rgba(255, 241, 201, 0.25);
+        }
+
+        .pj3d-ctrl button {
+          background: rgba(36, 18, 69, 0.78);
+          border-color: rgba(255, 211, 122, 0.4);
+          color: #ffe9bd;
+        }
+
+        .pj3d-ctrl button:hover {
+          background: rgba(255, 211, 122, 0.16);
+          border-color: #ffd37a;
+        }
+
+        .pj3d-counter {
+          font-family: var(--tg-serif);
+          color: #ffe3a8;
+        }
+
+        /* featured project */
+        .pj3d-paperow-feature {
+          border-color: rgba(255, 211, 122, 0.4);
+          background:
+            radial-gradient(
+              520px 300px at 0% 0%,
+              rgba(255, 170, 70, 0.2),
+              transparent
+            ),
+            linear-gradient(120deg, #2e1658, #1b0d33 70%);
+          box-shadow:
+            0 26px 64px rgba(8, 2, 22, 0.6),
+            0 0 40px rgba(255, 190, 90, 0.12);
+          transform-style: preserve-3d;
+        }
+
+        .pj3d-paperow-feature:hover {
+          transform: translateY(-6px) rotateX(2.5deg);
+          border-color: #ffd37a;
+          box-shadow:
+            0 34px 80px rgba(8, 2, 22, 0.7),
+            0 0 56px rgba(255, 190, 90, 0.3);
+        }
+
+        .pj3d-paperow-copy strong {
+          font-family: var(--tg-serif);
+          color: #fff1c9;
+        }
+
+        /* index rows */
+        .pj3d-row {
+          border-color: rgba(255, 211, 122, 0.18);
+        }
+
+        .pj3d-row.on,
+        .pj3d-row:hover {
+          border-color: #ffd37a;
+          background: rgba(255, 211, 122, 0.08);
+        }
+
+        /* office / skills cards */
+        .pj3d-office-card {
+          position: relative;
+          border-color: rgba(255, 211, 122, 0.24);
+          background: linear-gradient(
+            155deg,
+            rgba(54, 28, 96, 0.8),
+            rgba(24, 11, 46, 0.9)
+          );
+          backdrop-filter: blur(6px);
+          transform-style: preserve-3d;
+          transition:
+            transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+            border-color 0.3s,
+            box-shadow 0.3s;
+        }
+
+        .pj3d-office-card:hover {
+          transform: perspective(900px) translateY(-8px) rotateX(4deg)
+            rotateY(-3deg);
+          border-color: #ffd37a;
+          box-shadow:
+            0 26px 56px rgba(8, 2, 22, 0.6),
+            0 0 36px rgba(255, 190, 90, 0.22);
+        }
+
+        .pj3d-office-eyebrow {
+          font-family: var(--tg-serif);
+          letter-spacing: 0.3em;
+        }
+
+        .pj3d-office-heading h3 {
+          font-family: var(--tg-serif);
+        }
+
+        .pj3d-office-note {
+          border-color: rgba(255, 211, 122, 0.3);
+        }
+
+        /* modal */
+        .pj3d-modal {
+          border-color: rgba(255, 211, 122, 0.45);
+          background:
+            radial-gradient(
+              600px 320px at 10% 0%,
+              rgba(255, 170, 70, 0.14),
+              transparent
+            ),
+            linear-gradient(160deg, #2a1452, #170a2e 70%);
+          box-shadow:
+            0 40px 100px rgba(5, 0, 18, 0.8),
+            0 0 60px rgba(255, 190, 90, 0.18);
+        }
+
+        .pj3d-detail-section h2,
+        .pj3d-detail-section h3,
+        .pj3d-modal-top h2,
+        .pj3d-modal-top h3 {
+          font-family: var(--tg-serif);
+          color: #fff1c9;
+        }
+
+        /* ---------- big arrows, dots, progress ---------- */
+        .pj3d-stage {
+          position: relative;
+        }
+
+        .pj3d-arrow {
+          position: absolute;
+          top: 46%;
+          z-index: 40;
+          display: grid;
+          width: 58px;
+          height: 58px;
+          place-items: center;
+          border: 2px solid #fff1c9;
+          border-radius: 50%;
+          background: linear-gradient(145deg, #ffe6b1, #f0b25c);
+          color: #2a1535;
+          cursor: pointer;
+          box-shadow:
+            0 14px 30px rgba(8, 2, 22, 0.6),
+            inset 0 1px 0 rgba(255, 255, 255, 0.7);
+          transform: translateY(-50%);
+          transition:
+            transform 0.25s ease,
+            box-shadow 0.25s ease;
+        }
+
+        .pj3d-arrow:hover {
+          transform: translateY(-50%) scale(1.12);
+          box-shadow:
+            0 18px 38px rgba(8, 2, 22, 0.7),
+            0 0 0 6px rgba(255, 211, 122, 0.25);
+        }
+
+        .pj3d-arrow:active {
+          transform: translateY(-50%) scale(0.96);
+        }
+
+        .pj3d-arrow-prev {
+          left: 0;
+        }
+
+        .pj3d-arrow-next {
+          right: 0;
+        }
+
+        .pj3d-arrow:focus-visible {
+          outline: 3px solid #fff;
+          outline-offset: 3px;
+        }
+
+        .pj3d-dots-nav {
+          display: flex;
+          justify-content: center;
+          gap: 9px;
+          margin-top: 6px;
+        }
+
+        .pj3d-dots-nav button {
+          width: 10px;
+          height: 10px;
+          padding: 0;
+          border: 1px solid rgba(255, 211, 122, 0.6);
+          border-radius: 99px;
+          background: transparent;
+          cursor: pointer;
+          transition:
+            width 0.35s ease,
+            background 0.35s ease;
+        }
+
+        .pj3d-dots-nav button.on {
+          width: 34px;
+          background: #ffd37a;
+        }
+
+        .pj3d-progress {
+          display: block;
+          width: min(220px, 60%);
+          height: 3px;
+          margin: 14px auto 14px;
+          overflow: hidden;
+          border-radius: 99px;
+          background: rgba(255, 255, 255, 0.14);
+        }
+
+        .pj3d-progress i {
+          display: block;
+          height: 100%;
+          border-radius: 99px;
+          background: linear-gradient(90deg, #ffd37a, #fff1c9);
+          transform-origin: left;
+          animation: pj3d-fill 4.5s linear forwards;
+        }
+
+        .pj3d-progress i.paused {
+          animation: none;
+          transform: scaleX(0);
+        }
+
+        @keyframes pj3d-fill {
+          from {
+            transform: scaleX(0);
+          }
+          to {
+            transform: scaleX(1);
+          }
+        }
+
+        /* cards "deal" into place when the carousel first appears */
+        .pj3d-cover .pj3d-card {
+          animation: pj3d-deal 0.9s ease backwards;
+          animation-delay: calc(var(--i, 0) * 110ms);
+          transition:
+            transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+            opacity 0.6s,
+            filter 0.6s,
+            border-color 0.3s,
+            box-shadow 0.3s;
+        }
+
+        @keyframes pj3d-deal {
+          from {
+            opacity: 0;
+            margin-top: 90px;
+          }
+        }
+
+        @media (max-width: 760px) {
+          .pj3d-arrow {
+            width: 46px;
+            height: 46px;
+          }
+
+          .pj3d-arrow-prev {
+            left: -4px;
+          }
+
+          .pj3d-arrow-next {
+            right: -4px;
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .pj3d-cover .pj3d-card,
+          .pj3d-progress i {
+            animation: none;
           }
         }
       `}</style>
