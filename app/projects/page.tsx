@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -94,12 +95,12 @@ const projects: Project[] = [
     year: "2026",
     number: "02",
     emoji: "✧",
-     image: "/images/projects/luxro-store/2.png",
+    image: "/images/projects/luxro-store/2.png",
     images: [
       "/images/projects/luxro-store/2.png",
       "/images/projects/luxro-store/3.png",
       "/images/projects/luxro-store/5.png",
-"/images/projects/luxro-store/9.png",
+      "/images/projects/luxro-store/9.png",
       "/images/projects/luxro-store/7.png",
     ],
     description:
@@ -140,13 +141,11 @@ const projects: Project[] = [
     year: "2026",
     number: "03",
     emoji: "◈",
-      image: "/images/projects/shopsphere/1.png",
+    image: "/images/projects/shopsphere/1.png",
     images: [
       "/images/projects/shopsphere/1.png",
       "/images/projects/shopsphere/2.png",
       "/images/projects/shopsphere/3.png",
-
-      "/images/projects/luxro-store/7.png",
     ],
     description:
       "A modern e-commerce experience built around product discovery, clean navigation and reusable React components.",
@@ -186,16 +185,14 @@ const projects: Project[] = [
     year: "2026",
     number: "04",
     emoji: "✚",
-     image: "/images/projects/medicare/1.png",
+    image: "/images/projects/medicare/1.png",
     images: [
       "/images/projects/medicare/1.png",
       "/images/projects/medicare/2.png",
       "/images/projects/medicare/3.png",
-        "/images/projects/medicare/4.png",
-          "/images/projects/medicare/5.png",
-        "/images/projects/medicare/6.png",
-
-      "/images/projects/luxro-store/7.png",
+      "/images/projects/medicare/4.png",
+      "/images/projects/medicare/5.png",
+      "/images/projects/medicare/6.png",
     ],
     description:
       "A professional healthcare interface designed to make medical services, doctors and appointment information easier to explore.",
@@ -235,16 +232,13 @@ const projects: Project[] = [
     year: "2025",
     number: "05",
     emoji: "✦",
-        image: "/images/projects/portfolio/1.png",
+    image: "/images/projects/portfolio/1.png",
     images: [
       "/images/projects/portfolio/1.png",
       "/images/projects/portfolio/2.png",
       "/images/projects/portfolio/4.png",
-        "/images/projects/portfolio/5.png",
-          "/images/projects/portfolio/6.png",
-      
-
-      
+      "/images/projects/portfolio/5.png",
+      "/images/projects/portfolio/6.png",
     ],
     description:
       "An earlier personal portfolio created to present development skills, projects and professional work through a dedicated website.",
@@ -277,22 +271,95 @@ const projects: Project[] = [
     live: "https://faiza-noor-portfolio.vercel.app/",
     code: "https://github.com/fizzanoor051-arch/Faiza-Noor-portfolio",
   },
+  {
+    title: "EMBER & OAK",
+    kind: "Restaurant Website",
+    year: "2026",
+    number: "06",
+    emoji: "✦",
+    image: "/images/projects/ember-oak/1.png",
+    images: ["/images/projects/ember-oak/1.png"],
+    description:
+      "A modern restaurant website featuring an elegant dining experience, rich visuals and a polished interface for exploring the restaurant.",
+    overview:
+      "EMBER & OAK is a restaurant website concept designed to present a premium dining experience through refined visuals, clear content and an inviting digital storefront.",
+    problem: [
+      "Restaurants need an attractive online presence to introduce their dining experience.",
+      "Visitors should be able to explore the restaurant and its offerings easily.",
+      "The website needs a consistent experience across desktop and mobile devices.",
+    ],
+    features: [
+      "Restaurant-focused homepage",
+      "Modern visual presentation",
+      "Dining and menu-focused sections",
+      "Responsive website layout",
+      "Clear navigation and content structure",
+    ],
+    solution: [
+      "Created a visual direction suited to a modern restaurant brand.",
+      "Organized content to make the restaurant experience easy to explore.",
+      "Focused on responsive layouts and clear navigation.",
+    ],
+    value: [
+      "Gives the restaurant a polished online presence.",
+      "Makes its dining experience easier to discover.",
+      "Creates a consistent experience across devices.",
+    ],
+    tags: ["React", "Modern UI", "Responsive Design", "Restaurant"],
+    colors: ["#a87548", "#e9c99c"],
+    live: "https://little-wave-greetings.lovable.app/",
+    code: "https://github.com/fizzanoor051-arch",
+  },
+  {
+    title: "LUMIÈRE SKIN",
+    kind: "Skincare E-commerce Store",
+    year: "2026",
+    number: "07",
+    emoji: "✧",
+    image: "/images/projects/lumiere-skin/1.png",
+    images: ["/images/projects/lumiere-skin/1.png"],
+    description:
+      "A skincare e-commerce experience with elegant product presentation, a clean storefront and a refined shopping interface.",
+    overview:
+      "Lumière Skin is a skincare store concept focused on presenting beauty and skincare products through a clean, modern and visually consistent shopping experience.",
+    problem: [
+      "Skincare stores need clear product presentation and organized browsing.",
+      "Customers should be able to explore products through an intuitive interface.",
+      "A consistent visual identity helps create a polished shopping experience.",
+    ],
+    features: [
+      "Skincare-focused e-commerce storefront",
+      "Product presentation and browsing",
+      "Modern homepage layout",
+      "Responsive shopping interface",
+      "Clean navigation and visual hierarchy",
+    ],
+    solution: [
+      "Created a clean visual direction suited to a skincare brand.",
+      "Structured the storefront around product discovery.",
+      "Focused on responsive layouts and intuitive navigation.",
+    ],
+    value: [
+      "Provides a polished digital storefront for skincare products.",
+      "Makes product discovery easier for visitors.",
+      "Creates a consistent shopping experience across devices.",
+    ],
+    tags: ["E-commerce", "React", "Modern UI", "Responsive Design"],
+    colors: ["#c99e91", "#f0d9ce"],
+    live: "https://lumiere-skin-store.lovable.app/",
+    code: "https://github.com/fizzanoor051-arch",
+  },
 ];
 
-
-
-// Featured project kept separate from the five selected projects below.
+// Featured project kept separate from the selected projects.
 const paperowProject: Project = {
   title: "Paperow AI",
   kind: "AI Document Intelligence Platform",
   year: "2026",
   number: "FEATURED",
   emoji: "✳",
-         image: "/images/projects/1.png",
-    images: [
-      "/images/projects/1.png",
-   
-    ],
+  image: "/images/projects/1.png",
+  images: ["/images/projects/1.png"],
   description:
     "An AI-powered document-to-data workspace that turns invoices, receipts and order messages into structured information that people can review, edit and export.",
   overview:
@@ -581,7 +648,9 @@ function ProjectDetailsModal({
 
         <div className="pj3d-modal-top">
           <span className="pj3d-modal-eyebrow">
-            {project.status ? `${project.status} · PROJECT CASE STUDY` : `PROJECT CASE STUDY · ${project.number}`}
+            {project.status
+              ? `${project.status} · PROJECT CASE STUDY`
+              : `PROJECT CASE STUDY · ${project.number}`}
           </span>
           <h2 id="pj3d-modal-title">{project.title}</h2>
           <p>{project.description}</p>
@@ -770,15 +839,14 @@ export default function ProjectsShowcase() {
           aria-label="Explore the Paperow AI in-progress project case study"
         >
           <span className="pj3d-paperow-visual" aria-hidden="true">
-            <span className="pj3d-paperow-orbit orbit-one" />
-            <span className="pj3d-paperow-orbit orbit-two" />
-            <span className="pj3d-paperow-doc doc-one">PDF</span>
-            <span className="pj3d-paperow-doc doc-two">AI</span>
-            <span className="pj3d-paperow-table">
-              <i /><i /><i /><i /><i /><i />
-            </span>
-            <span className="pj3d-paperow-spark">✳</span>
+            <img
+              className="pj3d-paperow-screenshot"
+              src={paperowProject.image}
+              alt=""
+              loading="lazy"
+            />
           </span>
+
           <span className="pj3d-paperow-copy">
             <span className="pj3d-paperow-meta">
               <span>FEATURED PROJECT</span>
@@ -793,7 +861,10 @@ export default function ProjectsShowcase() {
               reviewable business data — then export it as CSV.
             </span>
             <span className="pj3d-paperow-tags">
-              <i>Next.js</i><i>TypeScript</i><i>Gemini AI</i><i>MongoDB</i>
+              <i>Next.js</i>
+              <i>TypeScript</i>
+              <i>Gemini AI</i>
+              <i>MongoDB</i>
             </span>
             <span className="pj3d-paperow-action">
               Explore the project case study <b>↗</b>
@@ -1063,6 +1134,7 @@ export default function ProjectsShowcase() {
         }
 
         /* FEATURED PAPEROW AI PROJECT */
+
         .pj3d-paperow-feature {
           display: grid;
           grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
@@ -1101,76 +1173,14 @@ export default function ProjectsShowcase() {
             linear-gradient(135deg, rgba(22, 184, 166, 0.13), rgba(100, 120, 245, 0.12));
         }
 
-        .pj3d-paperow-orbit {
+        .pj3d-paperow-screenshot {
           position: absolute;
-          width: 245px;
-          height: 245px;
-          border: 1px solid rgba(133, 225, 225, 0.19);
-          border-radius: 50%;
-        }
-
-        .pj3d-paperow-orbit.orbit-two {
-          width: 185px;
-          height: 185px;
-          border-style: dashed;
-          transform: rotateX(62deg) rotateZ(-25deg);
-        }
-
-        .pj3d-paperow-doc {
-          position: absolute;
-          z-index: 2;
-          display: grid;
-          width: 78px;
-          height: 96px;
-          place-items: center;
-          border: 1px solid rgba(255,255,255,.2);
-          border-radius: 13px;
-          background: linear-gradient(145deg, #263b51, #172338);
-          color: #dffbff;
-          font-size: 17px;
-          font-weight: 800;
-          box-shadow: 0 18px 38px #0005;
-        }
-
-        .pj3d-paperow-doc.doc-one {
-          transform: translate(-68px, -18px) rotate(-12deg);
-        }
-
-        .pj3d-paperow-doc.doc-two {
-          transform: translate(66px, 20px) rotate(11deg);
-          background: linear-gradient(145deg, #334b75, #202b4b);
-          color: #b9c7ff;
-        }
-
-        .pj3d-paperow-table {
-          position: absolute;
-          z-index: 3;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 6px;
-          width: 112px;
-          padding: 12px;
-          border: 1px solid rgba(255,255,255,.2);
-          border-radius: 12px;
-          background: rgba(10, 17, 31, .94);
-          box-shadow: 0 18px 45px #0008;
-          transform: translate(0, 78px);
-        }
-
-        .pj3d-paperow-table i {
-          height: 5px;
-          border-radius: 5px;
-          background: linear-gradient(90deg, #29d5c2, #758bff);
-          opacity: .8;
-        }
-
-        .pj3d-paperow-spark {
-          position: absolute;
-          top: 24px;
-          right: 28px;
-          color: #5de7d5;
-          font-size: 28px;
-          filter: drop-shadow(0 0 15px #2dd4bf88);
+          inset: 0;
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
         }
 
         .pj3d-paperow-copy {
@@ -1254,6 +1264,7 @@ export default function ProjectsShowcase() {
         }
 
         /* Keep the navigation from overlapping the open case study modal. */
+
         body.pj3d-modal-open header,
         body.pj3d-modal-open nav,
         body.pj3d-modal-open [role="navigation"] {
@@ -1261,9 +1272,11 @@ export default function ProjectsShowcase() {
           pointer-events: none !important;
         }
 
+        /* PROJECT CARDS: original card styling, image above details */
+
         .pj3d-card {
           display: grid;
-          grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+          grid-template-columns: minmax(0, 1fr);
           align-items: stretch;
           overflow: hidden;
           border: 1px solid var(--pj-bd);
@@ -1276,7 +1289,8 @@ export default function ProjectsShowcase() {
 
         .pj3d-shot {
           position: relative;
-          height: 100%;
+          width: 100%;
+          height: 245px;
           min-height: 245px;
           overflow: hidden;
           background: linear-gradient(135deg, var(--c1), var(--c2));
@@ -1431,8 +1445,8 @@ export default function ProjectsShowcase() {
         }
 
         .pj3d-cover .pj3d-card.act .pj3d-shot {
-          height: auto;
-          min-height: 285px;
+          height: 245px;
+          min-height: 245px;
         }
 
         .pj3d-ctrl {
@@ -2038,6 +2052,7 @@ export default function ProjectsShowcase() {
           }
 
           .pj3d-shot {
+            width: 100%;
             height: 190px;
             min-height: 190px;
           }
